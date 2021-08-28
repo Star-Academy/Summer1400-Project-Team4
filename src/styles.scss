@@ -1,1 +1,17 @@
-/* You can add global styles to this file, and also import other style files */
+/* Webfont: Yekan */
+@font-face {
+	font-family: 'Yekan';
+	src:	url('assets/font/Yekan.eot'); /* IE9 Compat Modes */
+	src:	url('assets/font/Yekan.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+			url('assets/font/Yekan.woff2') format('woff2'), /* Modern Browsers */
+			url('assets/font/Yekan.woff') format('woff'), /* Modern Browsers */
+			url('assets/font/Yekan.otf') format('opentype'), /* Open Type Font */	
+			url('assets/font/Yekan.ttf') format('truetype'); /* Safari, Android, iOS */
+	font-weight: normal;
+	font-style: normal;
+	text-rendering: optimizeLegibility;
+	font-display: auto;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: 'Yekan', Roboto, "Helvetica Neue", sans-serif; }
