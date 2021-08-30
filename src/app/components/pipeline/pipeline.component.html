@@ -1,0 +1,55 @@
+<mat-toolbar color="primary">
+    <button mat-icon-button>
+        <mat-icon>merge_type</mat-icon>
+    </button>
+    <span> اجراگر خط لوله </span>
+
+    <mat-form-field floatLabel="never">
+        <mat-label>نام خط لوله</mat-label>
+        <input matInput type="text" [(ngModel)]="pipelineName" />
+    </mat-form-field>
+
+    <div fxFlex fxLayout="row" fxLayoutAlign="flex-end">
+        <ul fxLayout="row" fxLayoutGap="2.5rem">
+            <li>
+                <button title="اجرا" mat-icon-button mat-raised-button>
+                    <mat-icon color="primary">play_arrow</mat-icon>
+                </button>
+            </li>
+
+            <li>
+                <button title="دانلود" mat-icon-button>
+                    <mat-icon>file_upload</mat-icon>
+                </button>
+            </li>
+
+            <li>
+                <button title="پنجره تنظیمات" mat-icon-button>
+                    <mat-icon>vertical_split</mat-icon>
+                </button>
+            </li>
+
+            <li>
+                <button title="پنجره پیش‌نمایش" mat-icon-button>
+                    <mat-icon>horizontal_split</mat-icon>
+                </button>
+            </li>
+
+            <li>
+                <button mat-button [matMenuTriggerFor]="menu">
+                    <mat-icon>person</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item>
+                        <mat-icon>manage_accounts</mat-icon>
+                        مدیریت حساب
+                    </button>
+                    <button mat-menu-item>
+                        <mat-icon>exit_to_app</mat-icon>
+                        خروج
+                    </button>
+                </mat-menu>
+            </li>
+        </ul>
+    </div>
+</mat-toolbar>
