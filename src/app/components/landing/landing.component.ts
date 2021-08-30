@@ -7,9 +7,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LandingComponent implements OnInit {
 
+  public toggleOpen = false ;
+
   constructor() { }
 
   ngOnInit(): void {
+  }
+  toggleButton()
+  {
+    this.toggleOpen = !this.toggleOpen;
   }
 
 }

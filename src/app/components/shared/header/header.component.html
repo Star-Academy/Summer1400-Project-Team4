@@ -1,1 +1,37 @@
-<p>header works!</p>
+  <mat-toolbar dir="rtl" color="primary">
+    <button (click)="toggleSideBar()" mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span> لوگو </span>
+    <div fxFlex fxLayout="row" fxLayoutAlign="flex-end">
+
+      <ul  fxLayout="row" fxLayoutGap="25px">
+        <li>
+          <button title="تنظیمات" mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+            <mat-icon>settings</mat-icon>
+          </button>
+        </li>
+
+        <li>
+          <button title="درباره ما" mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+            <mat-icon>help_outline</mat-icon>
+          </button>
+        </li>
+
+        <li>
+          <button mat-button [matMenuTriggerFor]="menu">
+            <mat-icon>person</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item>
+              <mat-icon>exit_to_app</mat-icon>
+              خروج
+            </button>
+          </mat-menu>
+
+        </li>
+
+      </ul>
+
+    </div>
+  </mat-toolbar>
