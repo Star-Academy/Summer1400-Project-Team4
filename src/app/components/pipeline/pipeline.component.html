@@ -1,22 +1,36 @@
 <mat-toolbar color="primary">
-    <button mat-icon-button>
-        <mat-icon>merge_type</mat-icon>
-    </button>
-    <span> اجراگر خط لوله </span>
+    <a routerLink="/" mat-flat-button disableRipple color="primary">
+        <mat-icon>call_split</mat-icon>
+        <span class="logo-name"> اجراگر خط لوله</span>
+    </a>
 
-    <mat-form-field floatLabel="never">
-        <mat-label>نام خط لوله</mat-label>
-        <input matInput type="text" [(ngModel)]="pipelineName" />
-    </mat-form-field>
+    <span class="pipeline-info">
+        <mat-form-field floatLabel="never">
+            <mat-label>نام خط لوله</mat-label>
+            <input
+                #pipelineNameInput="matInput"
+                matInput
+                type="text"
+                [(ngModel)]="pipelineName"
+            />
+            <button
+                [style.visibility]="pipelineNameInput.focused ? '' : 'hidden'"
+                matSuffix
+                mat-icon-button
+            >
+                <mat-icon>edit</mat-icon>
+            </button>
+        </mat-form-field>
 
-    <div fxFlex fxLayout="row" fxLayoutAlign="flex-end">
-        <ul fxLayout="row" fxLayoutGap="2.5rem">
-            <li>
-                <button title="اجرا" mat-icon-button mat-raised-button>
-                    <mat-icon color="primary">play_arrow</mat-icon>
-                </button>
-            </li>
+        <button title="اجرا" mat-icon-button mat-raised-button mat-tip>
+            <mat-icon class="mat-icon-rtl-mirror" color="primary">
+                play_arrow
+            </mat-icon>
+        </button>
+    </span>
 
+    <nav>
+        <ul>
             <li>
                 <button title="دانلود" mat-icon-button>
                     <mat-icon>file_upload</mat-icon>
@@ -36,10 +50,10 @@
             </li>
 
             <li>
-                <button mat-button [matMenuTriggerFor]="menu">
+                <button mat-button [matMenuTriggerFor]="accountMenu">
                     <mat-icon>person</mat-icon>
                 </button>
-                <mat-menu #menu="matMenu">
+                <mat-menu #accountMenu="matMenu">
                     <button mat-menu-item>
                         <mat-icon>manage_accounts</mat-icon>
                         مدیریت حساب
@@ -51,5 +65,94 @@
                 </mat-menu>
             </li>
         </ul>
-    </div>
+    </nav>
 </mat-toolbar>
+
+<mat-sidenav-container>
+    <mat-sidenav mode="side" opened>
+        <div class="config-pane">
+            <h2>تجمع</h2>
+
+            <div>
+                <h3>گروه‌بندی بر اساس</h3>
+                <mat-accordion>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <bdo dir="ltr">.Op</bdo>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <mat-form-field>
+                            <mat-label>نام متغیر</mat-label>
+                            <input
+                                matInput
+                                type="text"
+                                value=".Op"
+                                class="propery-input"
+                            />
+                        </mat-form-field>
+                    </mat-expansion-panel>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <bdo dir="ltr">.Position</bdo>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <mat-form-field>
+                            <mat-label>نام متغیر</mat-label>
+                            <input
+                                matInput
+                                type="text"
+                                value=".Position"
+                                class="propery-input"
+                            />
+                        </mat-form-field>
+                    </mat-expansion-panel>
+                </mat-accordion>
+                <br />
+                <h3>عملیات</h3>
+                <mat-accordion>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <span>
+                                    بیشینه
+                                    <bdo dir="ltr">.Price</bdo>
+                                    به عنوان Total
+                                </span>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <mat-form-field>
+                            <mat-label>نام متغیر</mat-label>
+                            <input
+                                matInput
+                                type="text"
+                                value=".Price"
+                                class="propery-input"
+                            />
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label>نوع عملیت</mat-label>
+                            <input matInput type="text" value="بیشینه" />
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label>نام متغیر خروجی</mat-label>
+                            <input
+                                matInput
+                                type="text"
+                                value="Total"
+                                class="propery-input"
+                            />
+                        </mat-form-field>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </div>
+        </div>
+
+        <div class="config-actions">
+            <button mat-raised-button>لغو تغییرات</button>
+            <button mat-raised-button color="primary">ذخیره</button>
+        </div>
+    </mat-sidenav>
+    <mat-sidenav-content> constent. </mat-sidenav-content>
+</mat-sidenav-container>
