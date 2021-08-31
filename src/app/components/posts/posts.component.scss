@@ -1,3 +1,8 @@
+@use '~@angular/material' as mat;
+
+@include mat.core();
+
+$my-primary: mat.define-palette(mat.$amber-palette);
 .card
 {
   width:90%;
@@ -10,4 +15,11 @@ mat-icon
 ul li
 {
   list-style: none;
+}
+.mat-card-title
+{
+  &:hover
+  {
+    color: #14b4b4;
+  }
 }
