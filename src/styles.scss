@@ -13,8 +13,22 @@
     font-display: auto;
 }
 
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 :root {
     font-size: 62.5%;
+
+    --density-smallest: 0.1rem;
+    --density-smaller: 0.2rem;
+    --density-small: 0.5rem;
+    --density-normal: 1rem;
+    --density-large: 2rem;
+    --density-larger: 4rem;
+    --density-largest: 8rem;
 }
 
 html,
@@ -27,3 +41,11 @@ body {
     margin: 0;
     font-family: 'Yekan', Roboto, 'Helvetica Neue', sans-serif;
 }
+
+@import '~@angular/material/theming';
+
+$custom-typography: mat-typography-config(
+    $font-family: 'Yekan',
+);
+
+@include mat-core($custom-typography);
