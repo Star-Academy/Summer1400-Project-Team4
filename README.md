@@ -3,11 +3,12 @@
 برای api و طراحی پایپلاین یه فرمت موقت مینویسم. میتونین اگه باگی داره اصلاح کنین.
 </div>
 
+
 ## pipeline json
 
-  <pre>
+<pre>
 {
-    "executeOnTable": "myTable",
+    "pipelineName": "myPipeline",
     "processes": [
         {
             "name": "filter",
@@ -39,4 +40,4 @@
         }
     ]
 }
-  </pre>
+</pre>
