@@ -45,9 +45,15 @@
 
 ## API
 
-### save pipeline
+### save a pipeline
 
 <pre>
-PUT users/{userId}/pipelines/{pipelineId}
+PUT /users/{userId}/pipelines/{pipelineId}
+</pre>
+
+### execute a pipeline
+
+<pre>
+POST /users/{userId}/datasets/{datasetId}/execute?pipelineId={pipelineId}
 </pre>
 
