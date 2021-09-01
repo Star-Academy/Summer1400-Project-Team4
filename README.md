@@ -4,6 +4,8 @@
 </div>
 
 ## pipeline json
+
+  <xmp>
 {
     "processes": [
         {
@@ -69,3 +71,4 @@
     "name": "sdfsf",
     "isActive": false
 }
+  </xmp>
