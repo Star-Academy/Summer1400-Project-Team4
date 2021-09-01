@@ -54,6 +54,6 @@ PUT /users/{userId}/pipelines/{pipelineId}
 ### execute a pipeline
 
 <pre>
-POST /users/{userId}/datasets/{datasetId}/execute?pipelineId={pipelineId}
+POST /users/{userId}/datasets/{datasetId}/execute?pipelineId={pipelineId}&destination={datasetId}
 </pre>
 
