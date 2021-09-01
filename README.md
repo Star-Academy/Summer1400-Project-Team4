@@ -1,10 +1,9 @@
 # Summer1400-Project-Team4
 <div dir="rtl">
 برای api و طراحی پایپلاین یه فرمت موقت مینویسم. میتونین اگه باگی داره اصلاح کنین.
-  
 </div>
-## pipeline json:
- 
+
+## pipeline json
 {
     "processes": [
         {
