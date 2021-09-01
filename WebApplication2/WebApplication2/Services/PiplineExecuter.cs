@@ -6,6 +6,6 @@ namespace WebApplication2.Services
     public class PiplineExecuter
     {
         public object DataTable { get; set; }
-        public List<IQueryProcessor> QueriesList;
+        public List<QueryProcessor> QueriesList;
     }
 }

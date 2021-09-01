@@ -1,6 +1,6 @@
 ﻿namespace WebApplication2.Services.QueryServices
 {
-    public class JoinProcessor : IQueryProcessor
+    public class JoinProcessor : QueryProcessor
     {
         public override string Instruction { get; set; }
 

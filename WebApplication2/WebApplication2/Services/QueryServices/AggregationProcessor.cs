@@ -1,6 +1,6 @@
 ﻿namespace WebApplication2.Services.QueryServices
 {
-    public class AggregationProcessor : IQueryProcessor
+    public class AggregationProcessor : QueryProcessor
     {
         public override string Instruction { get; set; }
 

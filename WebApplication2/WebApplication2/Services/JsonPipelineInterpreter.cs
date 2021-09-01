@@ -5,7 +5,7 @@ namespace WebApplication2.Services
 {
     public class JsonPipelineInterpreter
     {
-        public static IEnumerable<IQueryProcessor> QueriesList(string pipelineJson)
+        public static IEnumerable<QueryProcessor> QueriesList(string pipelineJson)
         {
             return null;
         }
