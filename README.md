@@ -45,7 +45,13 @@
 
 ## API
 
-### save a pipeline
+### save a new pipeline
+
+<pre>
+POST /users/{userId}/pipelines
+</pre>
+
+### update a pipeline
 
 <pre>
 PUT /users/{userId}/pipelines/{pipelineId}
