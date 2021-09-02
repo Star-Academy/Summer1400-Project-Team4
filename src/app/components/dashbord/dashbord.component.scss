@@ -6,9 +6,13 @@
 
 table {
   width: 70%;
+  height: 600px;
 }
 
 .col-sm {
   width: 70px;
 }
 
+cdk-virtual-scroll-viewport {
+  height: 100vh;
+}

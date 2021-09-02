@@ -49,3 +49,13 @@ $custom-typography: mat-typography-config(
 );
 
 @include mat-core($custom-typography);
+
+
+.custom-dialog-container .mat-dialog-container {
+  background-color: #7948cb;
+  width: 500px;
+}
+.red-snackbar
+{
+  background: #B00020;
+}

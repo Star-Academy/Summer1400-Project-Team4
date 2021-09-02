@@ -14,7 +14,13 @@ import {MatBadgeModule} from '@angular/material/badge';
 import {MatTableModule} from '@angular/material/table';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import {TableVirtualScrollModule} from 'ng-table-virtual-scroll';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 const material = [
+    MatSnackBarModule ,
+    MatFormFieldModule,
     MatTableModule,
     MatSidenavModule,
     MatButtonModule,
@@ -29,7 +35,10 @@ const material = [
     MatExpansionModule,
     MatBadgeModule,
     ScrollingModule,
-    TableVirtualScrollModule
+    TableVirtualScrollModule,
+    MatDialogModule,
+    FormsModule,
+    ReactiveFormsModule,
 ];
 
 @NgModule({

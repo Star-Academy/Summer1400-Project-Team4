@@ -1,0 +1,115 @@
+h2 {
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  display: inline-block;
+  margin: 4rem 0.8rem 1rem 0.8rem;
+  color: #a39b9b;
+}
+
+.contentWrapper {
+  background: #59C173;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #59C173, #a17fe0,#5D26C1 );  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #59C173, #a17fe0,#5D26C1 ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  min-height: 100%;
+  padding: 2rem;
+  img
+  {
+    width: 12.5rem;
+    height: 12.5rem;
+    object-fit: cover;
+    border-radius: 10rem;
+  }
+  .formContent {
+    border-radius: 1rem 1rem 1rem 1rem;
+    background: snow;
+    width: 90%;
+    max-width: 45rem;
+    box-shadow: 0 3rem 6rem 0 rgba(0, 0, 0, 0.3);
+    position: relative;
+    padding: 0;
+    text-align: center;
+
+    button
+    {
+      &:hover
+      {
+        opacity: 0.9;
+      }
+    }
+
+    .formFooter {
+      background-color: #ece7e7;
+      border-top: 1px solid #dce8f1;
+      padding: 2.5rem;
+      text-align: center;
+      border-radius: 0 0 1rem 1rem;
+      margin-top: 1rem;
+      a {
+        color: deeppink;
+        display: inline-block;
+        text-decoration: none;
+        font-size: 16px;
+        margin-right: 1rem;
+      }
+      p {
+        display: inline-block;
+      }
+    }
+  }
+}
+
+.example-container
+{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .profile-changing
+  {
+    margin-bottom: 1rem;
+    cursor: pointer ;
+    color: #5D26C1;
+    font-size: 16px;
+    border: 2px solid;
+    padding: 7px;
+    &:hover
+    {
+      color: #59C173;
+    }
+
+  }
+}
+.example-container .mat-form-field + .mat-form-field {
+  margin-left: 8px;
+}
+
+.example-right-align {
+  text-align: right;
+}
+
+input.example-right-align::-webkit-outer-spin-button,
+input.example-right-align::-webkit-inner-spin-button {
+  display: none;
+}
+
+input.example-right-align {
+  -moz-appearance: textfield;
+}
+
+* {
+  box-sizing: border-box;
+}
+.mat-form-field
+{
+  margin-bottom: 0.4rem;
+  width: 25rem;
+}
+
