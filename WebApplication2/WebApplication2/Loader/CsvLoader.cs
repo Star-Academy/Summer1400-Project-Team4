@@ -2,36 +2,46 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Microsoft.Data.SqlClient;
+using WebApplication2.Services;
 
 namespace WebApplication2.Loader
 {
     public class CsvLoader
     {
-        private const string FilePath = "E://covid.csv";
+        private string _filePath;
         private string[] _firstLine;
         private string _tableName;
         private StreamReader _streamReader;
-        private string _newTableCommand;
-        private string _importCsvCommand;
-        private string _fieldSeparator;
+        public string NewTableCommand { get; private set; }
+        public string ImportCsvCommand { get; private set; }
+        public string FieldTerminator = ",";
+        public string RowTerminator = "\\n";
+        public int FirstRow = 2;
 
-        public void Load()
+        public void Load(string filePath, string newTableName)
         {
-            _fieldSeparator = ",";
-            _tableName = "temp";
-            _streamReader = new StreamReader(FilePath);
-            _firstLine = _streamReader.ReadLine()?.Split(',');
+            _filePath = filePath;
+            _tableName = newTableName;
+            _streamReader = new StreamReader(_filePath);
+            _firstLine = _streamReader.ReadLine()?.Split(FieldTerminator);
             CreateNewTableCommand();
             ImportFromCsvCommand();
+            ExecuteCommands();
         }
 
         private void ImportFromCsvCommand()
         {
             var stringBuilder = new StringBuilder();
             stringBuilder.Append($"BULK INSERT {_tableName}\n");
-            stringBuilder.Append($"FROM {FilePath}\n");
-            stringBuilder.Append($"WITH (\nFIRSTROW = 2,\nFIELDTERMINATOR = '{_fieldSeparator}',\nROWTERMINATOR = '\\n',\nTABLOCK\n);");
-            _importCsvCommand = stringBuilder.ToString();
+            stringBuilder.Append($"FROM '{_filePath}'\n");
+            stringBuilder.Append("WITH (\n" +
+                                 $"FIRSTROW = {FirstRow},\n" +
+                                 $"FIELDTERMINATOR = '{FieldTerminator}',\n" +
+                                 $"ROWTERMINATOR = '{RowTerminator}',\n" +
+                                 "TABLOCK\n" +
+                                 ");");
+            ImportCsvCommand = stringBuilder.ToString();
         }
 
         private void CreateNewTableCommand()
@@ -42,22 +52,33 @@ namespace WebApplication2.Loader
             {
                 stringBuilder.Append(s + " NVARCHAR(255),\n");
             }
-
             stringBuilder.Append(");");
-            _newTableCommand = stringBuilder.ToString();
+            NewTableCommand = stringBuilder.ToString();
         }
 
 
         public string[] GetColumn(int columnNumber)
         {
             var column = new List<string>();
-            _streamReader = new StreamReader(FilePath);
+            _streamReader = new StreamReader(_filePath);
             while (!_streamReader.EndOfStream)
             {
-                var row = _streamReader.ReadLine()?.Split(_fieldSeparator);
+                var row = _streamReader.ReadLine()?.Split(FieldTerminator);
                 if (row != null) column.Add(row[columnNumber]);
             }
             return column.ToArray();
+        }
+
+        private void ExecuteCommands()
+        {
+            using var connection = new ClientDbConnector().Connect("localhost", "newdb");
+            connection.Open();
+            var sqlCommand = new SqlCommand(NewTableCommand, connection);
+            sqlCommand.ExecuteNonQuery();
+            sqlCommand.Dispose();
+            sqlCommand = new SqlCommand(ImportCsvCommand, connection);
+            sqlCommand.ExecuteNonQuery();
+            sqlCommand.Dispose();
         }
     }
 }
