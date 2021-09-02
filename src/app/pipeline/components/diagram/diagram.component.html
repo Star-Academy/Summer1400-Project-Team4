@@ -1,0 +1,52 @@
+<div
+    class="diagram-container"
+    [style.background-position]="
+        '' +
+        (baseOffset.x + dragOffset.x) +
+        'px ' +
+        (baseOffset.y + dragOffset.y) +
+        'px'
+    "
+>
+    <div #lineContainer class="line-container"></div>
+    <div
+        class="card-container"
+        cdkDrag
+        (cdkDragEnded)="updateOffset($event)"
+        (cdkDragMoved)="refreshArrows(); updateDragOffset($event)"
+    >
+        <div
+            class="offset-container"
+            [style.transform]="
+                'translate(' + baseOffset.x + 'px, ' + baseOffset.y + 'px)'
+            "
+        >
+            <mat-card
+                #lineStart
+                cdkDrag
+                (transitionend)="refreshArrows()"
+                (cdkDragMoved)="refreshArrows()"
+                (cdkDragStarted)="cardDragStarted($event)"
+                (cdkDragEnded)="cardDragEnded($event)"
+            >
+                <mat-card-header>
+                    <mat-card-title>مبدأ</mat-card-title>
+                    <mat-card-subtitle>دیتاست ثبت احوال</mat-card-subtitle>
+                </mat-card-header>
+            </mat-card>
+            <mat-card
+                #lineEnd
+                cdkDrag
+                (transitionend)="refreshArrows()"
+                (cdkDragMoved)="refreshArrows()"
+                (cdkDragStarted)="cardDragStarted($event)"
+                (cdkDragEnded)="cardDragEnded($event)"
+            >
+                <mat-card-header>
+                    <mat-card-title>مقصد</mat-card-title>
+                    <mat-card-subtitle>CIA</mat-card-subtitle>
+                </mat-card-header>
+            </mat-card>
+        </div>
+    </div>
+</div>

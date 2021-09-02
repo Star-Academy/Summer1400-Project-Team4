@@ -1,3 +1,6 @@
+@use '~@angular/material' as mat;
+@use 'theme.scss' as theme;
+
 /* Webfont: Yekan */
 @font-face {
     font-family: 'Yekan';
@@ -22,13 +25,13 @@
 :root {
     font-size: 62.5%;
 
-    --density-smallest: 0.1rem;
-    --density-smaller: 0.2rem;
-    --density-small: 0.5rem;
-    --density-normal: 1rem;
-    --density-large: 2rem;
-    --density-larger: 4rem;
-    --density-largest: 8rem;
+    --density-smallest: #{theme.$density-smallest};
+    --density-smaller: #{theme.$density-smaller};
+    --density-small: #{theme.$density-small};
+    --density-normal: #{theme.$density-normal};
+    --density-large: #{theme.$density-large};
+    --density-larger: #{theme.$density-larger};
+    --density-largest: #{theme.$density-largest};
 }
 
 html,
@@ -38,14 +41,8 @@ body {
 
 body {
     font-size: 160%;
-    margin: 0;
     font-family: 'Yekan', Roboto, 'Helvetica Neue', sans-serif;
 }
 
-@import '~@angular/material/theming';
-
-$custom-typography: mat-typography-config(
-    $font-family: 'Yekan',
-);
-
-@include mat-core($custom-typography);
+@include mat.core(theme.$theme);
+@include mat.all-component-themes(theme.$theme);

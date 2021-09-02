@@ -1,0 +1,35 @@
+@use 'sass:map';
+@use '~@angular/material' as mat;
+
+@forward '~@angular/material/theming' show mat-color;
+
+$primary-palette: mat.define-palette(mat.$deep-purple-palette);
+$accent-palette: mat.define-palette(mat.$amber-palette, A200, A100, A400);
+$warn-palette: mat.define-palette(mat.$red-palette);
+
+$typography-config: mat.define-typography-config(
+    $font-family: 'Yekan',
+);
+
+$theme: mat.define-light-theme(
+    (
+        color: (
+            primary: $primary-palette,
+            accent: $accent-palette,
+            warn: $warn-palette,
+        ),
+        typography: $typography-config,
+    )
+);
+
+$color-config: mat.get-color-config($theme);
+$background-palette: map.get($color-config, 'background');
+$foreground-palette: map.get($color-config, 'foreground');
+
+$density-smallest: 0.1rem;
+$density-smaller: 0.2rem;
+$density-small: 0.5rem;
+$density-normal: 1rem;
+$density-large: 2rem;
+$density-larger: 4rem;
+$density-largest: 8rem;

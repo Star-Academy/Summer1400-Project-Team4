@@ -8,12 +8,15 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatInputModule } from '@angular/material/input';
-import {MatCardModule} from '@angular/material/card';
+import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
-import {MatBadgeModule} from '@angular/material/badge';
-import {MatTableModule} from '@angular/material/table';
-import {ScrollingModule} from '@angular/cdk/scrolling';
-import {TableVirtualScrollModule} from 'ng-table-virtual-scroll';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatTableModule } from '@angular/material/table';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { TableVirtualScrollModule } from 'ng-table-virtual-scroll';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+
 const material = [
     MatTableModule,
     MatSidenavModule,
@@ -29,7 +32,9 @@ const material = [
     MatExpansionModule,
     MatBadgeModule,
     ScrollingModule,
-    TableVirtualScrollModule
+    TableVirtualScrollModule,
+    DragDropModule,
+    MatButtonToggleModule,
 ];
 
 @NgModule({

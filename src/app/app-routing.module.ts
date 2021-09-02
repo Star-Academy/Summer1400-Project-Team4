@@ -3,10 +3,15 @@ import { RouterModule, Routes } from '@angular/router';
 import { LandingComponent } from './components/landing/landing.component';
 import { DashbordComponent } from './components/dashbord/dashbord.component';
 import { PostsComponent } from './components/posts/posts.component';
-import { PipelineComponent } from './components/pipeline/pipeline.component';
 
 const routes: Routes = [
-    { path: 'pipeline', component: PipelineComponent },
+    {
+        path: 'pipeline',
+        loadChildren: () =>
+            import('./pipeline/pipeline.module').then(
+                (module) => module.PipelineModule
+            ),
+    },
     {
         path: '',
         component: LandingComponent,
