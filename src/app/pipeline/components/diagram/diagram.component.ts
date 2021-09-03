@@ -1,8 +1,9 @@
 import {
+    CdkDragDrop,
     CdkDragEnd,
     CdkDragMove,
-    CdkDragRelease,
     CdkDragStart,
+    transferArrayItem,
 } from '@angular/cdk/drag-drop';
 import {
     AfterViewInit,
@@ -11,7 +12,22 @@ import {
     OnInit,
     ViewChild,
 } from '@angular/core';
+import { ReplaySubject, Subject } from 'rxjs';
 import { LineService } from '../../services/line.service';
+
+class Node {
+    constructor(
+        public id: number,
+        public title: string,
+        public subtitle: string = '',
+        public inputs: Node[] = []
+    ) {
+        this.outputs.push(this);
+    }
+
+    outputs: Node[] = [];
+    outputPlaceholderElement = new ReplaySubject<HTMLElement>(1);
+}
 
 @Component({
     selector: 'app-diagram',
@@ -27,6 +43,11 @@ export class DiagramComponent implements OnInit, AfterViewInit {
     lines: any[] = [];
     baseOffset = { x: 0, y: 0 };
     dragOffset = { x: 0, y: 0 };
+    nodes: Node[] = [
+        new Node(1, 'مبدأ', 'دیتاست ثبت احوال'),
+        new Node(2, 'مقصد', 'CIA'),
+    ];
+    reposition = new Subject<void>();
 
     constructor(private lineService: LineService) {}
 
@@ -36,28 +57,42 @@ export class DiagramComponent implements OnInit, AfterViewInit {
         this.Line = this.lineService.onContainer(
             this.lineContainer?.nativeElement
         );
+    }
 
-        this.lines.push(
-            this.Line(
-                this.lineStart!.nativeElement,
-                this.lineEnd!.nativeElement,
-                { color: 'var(--arrow-color)' }
-            )
-        );
+    addNode() {
+        this.nodes.push(new Node(0, 'پردازش', 'دلال اطلاعات'))
+    }
 
-        this.lines.push(
-            this.Line(
-                this.lineEnd!.nativeElement,
-                this.lineStart!.nativeElement,
-                { color: 'var(--arrow-color)' }
-            )
-        );
+    connectNode(begin: Node, end: Node) {
+        if (begin.outputs.length > 0) {
+            end.inputs.push(begin.outputs.pop()!);
+        }
+    }
+
+    buttonDrop(
+        event: CdkDragDrop<{
+            node: Node;
+            type: string;
+            list: Node[];
+        }>
+    ) {
+        if (event.previousContainer === event.container) {
+            return;
+        } else {
+            transferArrayItem(
+                event.previousContainer.data.list,
+                event.container.data.list,
+                event.previousIndex,
+                event.currentIndex
+            );
+        }
     }
 
     refreshArrows() {
-        this.lines.forEach((line) => {
-            line.position();
-        });
+        this.reposition.next();
+        // this.lines.forEach((line) => {
+        //     line.position();
+        // });
     }
 
     updateDragOffset(event: CdkDragMove) {

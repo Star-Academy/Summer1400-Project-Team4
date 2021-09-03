@@ -6,6 +6,8 @@ import { MaterialModule } from '../material/material.module';
 import { FormsModule } from '@angular/forms';
 import { LineService } from './services/line.service';
 import { DiagramComponent } from './components/diagram/diagram.component';
+import { AnchorComponent } from './components/anchor/anchor.component';
+import { SpyElementDirective } from './components/diagram/spy-element.directive';
 
 const routes: Routes = [
     {
@@ -15,7 +17,12 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    declarations: [PipelineDesignerComponent, DiagramComponent],
+    declarations: [
+        PipelineDesignerComponent,
+        DiagramComponent,
+        AnchorComponent,
+        SpyElementDirective,
+    ],
     imports: [
         CommonModule,
         RouterModule.forChild(routes),

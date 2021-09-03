@@ -1,4 +1,5 @@
 @use '../../../../theme.scss' as theme;
+@use '~@angular/material' as mat;
 
 ::ng-deep :root {
     --arrow-color: #{theme.mat-color(theme.$primary-palette)};
@@ -9,18 +10,9 @@
     height: 100%;
     overflow: hidden;
 
-    direction: ltr;
     background-size: 4rem 4rem;
     background-image: linear-gradient(to right, #eee 0.1rem, transparent 0.1rem),
         linear-gradient(to bottom, #eee 0.1rem, transparent 0.1rem);
-}
-
-.line-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 0;
-    height: 0;
 }
 
 .card-container {
@@ -39,6 +31,7 @@
 }
 
 .mat-card {
+    position: absolute;
     width: 20rem;
     height: 8rem;
 
@@ -46,27 +39,57 @@
     flex-direction: row;
     justify-content: center;
 
-    direction: rtl;
     cursor: move;
 
-    transition: box-shadow 200ms cubic-bezier(0, 0, 0.2, 1);
-
+    transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
     &.snap-animation {
         transition: transform 200ms ease-in-out,
-            box-shadow 200ms cubic-bezier(0, 0, 0.2, 1);
+            box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
-        0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-
+    @include mat.elevation(2);
     &:active {
-        box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
-            0 8px 10px 1px rgba(0, 0, 0, 0.14),
-            0 3px 14px 2px rgba(0, 0, 0, 0.12);
+        @include mat.elevation(6);
     }
 }
 
 .mat-card-title,
 .mat-card-subtitle {
     text-align: center;
+}
+
+.drop-placeholder {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 100%;
+}
+
+.input-drop-placeholder {
+    position: absolute;
+    top: 4rem - 1rem;
+    right: -1rem;
+
+    background-color: theme.mat-color(theme.$primary-palette, 'lighter');
+}
+
+.output-drop-placeholder {
+    position: absolute;
+    top: 4rem - 1rem;
+    left: -1rem;
+    background-color: theme.mat-color(theme.$primary-palette);
+}
+
+.line-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+}
+
+.top-right-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: var(--density-large);
 }

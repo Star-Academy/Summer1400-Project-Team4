@@ -16,6 +16,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { TableVirtualScrollModule } from 'ng-table-virtual-scroll';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatRippleModule } from '@angular/material/core';
 
 const material = [
     MatTableModule,
@@ -35,6 +36,7 @@ const material = [
     TableVirtualScrollModule,
     DragDropModule,
     MatButtonToggleModule,
+    MatRippleModule,
 ];
 
 @NgModule({

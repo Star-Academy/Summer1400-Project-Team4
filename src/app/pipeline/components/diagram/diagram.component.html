@@ -1,14 +1,13 @@
 <div
     class="diagram-container"
     [style.background-position]="
-        '' +
-        (baseOffset.x + dragOffset.x) +
-        'px ' +
+        'right ' +
+        (-baseOffset.x - dragOffset.x) +
+        'px top ' +
         (baseOffset.y + dragOffset.y) +
         'px'
     "
 >
-    <div #lineContainer class="line-container"></div>
     <div
         class="card-container"
         cdkDrag
@@ -20,9 +19,10 @@
             [style.transform]="
                 'translate(' + baseOffset.x + 'px, ' + baseOffset.y + 'px)'
             "
+            cdkDropListGroup
         >
             <mat-card
-                #lineStart
+                *ngFor="let node of nodes"
                 cdkDrag
                 (transitionend)="refreshArrows()"
                 (cdkDragMoved)="refreshArrows()"
@@ -30,23 +30,59 @@
                 (cdkDragEnded)="cardDragEnded($event)"
             >
                 <mat-card-header>
-                    <mat-card-title>مبدأ</mat-card-title>
-                    <mat-card-subtitle>دیتاست ثبت احوال</mat-card-subtitle>
+                    <mat-card-title>{{ node.title }}</mat-card-title>
+                    <mat-card-subtitle>{{ node.subtitle }}</mat-card-subtitle>
                 </mat-card-header>
-            </mat-card>
-            <mat-card
-                #lineEnd
-                cdkDrag
-                (transitionend)="refreshArrows()"
-                (cdkDragMoved)="refreshArrows()"
-                (cdkDragStarted)="cardDragStarted($event)"
-                (cdkDragEnded)="cardDragEnded($event)"
-            >
-                <mat-card-header>
-                    <mat-card-title>مقصد</mat-card-title>
-                    <mat-card-subtitle>CIA</mat-card-subtitle>
-                </mat-card-header>
+                <div
+                    class="drop-placeholder input-drop-placeholder"
+                    cdkDropList
+                    [cdkDropListData]="{
+                        node: node,
+                        type: 'input',
+                        list: node.inputs
+                    }"
+                    (cdkDropListDropped)="buttonDrop($event)"
+                >
+                    <app-anchor
+                        [lineContainer]="lineContainer"
+                        [connectionBegin]="
+                            (input.outputPlaceholderElement | async) ||
+                            undefined
+                        "
+                        [reposition]="reposition"
+                        *ngFor="let input of node.inputs"
+                    ></app-anchor>
+                </div>
+                <div
+                    spy-element
+                    (onInit)="
+                        node.outputPlaceholderElement.next(connectionBegin)
+                    "
+                    class="drop-placeholder output-drop-placeholder"
+                    cdkDropList
+                    #connectionBegin
+                    [cdkDropListData]="{
+                        node: node,
+                        type: 'output',
+                        list: node.outputs
+                    }"
+                    (cdkDropListDropped)="buttonDrop($event)"
+                >
+                    <app-anchor
+                        [lineContainer]="lineContainer"
+                        [connectionBegin]="connectionBegin"
+                        [connectionRestVisibility]="false"
+                        [reposition]="reposition"
+                        *ngFor="let output of node.outputs"
+                    ></app-anchor>
+                </div>
             </mat-card>
         </div>
+    </div>
+    <div #lineContainer class="line-container"></div>
+    <div class="top-right-container">
+        <button mat-raised-button color="primary" (click)="addNode()">
+            <mat-icon>add</mat-icon>
+        </button>
     </div>
 </div>
