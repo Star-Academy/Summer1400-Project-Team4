@@ -151,25 +151,27 @@
 <!--  </mat-card>-->
 
 <!--</div>-->
-
-
-<div class="example-container mat-elevation-z8">
-  <mat-table #table [dataSource]="dataSource" (scroll)="onTableScroll($event)">
+<p style="padding-right: 10px"> پست </p>
+<cdk-virtual-scroll-viewport (scroll)="onTableScroll($event)" class="wrapper mat-elevation-z2" tvsItemSize>
+  <table #table *ngIf="dataSource" [dataSource]="dataSource" class="mat-elevation-z8" mat-table
+         style="margin-right: 6rem">
 
     <!-- Position Column -->
     <ng-container matColumnDef="position">
-      <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.position}} </mat-cell>
+      <th *matHeaderCellDef mat-header-cell> ردیف</th>
+      <td *matCellDef="let element" mat-cell> {{element.position}} </td>
     </ng-container>
 
     <!-- Name Column -->
     <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+      <th *matHeaderCellDef mat-header-cell> نام</th>
+      <td *matCellDef="let element" mat-cell> {{element.name}} </td>
     </ng-container>
 
 
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-  </mat-table>
-</div>
+    <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+
+    <tr *matRowDef="let element; columns: displayedColumns;" mat-row></tr>
+
+  </table>
+</cdk-virtual-scroll-viewport>

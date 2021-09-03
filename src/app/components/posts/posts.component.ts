@@ -1,94 +1,98 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {LoginSignupAlertComponent} from "../messages/login-signup-alert/login-signup-alert.component";
+import {TableVirtualScrollDataSource} from "ng-table-virtual-scroll";
+import {PeriodicElement} from "../dashbord/dashbord.component";
+import {MatSnackBar} from "@angular/material/snack-bar";
+
+const buffer = 200;
+
 @Component({
   selector: 'app-posts',
   templateUrl: './posts.component.html',
   styleUrls: ['./posts.component.scss']
 })
 export class PostsComponent implements OnInit {
+
   displayedColumns = ['position', 'name'];
-  dataSource = ELEMENT_DATA;
+  dataSource!: TableVirtualScrollDataSource<PeriodicElement>;
+
+  constructor(public dialog: MatDialog , public snackBar : MatSnackBar) {
+  }
 
   // @ts-ignore
   onTableScroll(e) {
-    const tableViewHeight = e.target.offsetHeight // viewport: ~500px
-    const tableScrollHeight = e.target.scrollHeight // length of all table
+    const tableViewHeight = e.target.offsetHeight // viewport: 52rem
+    const tableScrollHeight = e.target.scrollHeight // the length of loaded datas exist in hole table
     const scrollLocation = e.target.scrollTop; // how far user scrolled
-
-    // If the user has scrolled within 200px of the bottom, add more data
-    const buffer = 200;
     const limit = tableScrollHeight - tableViewHeight - buffer;
+    // console.log('tableViewHeight : ' + tableViewHeight)
+    // console.log('tableScrollHeight : ' + tableScrollHeight)
+    // console.log('scrollLocation : ' + scrollLocation)
+    // console.log('limit : ' + limit)
+
     if (scrollLocation > limit) {
-     // this.dataSource.push(elem[0]);
-     //  this.dataSource.concat(elem);
+      //http post
+      // alert("loading more samples");
+        this.dataSource.data = this.dataSource.data.concat(ELEM);
     }
-  }
-  constructor(public dialog: MatDialog)
-  {
-    this.dataSource.push(elem[0]);
   }
 
   ngOnInit(): void {
-    this.dialog.open(LoginSignupAlertComponent, { panelClass: 'custom-dialog-container' , disableClose : true  ,
-                                                                                                closeOnNavigation : true});
-    console.log("ngOnInit");
-    setTimeout(()=>{
-      this.dataSource[0].name = "opotoniom";
-    } , 3000)
+    this.dataSource = new TableVirtualScrollDataSource(ELEM);
+
+    this.dialog.open(LoginSignupAlertComponent, {
+      panelClass: 'custom-dialog-container', disableClose: false,
+      closeOnNavigation: false
+    });
+    // console.log("ngOnInit");
+    // setTimeout(()=>{
+    //   this.dataSource.data[0].name = "opotoniom";
+    // } , 3000)
   }
 
 }
-export interface Element {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
 
-const ELEMENT_DATA: Element[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-  {position: 11, name: 'Sodium', weight: 22.9897, symbol: 'Na'},
-  {position: 12, name: 'Magnesium', weight: 24.305, symbol: 'Mg'},
-  {position: 13, name: 'Aluminum', weight: 26.9815, symbol: 'Al'},
-  {position: 14, name: 'Silicon', weight: 28.0855, symbol: 'Si'},
-  {position: 15, name: 'Phosphorus', weight: 30.9738, symbol: 'P'},
-  {position: 16, name: 'Sulfur', weight: 32.065, symbol: 'S'},
-  {position: 17, name: 'Chlorine', weight: 35.453, symbol: 'Cl'},
-  {position: 18, name: 'Argon', weight: 39.948, symbol: 'Ar'},
-  {position: 19, name: 'Potassium', weight: 39.0983, symbol: 'K'},
-  {position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca'},
-];
-
-let elem: Element[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-  {position: 11, name: 'Sodium', weight: 22.9897, symbol: 'Na'},
-  {position: 12, name: 'Magnesium', weight: 24.305, symbol: 'Mg'},
-  {position: 13, name: 'Aluminum', weight: 26.9815, symbol: 'Al'},
-  {position: 14, name: 'Silicon', weight: 28.0855, symbol: 'Si'},
-  {position: 15, name: 'Phosphorus', weight: 30.9738, symbol: 'P'},
-  {position: 16, name: 'Sulfur', weight: 32.065, symbol: 'S'},
-  {position: 17, name: 'Chlorine', weight: 35.453, symbol: 'Cl'},
-  {position: 18, name: 'Argon', weight: 39.948, symbol: 'Ar'},
-  {position: 19, name: 'Potassium', weight: 39.0983, symbol: 'K'},
-  {position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca'},
+let ELEM: PeriodicElement[] = [
+  {position: 1, name: 'هیدروزن'},
+  {position: 2, name: 'هلیم'},
+  {position: 3, name: 'لیتیم'},
+  {position: 4, name: 'برلیم'},
+  {position: 5, name: 'بورن'},
+  {position: 6, name: 'بور'},
+  {position: 7, name: 'نیترو'},
+  {position: 8, name: 'اکسیژ'},
+  {position: 9, name: 'فبور'},
+  {position: 10, name: 'نیون'},
+  {position: 11, name: 'هیدروزن'},
+  {position: 12, name: 'هلیم'},
+  {position: 13, name: 'لیتیم'},
+  {position: 14, name: 'برلیم'},
+  {position: 15, name: 'بورن'},
+  {position: 16, name: 'بور'},
+  {position: 17, name: 'نیترو'},
+  {position: 18, name: 'اکسیژ'},
+  {position: 19, name: 'فبور'},
+  {position: 20, name: 'نیون'},
+  {position: 21, name: 'هیدروزن'},
+  {position: 22, name: 'هلیم'},
+  {position: 23, name: 'لیتیم'},
+  {position: 24, name: 'برلیم'},
+  {position: 25, name: 'بورن'},
+  {position: 26, name: 'بور'},
+  {position: 27, name: 'نیترو'},
+  {position: 28, name: 'اکسیژ'},
+  {position: 29, name: 'فبور'},
+  {position: 30, name: 'نیون'},
+  {position: 31, name: 'هیدروزن'},
+  {position: 32, name: 'هلیم'},
+  {position: 33, name: 'لیتیم'},
+  {position: 34, name: 'برلیم'},
+  {position: 35, name: 'بورن'},
+  {position: 36, name: 'بور'},
+  {position: 37, name: 'نیترو'},
+  {position: 38, name: 'اکسیژ'},
+  {position: 39, name: 'فبور'},
+  {position: 40, name: 'نیون'},
 ];
 

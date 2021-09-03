@@ -3,7 +3,6 @@
 @include mat.core();
 
 $my-primary: mat.define-palette(mat.$amber-palette);
-
 //.card
 //{
 //  width:90%;
@@ -25,14 +24,16 @@ $my-primary: mat.define-palette(mat.$amber-palette);
 //  }
 //}
 
-.example-container {
-  display: flex;
-  flex-direction: column;
-  max-height: 500px;
-  min-width: 300px;
+table {
+  width: 70%;
+  height: 600px;
 }
 
-.mat-table {
+cdk-virtual-scroll-viewport {
+  height: 100vh;
+}
+
+.wrapper {
+  height: 52rem;
   overflow: auto;
-  max-height: 500px;
 }
