@@ -5,39 +5,40 @@
 
 
 ## pipeline json
-
+سینتکس instruction رو به صورت دیفالت همون سینکتکس sql server در نظر بگیرین. 
 <pre>
 {
     "pipelineName": "myPipeline",
     "processes": [
         {
             "name": "filter",
-            "instruction": "{\"outputColumns\":[\"StudentNumber\", \"Grade\", \"FirstName\", \"LastName\"], \"condition\":\"IsMale = 1 AND 10 < Grade AND Grade < 15\"}"
+            "instruction": "(state = 'California' AND supplier_id <> 900) OR (supplier_id = 100)"
         },
         {
             "name": "filter",
-            "instruction": "{\"outputColumns\":[\"StudentNumber\", \"Grade\", \"FirstName\", \"LastName\"], \"condition\":\"IsMale = 1 AND 10 < Grade AND Grade < 15\"}"
+            "instruction": "(state = 'California' AND supplier_id <> 900) OR (supplier_id = 100)"
         },
         {
             "name": "filter",
-            "instruction": "{\"outputColumns\":[\"StudentNumber\", \"Grade\", \"FirstName\", \"LastName\"], \"condition\":\"IsMale = 1 AND 10 < Grade AND Grade < 15\"}"
+            "instruction": "(state = 'California' AND supplier_id <> 900) OR (supplier_id = 100)"
         },
         {
             "name": "filter",
-            "instruction": "{\"outputColumns\":[\"StudentNumber\", \"Grade\", \"FirstName\", \"LastName\"], \"condition\":\"IsMale = 1 AND 10 < Grade AND Grade < 15\"}"
+            "instruction": "(state = 'California' AND supplier_id <> 900) OR (supplier_id = 100)"
         },
         {
             "name": "filter",
-            "instruction": "{\"outputColumns\":[\"StudentNumber\", \"Grade\", \"FirstName\", \"LastName\"], \"condition\":\"IsMale = 1 AND 10 < Grade AND Grade < 15\"}"
+            "instruction": "(state = 'California' AND supplier_id <> 900) OR (supplier_id = 100)"
         },
         {
             "name": "filter",
-            "instruction": "{\"outputColumns\":[\"StudentNumber\", \"Grade\", \"FirstName\", \"LastName\"], \"condition\":\"IsMale = 1 AND 10 < Grade AND Grade < 15\"}"
+            "instruction": "(state = 'California' AND supplier_id <> 900) OR (supplier_id = 100)"
         },
         {
             "name": "filter",
-            "instruction": "{\"outputColumns\":[\"StudentNumber\", \"Grade\", \"FirstName\", \"LastName\"], \"condition\":\"IsMale = 1 AND 10 < Grade AND Grade < 15\"}"
-        }
+            "instruction": "(state = 'California' AND supplier_id <> 900) OR (supplier_id = 100)"
+        },
+        
     ]
 }
 </pre>
