@@ -7,18 +7,18 @@ namespace WebApplication2.Services
 {
     public class PipelineExecutor
     {
-        private SqlConnection SqlConnection;
-        private List<QueryProcessor> QueriesList;
+        private readonly SqlConnection _sqlConnection;
+        private readonly List<QueryProcessor> _queriesList;
 
         public PipelineExecutor(string connectionString, string jsonPipeline)
         {
-            QueriesList = JsonPipelineInterpreter.GetQueriesList(jsonPipeline).ToList();
-            SqlConnection = new SqlConnection(connectionString);
+            _queriesList = JsonPipelineInterpreter.GetQueriesList(jsonPipeline).ToList();
+            _sqlConnection = new SqlConnection(connectionString);
         }
 
         public void Execute()
         {
-            QueriesList.ForEach(query => query.Handle());
+            _queriesList.ForEach(query => query.Handle(_sqlConnection));
         }
     }
 }
