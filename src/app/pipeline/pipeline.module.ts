@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PipelineDesignerComponent } from './components/pipeline-designer/pipeline-designer.component';
+import { DesignerComponent } from './components/designer/designer.component';
 import { RouterModule, Routes } from '@angular/router';
 import { MaterialModule } from '../material/material.module';
 import { FormsModule } from '@angular/forms';
@@ -12,13 +12,13 @@ import { SpyElementDirective } from './components/diagram/spy-element.directive'
 const routes: Routes = [
     {
         path: '',
-        component: PipelineDesignerComponent,
+        component: DesignerComponent,
     },
 ];
 
 @NgModule({
     declarations: [
-        PipelineDesignerComponent,
+        DesignerComponent,
         DiagramComponent,
         AnchorComponent,
         SpyElementDirective,

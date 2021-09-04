@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
     selector: 'app-pipeline',
-    templateUrl: './pipeline-designer.component.html',
-    styleUrls: ['./pipeline-designer.component.scss'],
+    templateUrl: './designer.component.html',
+    styleUrls: ['./designer.component.scss'],
 })
-export class PipelineDesignerComponent implements OnInit {
+export class DesignerComponent implements OnInit {
     pipelineName: string = 'خط لوله جدید';
 
     constructor() {}
