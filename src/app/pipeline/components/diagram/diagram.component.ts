@@ -1,9 +1,10 @@
 import {
+    CdkDrag,
     CdkDragDrop,
     CdkDragEnd,
     CdkDragMove,
     CdkDragStart,
-    transferArrayItem,
+    CdkDropList,
 } from '@angular/cdk/drag-drop';
 import {
     AfterViewInit,
@@ -12,21 +13,29 @@ import {
     OnInit,
     ViewChild,
 } from '@angular/core';
-import { ReplaySubject, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { LineService } from '../../services/line.service';
 
 class Node {
     constructor(
         public id: number,
+        numInputs: number,
+        public hasOutput: boolean,
         public title: string,
-        public subtitle: string = '',
-        public inputs: Node[] = []
+        public subtitle: string = ''
     ) {
-        this.outputs.push(this);
+        for (let i = 0; i < numInputs; i++) this.inputs.push([]);
     }
 
-    outputs: Node[] = [];
-    outputPlaceholderElement = new ReplaySubject<HTMLElement>(1);
+    inputs: Node[][] = [];
+    outputPlaceholderElement?: HTMLElement;
+    position = { x: 0, y: 0 };
+}
+
+interface DropListData {
+    type: 'input' | 'output' | 'remove';
+    node?: Node;
+    list?: Node[];
 }
 
 @Component({
@@ -39,15 +48,17 @@ export class DiagramComponent implements OnInit, AfterViewInit {
     @ViewChild('lineStart', { read: ElementRef }) lineStart?: ElementRef;
     @ViewChild('lineEnd', { read: ElementRef }) lineEnd?: ElementRef;
 
-    private Line?: { (start: any, end: any, options?: any): any };
+    private Line?: object;
     lines: any[] = [];
     baseOffset = { x: 0, y: 0 };
     dragOffset = { x: 0, y: 0 };
     nodes: Node[] = [
-        new Node(1, 'مبدأ', 'دیتاست ثبت احوال'),
-        new Node(2, 'مقصد', 'CIA'),
+        new Node(1, 0, true, 'مبدأ', 'دیتاست ثبت احوال'),
+        new Node(2, 1, false, 'مقصد', 'CIA'),
     ];
     reposition = new Subject<void>();
+
+    Node = Node;
 
     constructor(private lineService: LineService) {}
 
@@ -60,39 +71,40 @@ export class DiagramComponent implements OnInit, AfterViewInit {
     }
 
     addNode() {
-        this.nodes.push(new Node(0, 'پردازش', 'دلال اطلاعات'))
+        this.nodes.push(new Node(0, 2, true, 'پردازش', 'دلال اطلاعات'));
     }
 
-    connectNode(begin: Node, end: Node) {
-        if (begin.outputs.length > 0) {
-            end.inputs.push(begin.outputs.pop()!);
+    inputDropEnterPredicate(drag: CdkDrag, drop: CdkDropList<DropListData>) {
+        return (drag.data as Node) !== drop.data.node!;
+    }
+
+    buttonDrop(event: CdkDragDrop<DropListData>) {
+        if (event.previousContainer === event.container) return;
+
+        if (
+            event.container.data.type === 'output' ||
+            event.container.data.type === 'remove'
+        ) {
+            if (event.previousContainer.data.type === 'input')
+                event.previousContainer.data.list!.pop();
+        } else if (event.container.data.type === 'input') {
+            if (event.container.data.list!.length > 0)
+                event.container.data.list!.pop();
+
+            if (event.previousContainer.data.type === 'input') {
+                event.container.data.list!.push(
+                    event.previousContainer.data.list!.pop()!
+                );
+            } else if (event.previousContainer.data.type === 'output') {
+                event.container.data.list!.push(
+                    event.previousContainer.data.node!
+                );
+            }
         }
     }
 
-    buttonDrop(
-        event: CdkDragDrop<{
-            node: Node;
-            type: string;
-            list: Node[];
-        }>
-    ) {
-        if (event.previousContainer === event.container) {
-            return;
-        } else {
-            transferArrayItem(
-                event.previousContainer.data.list,
-                event.container.data.list,
-                event.previousIndex,
-                event.currentIndex
-            );
-        }
-    }
-
-    refreshArrows() {
+    positionConnections() {
         this.reposition.next();
-        // this.lines.forEach((line) => {
-        //     line.position();
-        // });
     }
 
     updateDragOffset(event: CdkDragMove) {
@@ -114,12 +126,10 @@ export class DiagramComponent implements OnInit, AfterViewInit {
 
     cardDragEnded(event: CdkDragEnd) {
         event.source.element.nativeElement.classList.add('snap-animation');
-        event.source._dragRef.setFreeDragPosition({
+        event.source.data.position = {
             x: snapTo(event.source.getFreeDragPosition().x, 4 * remInPixels()),
             y: snapTo(event.source.getFreeDragPosition().y, 4 * remInPixels()),
-        });
-
-        this.refreshArrows();
+        };
     }
 }
 

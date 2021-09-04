@@ -1,8 +1,10 @@
 <div
     #connectionEnd
     cdkDrag
-    class="drag-button"
     (cdkDragMoved)="previewDragMoved($event)"
     (cdkDragStarted)="previewDragStarted($event)"
     (cdkDragEnded)="previewDragEnded()"
-></div>
+    [cdkDragData]="dragData"
+>
+    <ng-content></ng-content>
+</div>

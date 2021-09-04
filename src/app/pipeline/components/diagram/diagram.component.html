@@ -10,71 +10,95 @@
 >
     <div
         class="card-container"
+        cdkDropListGroup
         cdkDrag
         (cdkDragEnded)="updateOffset($event)"
-        (cdkDragMoved)="refreshArrows(); updateDragOffset($event)"
+        (cdkDragMoved)="positionConnections(); updateDragOffset($event)"
     >
+        <div
+            class="remove-connection-container"
+            cdkDropList
+            [cdkDropListData]="
+                $any({
+                    type: 'remove'
+                })
+            "
+            (cdkDropListDropped)="buttonDrop($event)"
+        ></div>
         <div
             class="offset-container"
             [style.transform]="
                 'translate(' + baseOffset.x + 'px, ' + baseOffset.y + 'px)'
             "
-            cdkDropListGroup
         >
             <mat-card
                 *ngFor="let node of nodes"
                 cdkDrag
-                (transitionend)="refreshArrows()"
-                (cdkDragMoved)="refreshArrows()"
+                [cdkDragData]="node"
+                [cdkDragFreeDragPosition]="node.position"
                 (cdkDragStarted)="cardDragStarted($event)"
                 (cdkDragEnded)="cardDragEnded($event)"
+                (cdkDragMoved)="positionConnections()"
+                (transitionend)="positionConnections()"
             >
                 <mat-card-header>
                     <mat-card-title>{{ node.title }}</mat-card-title>
                     <mat-card-subtitle>{{ node.subtitle }}</mat-card-subtitle>
                 </mat-card-header>
-                <div
-                    class="drop-placeholder input-drop-placeholder"
-                    cdkDropList
-                    [cdkDropListData]="{
-                        node: node,
-                        type: 'input',
-                        list: node.inputs
-                    }"
-                    (cdkDropListDropped)="buttonDrop($event)"
-                >
-                    <app-anchor
-                        [lineContainer]="lineContainer"
-                        [connectionBegin]="
-                            (input.outputPlaceholderElement | async) ||
-                            undefined
-                        "
-                        [reposition]="reposition"
+                <div class="drop-placeholder input-drop-placeholder">
+                    <div
                         *ngFor="let input of node.inputs"
-                    ></app-anchor>
+                        class="empty-button-placeholder"
+                        cdkDropList
+                        [cdkDropListData]="
+                            $any({
+                                type: 'input',
+                                node: node,
+                                list: input
+                            })
+                        "
+                        [cdkDropListEnterPredicate]="inputDropEnterPredicate"
+                        (cdkDropListDropped)="buttonDrop($event)"
+                    >
+                        <app-anchor
+                            *ngFor="let child of input"
+                            [lineContainer]="lineContainer"
+                            [connectionBegin]="child.outputPlaceholderElement"
+                            [reposition]="reposition"
+                            [dragData]="child"
+                        >
+                            <div class="drag-button"></div>
+                        </app-anchor>
+                    </div>
                 </div>
                 <div
-                    spy-element
-                    (onInit)="
-                        node.outputPlaceholderElement.next(connectionBegin)
-                    "
-                    class="drop-placeholder output-drop-placeholder"
-                    cdkDropList
                     #connectionBegin
-                    [cdkDropListData]="{
-                        node: node,
-                        type: 'output',
-                        list: node.outputs
-                    }"
-                    (cdkDropListDropped)="buttonDrop($event)"
+                    spy-element
+                    (onInit)="node.outputPlaceholderElement = connectionBegin"
+                    class="drop-placeholder output-drop-placeholder"
                 >
-                    <app-anchor
-                        [lineContainer]="lineContainer"
-                        [connectionBegin]="connectionBegin"
-                        [connectionRestVisibility]="false"
-                        [reposition]="reposition"
-                        *ngFor="let output of node.outputs"
-                    ></app-anchor>
+                    <div
+                        *ngIf="node.hasOutput"
+                        class="full-button-placeholder"
+                        cdkDropList
+                        [cdkDropListData]="
+                            $any({
+                                node: node,
+                                type: 'output'
+                            })
+                        "
+                        (cdkDropListDropped)="buttonDrop($event)"
+                    >
+                        <app-anchor
+                            [lineContainer]="lineContainer"
+                            [connectionBegin]="connectionBegin"
+                            [connectionRestVisibility]="false"
+                            [reposition]="reposition"
+                            [dragData]="node"
+                        >
+                            <div class="drag-button"></div>
+                        </app-anchor>
+                    </div>
                 </div>
             </mat-card>
         </div>

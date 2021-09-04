@@ -29,6 +29,7 @@ export class AnchorComponent
     @ViewChild('connectionEndPreview') connectionEndPreviewRef?: ElementRef;
     @Input() connectionRestVisibility: boolean = true;
     @Input() reposition?: Observable<void>;
+    @Input() dragData?: any;
     line: any;
     subscription?: Subscription;
 
@@ -70,7 +71,7 @@ export class AnchorComponent
     updateLineVisibility() {
         if (this.line !== undefined) {
             if (this.connectionRestVisibility) this.line.show();
-            else this.line.hide();
+            else this.line.hide('none');
         }
     }
 

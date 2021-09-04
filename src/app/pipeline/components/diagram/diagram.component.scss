@@ -39,7 +39,7 @@
     flex-direction: row;
     justify-content: center;
 
-    cursor: move;
+    cursor: pointer;
 
     transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
     &.snap-animation {
@@ -50,6 +50,7 @@
     @include mat.elevation(2);
     &:active {
         @include mat.elevation(6);
+        cursor: move;
     }
 }
 
@@ -59,23 +60,50 @@
 }
 
 .drop-placeholder {
+    position: absolute;
+    width: 0;
+    height: 8rem;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.input-drop-placeholder {
+    top: 0;
+    right: 0;
+}
+
+.output-drop-placeholder {
+    top: 0;
+    left: 0;
+}
+
+@mixin button-placeholder {
     width: 2rem;
     height: 2rem;
     border-radius: 100%;
 }
 
-.input-drop-placeholder {
-    position: absolute;
-    top: 4rem - 1rem;
-    right: -1rem;
-
+.empty-button-placeholder {
+    @include button-placeholder;
     background-color: theme.mat-color(theme.$primary-palette, 'lighter');
 }
 
-.output-drop-placeholder {
-    position: absolute;
-    top: 4rem - 1rem;
-    left: -1rem;
+.full-button-placeholder {
+    @include button-placeholder;
+    background-color: theme.mat-color(theme.$primary-palette);
+}
+
+@mixin drag-button {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 100%;
+}
+
+.drag-button {
+    @include drag-button;
     background-color: theme.mat-color(theme.$primary-palette);
 }
 
@@ -91,5 +119,17 @@
     position: absolute;
     top: 0;
     right: 0;
-    padding: var(--density-large);
+    margin: var(--density-large);
+}
+
+.remove-connection-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+
+    .drag-button {
+        display: none;
+    }
 }
