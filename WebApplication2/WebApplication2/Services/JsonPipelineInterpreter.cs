@@ -3,9 +3,9 @@ using WebApplication2.Services.QueryServices;
 
 namespace WebApplication2.Services
 {
-    public class JsonPipelineInterpreter
+    public static class JsonPipelineInterpreter
     {
-        public static IEnumerable<QueryProcessor> QueriesList(string pipelineJson)
+        public static IEnumerable<QueryProcessor> GetQueriesList(string pipelineJson)
         {
             return null;
         }
