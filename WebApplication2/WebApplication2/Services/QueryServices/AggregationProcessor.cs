@@ -2,11 +2,16 @@
 {
     public class AggregationProcessor : QueryProcessor
     {
-        public override string Instruction { get; set; }
+        public sealed override string Instruction { get; set; }
 
         public override void Handle()
         {
             throw new System.NotImplementedException();
+        }
+
+        public AggregationProcessor(string instruction)
+        {
+            Instruction = instruction;
         }
     }
 }
