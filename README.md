@@ -5,7 +5,10 @@
 
 
 ## pipeline json
-سینتکس instruction رو به صورت دیفالت همون سینکتکس sql server در نظر بگیرین. 
+<div dir="rtl">
+سینتکس instruction رو به صورت دیفالت همون سینکتکس sql server در نظر بگیرین.
+</div>
+
 <pre>
 {
     "pipelineName": "myPipeline",
