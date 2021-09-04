@@ -5,39 +5,43 @@
 
 
 ## pipeline json
+<div dir="rtl">
+سینتکس instruction رو به صورت دیفالت همون سینکتکس sql server در نظر بگیرین.
+    
+</div>
 
 <pre>
 {
-    "pipelineName": "myPipeline",
-    "processes": [
+    "PipelineName": "myPipeline",
+    "Processes": [
         {
-            "name": "filter",
-            "instruction": "{\"outputColumns\":[\"StudentNumber\", \"Grade\", \"FirstName\", \"LastName\"], \"condition\":\"IsMale = 1 AND 10 < Grade AND Grade < 15\"}"
+            "Name": "filter",
+            "Instruction": "(state = 'California' AND supplier_id <> 900) OR (supplier_id = 100)"
         },
         {
-            "name": "filter",
-            "instruction": "{\"outputColumns\":[\"StudentNumber\", \"Grade\", \"FirstName\", \"LastName\"], \"condition\":\"IsMale = 1 AND 10 < Grade AND Grade < 15\"}"
+            "Name": "filter",
+            "Instruction": "(state = 'California' AND supplier_id <> 900) OR (supplier_id = 100)"
         },
         {
-            "name": "filter",
-            "instruction": "{\"outputColumns\":[\"StudentNumber\", \"Grade\", \"FirstName\", \"LastName\"], \"condition\":\"IsMale = 1 AND 10 < Grade AND Grade < 15\"}"
+            "Name": "filter",
+            "Instruction": "(state = 'California' AND supplier_id <> 900) OR (supplier_id = 100)"
         },
         {
-            "name": "filter",
-            "instruction": "{\"outputColumns\":[\"StudentNumber\", \"Grade\", \"FirstName\", \"LastName\"], \"condition\":\"IsMale = 1 AND 10 < Grade AND Grade < 15\"}"
+            "Name": "filter",
+            "Instruction": "(state = 'California' AND supplier_id <> 900) OR (supplier_id = 100)"
         },
         {
-            "name": "filter",
-            "instruction": "{\"outputColumns\":[\"StudentNumber\", \"Grade\", \"FirstName\", \"LastName\"], \"condition\":\"IsMale = 1 AND 10 < Grade AND Grade < 15\"}"
+            "Name": "filter",
+            "Instruction": "(state = 'California' AND supplier_id <> 900) OR (supplier_id = 100)"
         },
         {
-            "name": "filter",
-            "instruction": "{\"outputColumns\":[\"StudentNumber\", \"Grade\", \"FirstName\", \"LastName\"], \"condition\":\"IsMale = 1 AND 10 < Grade AND Grade < 15\"}"
+            "Name": "filter",
+            "Instruction": "(state = 'California' AND supplier_id <> 900) OR (supplier_id = 100)"
         },
         {
-            "name": "filter",
-            "instruction": "{\"outputColumns\":[\"StudentNumber\", \"Grade\", \"FirstName\", \"LastName\"], \"condition\":\"IsMale = 1 AND 10 < Grade AND Grade < 15\"}"
-        }
+            "Name": "filter",
+            "Instruction": "(state = 'California' AND supplier_id <> 900) OR (supplier_id = 100)"
+        },        
     ]
 }
 </pre>
