@@ -16,7 +16,7 @@ import {
 import { Subject } from 'rxjs';
 import { LineService } from '../../services/line.service';
 
-class Node {
+class Card {
     constructor(
         public id: number,
         numInputs: number,
@@ -27,15 +27,15 @@ class Node {
         for (let i = 0; i < numInputs; i++) this.inputs.push([]);
     }
 
-    inputs: Node[][] = [];
+    inputs: Card[][] = [];
     outputPlaceholderElement?: HTMLElement;
     position = { x: 0, y: 0 };
 }
 
 interface DropListData {
     type: 'input' | 'output' | 'remove';
-    node?: Node;
-    list?: Node[];
+    card?: Card;
+    list?: Card[];
 }
 
 @Component({
@@ -52,13 +52,13 @@ export class DiagramComponent implements OnInit, AfterViewInit {
     lines: any[] = [];
     baseOffset = { x: 0, y: 0 };
     dragOffset = { x: 0, y: 0 };
-    nodes: Node[] = [
-        new Node(1, 0, true, 'مبدأ', 'دیتاست ثبت احوال'),
-        new Node(2, 1, false, 'مقصد', 'CIA'),
+    cards: Card[] = [
+        new Card(1, 0, true, 'مبدأ', 'دیتاست ثبت احوال'),
+        new Card(2, 1, false, 'مقصد', 'CIA'),
     ];
     reposition = new Subject<void>();
 
-    Node = Node;
+    Card = Card;
 
     constructor(private lineService: LineService) {}
 
@@ -70,12 +70,12 @@ export class DiagramComponent implements OnInit, AfterViewInit {
         );
     }
 
-    addNode() {
-        this.nodes.push(new Node(0, 2, true, 'پردازش', 'دلال اطلاعات'));
+    addCard() {
+        this.cards.push(new Card(0, 2, true, 'پردازش', 'دلال اطلاعات'));
     }
 
     inputDropEnterPredicate(drag: CdkDrag, drop: CdkDropList<DropListData>) {
-        return (drag.data as Node) !== drop.data.node!;
+        return (drag.data as Card) !== drop.data.card!;
     }
 
     buttonDrop(event: CdkDragDrop<DropListData>) {
@@ -97,7 +97,7 @@ export class DiagramComponent implements OnInit, AfterViewInit {
                 );
             } else if (event.previousContainer.data.type === 'output') {
                 event.container.data.list!.push(
-                    event.previousContainer.data.node!
+                    event.previousContainer.data.card!
                 );
             }
         }

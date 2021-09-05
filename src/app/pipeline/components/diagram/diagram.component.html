@@ -32,28 +32,28 @@
             "
         >
             <mat-card
-                *ngFor="let node of nodes"
+                *ngFor="let card of cards"
                 cdkDrag
-                [cdkDragData]="node"
-                [cdkDragFreeDragPosition]="node.position"
+                [cdkDragData]="card"
+                [cdkDragFreeDragPosition]="card.position"
                 (cdkDragStarted)="cardDragStarted($event)"
                 (cdkDragEnded)="cardDragEnded($event)"
                 (cdkDragMoved)="positionConnections()"
                 (transitionend)="positionConnections()"
             >
                 <mat-card-header>
-                    <mat-card-title>{{ node.title }}</mat-card-title>
-                    <mat-card-subtitle>{{ node.subtitle }}</mat-card-subtitle>
+                    <mat-card-title>{{ card.title }}</mat-card-title>
+                    <mat-card-subtitle>{{ card.subtitle }}</mat-card-subtitle>
                 </mat-card-header>
                 <div class="drop-placeholder input-drop-placeholder">
                     <div
-                        *ngFor="let input of node.inputs"
+                        *ngFor="let input of card.inputs"
                         class="empty-button-placeholder"
                         cdkDropList
                         [cdkDropListData]="
                             $any({
                                 type: 'input',
-                                node: node,
+                                card: card,
                                 list: input
                             })
                         "
@@ -74,16 +74,16 @@
                 <div
                     #connectionBegin
                     spy-element
-                    (onInit)="node.outputPlaceholderElement = connectionBegin"
+                    (onInit)="card.outputPlaceholderElement = connectionBegin"
                     class="drop-placeholder output-drop-placeholder"
                 >
                     <div
-                        *ngIf="node.hasOutput"
+                        *ngIf="card.hasOutput"
                         class="full-button-placeholder"
                         cdkDropList
                         [cdkDropListData]="
                             $any({
-                                node: node,
+                                card: card,
                                 type: 'output'
                             })
                         "
@@ -94,7 +94,7 @@
                             [connectionBegin]="connectionBegin"
                             [connectionRestVisibility]="false"
                             [reposition]="reposition"
-                            [dragData]="node"
+                            [dragData]="card"
                         >
                             <div class="drag-button"></div>
                         </app-anchor>
@@ -105,7 +105,7 @@
     </div>
     <div #lineContainer class="line-container"></div>
     <div class="top-right-container">
-        <button mat-raised-button color="primary" (click)="addNode()">
+        <button mat-raised-button color="primary" (click)="addCard()">
             <mat-icon>add</mat-icon>
         </button>
     </div>
