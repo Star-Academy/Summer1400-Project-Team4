@@ -14,9 +14,15 @@ namespace WebApplication2.Services.Sql
             Initialize();
         }
 
+        ~SqlConnection()
+        {
+            _sqlConnection.Close();
+        }
+
         public void Initialize()
         {
             _sqlConnection = new Microsoft.Data.SqlClient.SqlConnection(_connectionString);
+            _sqlConnection.Open();
         }
 
         public void SendQuery(string query)
@@ -25,9 +31,7 @@ namespace WebApplication2.Services.Sql
             {
                 CommandText = query, CommandType = CommandType.Text, Connection = _sqlConnection
             };
-            _sqlConnection.Open();
             sqlCommand.ExecuteReader();
-            _sqlConnection.Close();
         }
     }
 }

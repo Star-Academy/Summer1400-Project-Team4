@@ -19,7 +19,11 @@ namespace WebApplication2.Services
 
         public void Execute(string startingDatasetName, string destinationDatasetName)
         {
-            _queriesList.ForEach(query => query.Handle(_sqlConnection));
+            foreach (var query in _queriesList)
+            {
+                query.Handle(_sqlConnection, startingDatasetName, destinationDatasetName);
+            }
+            // _queriesList.ForEach(query => query.Handle(_sqlConnection));
         }
     }
 }
