@@ -11,7 +11,7 @@ import { DashbordComponent } from './components/dashbord/dashbord.component';
 import { HeaderComponent } from './components/shared/header/header.component';
 import { FooterComponent } from './components/shared/footer/footer.component';
 import { SidebarComponent } from './components/shared/sidebar/sidebar.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PostsComponent } from './components/posts/posts.component';
 import { LoginSignupAlertComponent } from './components/messages/login-signup-alert/login-signup-alert.component';
 import { UserComponent } from './components/user/user.component';
@@ -44,6 +44,7 @@ import { EditProfileComponent } from './components/user/edit-profile/edit-profil
         MaterialModule,
         FlexLayoutModule,
         FormsModule,
+        ReactiveFormsModule,
     ],
     providers: [],
     bootstrap: [AppComponent],

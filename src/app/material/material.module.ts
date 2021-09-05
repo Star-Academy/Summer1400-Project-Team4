@@ -22,7 +22,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 const material = [
-    MatSnackBarModule ,
+    MatSnackBarModule,
     MatFormFieldModule,
     MatTableModule,
     MatSidenavModule,
@@ -43,8 +43,6 @@ const material = [
     MatButtonToggleModule,
     MatRippleModule,
     MatDialogModule,
-    FormsModule,
-    ReactiveFormsModule,
 ];
 
 @NgModule({
