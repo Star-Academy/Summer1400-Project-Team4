@@ -11,8 +11,21 @@ namespace WebApplication2
         public static void Main(string[] args)
         {
             //CreateHostBuilder(args).Build().Run();
+            //CsvLoadExample();
+            SqlCopyExample();
+        }
+
+        private static void SqlCopyExample()
+        {
+            var sqlCreator = new SqlTableCreator();
+            sqlCreator.CopySql("localhost", "olddb", "dbo.tbl", "copied");
+            // if the source table is not in the "dbo" schema you should put that instead. however the default value is always "dbo".
+        }
+
+        private static void CsvLoadExample()
+        {
             var csvLoader = new CsvLoader();
-            csvLoader.Load("E:/covid.csv", "goraz");
+            csvLoader.Load("E:/covid.csv", "csvTable");
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
