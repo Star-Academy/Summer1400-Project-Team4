@@ -15,9 +15,9 @@ namespace WebApplication2.Services.QueryServices
             string destinationDatasetName)
         {
             applyingSql.SendQuery("SELECT * " +
-                                  $"INTO {destinationDatasetName}" +
-                                  $"FROM {startingDatasetName}" +
-                                  $"WHERE {Instruction}");
+                                  $"INTO {destinationDatasetName} " +
+                                  $"FROM {startingDatasetName} " +
+                                  $"WHERE {Instruction} ");
         }
     }
 }

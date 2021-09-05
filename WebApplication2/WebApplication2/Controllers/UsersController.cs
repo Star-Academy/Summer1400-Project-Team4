@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebApplication2.models;
 using WebApplication2.Services;
 
@@ -13,28 +14,28 @@ namespace WebApplication2.Controllers
         [HttpGet]
         public List<User> GetUsers()
         {
-            return Startup.EtlContext.Users.ToList();
+            return Startup.EtlContext.Users.Include(a => a.Pipelines).Include(a => a.Datasets).ToList();
         }
 
         [HttpGet]
         [Route("/{userId:int}/Pipelines")]
         public List<Pipeline> GetUserPipelines(int userId)
         {
-            return Startup.EtlContext.Users.First(u => u.UserId == userId).Pipelines.ToList();
+            return Startup.EtlContext.Users.Include(a => a.Pipelines).First(u => u.UserId == userId).Pipelines.ToList();
         }
 
         [HttpGet]
         [Route("/{userId:int}/Datasets")]
         public List<Dataset> GetUserDataset(int userId)
         {
-            return Startup.EtlContext.Users.First(u => u.UserId == userId).Datasets.ToList();
+            return Startup.EtlContext.Users.Include(a => a.Datasets).First(u => u.UserId == userId).Datasets.ToList();
         }
 
         [HttpPost]
         [Route("/{userId:int}/Pipelines")]
         public IActionResult AddToUserPipelines(int userId, Pipeline pipeline)
         {
-            var user = Startup.EtlContext.Users.FirstOrDefault(u => u.UserId == userId);
+            var user = Startup.EtlContext.Users.Include(a => a.Pipelines).FirstOrDefault(u => u.UserId == userId);
 
             if (user != null)
             {
@@ -56,7 +57,7 @@ namespace WebApplication2.Controllers
         [Route("/{userId:int}/Datasets")]
         public IActionResult AddToUserDatasets(int userId, Dataset dataset)
         {
-            var user = Startup.EtlContext.Users.FirstOrDefault(u => u.UserId == userId);
+            var user = Startup.EtlContext.Users.Include(a => a.Datasets).FirstOrDefault(u => u.UserId == userId);
 
             if (user != null)
             {
