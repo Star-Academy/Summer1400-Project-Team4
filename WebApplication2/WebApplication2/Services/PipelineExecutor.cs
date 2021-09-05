@@ -24,23 +24,9 @@ namespace WebApplication2.Services
             string endingTempTableName = "";
             foreach (var query in _queriesList)
             {
-                if (query == _queriesList[0])
-                {
-                    startingTempTableName = startingDatasetName;
-                }
-                else
-                {
-                    startingTempTableName = endingTempTableName;
-                }
+                startingTempTableName = query == _queriesList[0] ? startingDatasetName : endingTempTableName;
+                endingTempTableName = query == _queriesList[^1] ? destinationDatasetName : "#" + Guid.NewGuid().ToString("n");
 
-                if (query == _queriesList[^1])
-                {
-                    endingTempTableName = destinationDatasetName;
-                }
-                else
-                {
-                    endingTempTableName = Guid.NewGuid().ToString("n");
-                }
                 query.Handle(_sqlConnection, startingTempTableName, endingTempTableName);
             }
         }
