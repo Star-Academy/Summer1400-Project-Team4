@@ -11,7 +11,8 @@ namespace WebApplication2.Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Data Source=localhost\SQLExpress,1433;Database=ETL;Integrated Security=sspi;");
+            optionsBuilder.UseSqlServer(
+                @"Data Source=localhost\SQLExpress,1433;Database=ETL;Integrated Security=sspi;");
         }
     }
 }

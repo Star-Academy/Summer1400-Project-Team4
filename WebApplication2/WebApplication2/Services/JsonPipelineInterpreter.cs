@@ -12,13 +12,9 @@ namespace WebApplication2.Services
         {
             var pipeline = JsonSerializer.Deserialize<Pipeline>(pipelineJson);
             var queriesList = new List<QueryProcessor>();
-            if (pipeline?.Processes == null)
-            {
-                throw new Exception("There are no processes to handle");
-            }
+            if (pipeline?.Processes == null) throw new Exception("There are no processes to handle");
 
             foreach (var process in pipeline.Processes)
-            {
                 switch (process.Name)
                 {
                     case "filter":
@@ -31,7 +27,6 @@ namespace WebApplication2.Services
                         queriesList.Add(new AggregationProcessor(process.Instruction));
                         break;
                 }
-            }
 
             return queriesList;
         }

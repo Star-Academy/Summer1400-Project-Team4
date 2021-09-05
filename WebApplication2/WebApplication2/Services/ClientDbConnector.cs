@@ -1,5 +1,4 @@
-﻿using System.Text;
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 
 namespace WebApplication2.Services
 {

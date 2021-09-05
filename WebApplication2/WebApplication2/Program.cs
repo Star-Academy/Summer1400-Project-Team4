@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-using WebApplication2.Services.Sql;
 
 namespace WebApplication2
 {
@@ -17,9 +16,10 @@ namespace WebApplication2
         //         @"Data Source=localhost\SQLExpress,1433;Database=ETL;Integrated Security=sspi;");
         // }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
+        public static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            return Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
-        
+        }
     }
 }

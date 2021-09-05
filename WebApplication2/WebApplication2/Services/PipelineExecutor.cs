@@ -7,8 +7,8 @@ namespace WebApplication2.Services
 {
     public class PipelineExecutor
     {
-        private readonly SqlConnection _sqlConnection;
         private readonly List<QueryProcessor> _queriesList;
+        private readonly SqlConnection _sqlConnection;
 
         public PipelineExecutor(string connectionString, string jsonPipeline)
         {
