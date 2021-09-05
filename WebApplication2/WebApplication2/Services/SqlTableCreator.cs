@@ -5,12 +5,10 @@ namespace WebApplication2.Services
 {
     public class SqlTableCreator : ITableCreator
     {
-        private SqlConnection _serverDbConnection;
         private DataTable _dataTable;
 
-        public SqlTableCreator(SqlConnection serverDbConnection, DataTable dataTable)
+        public SqlTableCreator(DataTable dataTable)
         {
-            _serverDbConnection = serverDbConnection;
             _dataTable = dataTable;
         }
 
@@ -26,7 +24,7 @@ namespace WebApplication2.Services
 
         public void DataTableToServerDataTableConvertor()
         {
-            var queryString = $"";
+            
         }
     }
 }
