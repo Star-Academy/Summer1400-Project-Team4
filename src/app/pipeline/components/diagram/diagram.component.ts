@@ -10,32 +10,54 @@ import {
     AfterViewInit,
     Component,
     ElementRef,
+    Input,
     OnInit,
     ViewChild,
 } from '@angular/core';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
+import {
+    Pipeline,
+    PipelineNode,
+    pipelineNodeHasOutput,
+    pipelineNodeTypeReadableNames,
+} from '../../pipeline.model';
 import { LineService } from '../../services/line.service';
 
+const REM_IN_PIXLES = parseFloat(
+    getComputedStyle(document.documentElement).fontSize
+);
+const GRID_IN_PIXELS = 4 * REM_IN_PIXLES;
+
 class Card {
-    constructor(
-        public id: number,
-        numInputs: number,
-        public hasOutput: boolean,
-        public title: string,
-        public subtitle: string = ''
-    ) {
-        for (let i = 0; i < numInputs; i++) this.inputs.push([]);
+    constructor(public node: PipelineNode, public hasOutput: boolean) {
+        this.inputs = Array(node.inputs.length).fill(null);
+        this.updatePosition();
     }
 
-    inputs: Card[][] = [];
+    position!: { x: number; y: number };
+    inputs: (Card | null)[];
     outputPlaceholderElement?: HTMLElement;
-    position = { x: 0, y: 0 };
+
+    get title() {
+        return this.node.name;
+    }
+
+    get subtitle() {
+        return pipelineNodeTypeReadableNames[this.node.type];
+    }
+
+    updatePosition() {
+        this.position = {
+            x: -this.node.position.x * GRID_IN_PIXELS,
+            y: this.node.position.y * GRID_IN_PIXELS,
+        };
+    }
 }
 
 interface DropListData {
     type: 'input' | 'output' | 'remove';
     card?: Card;
-    list?: Card[];
+    index?: number;
 }
 
 @Component({
@@ -44,25 +66,37 @@ interface DropListData {
     styleUrls: ['./diagram.component.scss'],
 })
 export class DiagramComponent implements OnInit, AfterViewInit {
+    @Input() pipeline?: Pipeline;
     @ViewChild('lineContainer') lineContainer?: ElementRef;
-    @ViewChild('lineStart', { read: ElementRef }) lineStart?: ElementRef;
-    @ViewChild('lineEnd', { read: ElementRef }) lineEnd?: ElementRef;
 
     private Line?: object;
     lines: any[] = [];
     baseOffset = { x: 0, y: 0 };
     dragOffset = { x: 0, y: 0 };
-    cards: Card[] = [
-        new Card(1, 0, true, 'مبدأ', 'دیتاست ثبت احوال'),
-        new Card(2, 1, false, 'مقصد', 'CIA'),
-    ];
+    cards: Card[] = [];
     reposition = new Subject<void>();
 
     Card = Card;
 
     constructor(private lineService: LineService) {}
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.pipeline!.nodeAdded.subscribe((node) => {
+            this.cards.push(new Card(node, pipelineNodeHasOutput[node.type]));
+            this.updateCardInputs(node);
+        });
+
+        this.pipeline!.nodeEdited.subscribe((node) => {
+            this.updateCardInputs(node);
+        });
+
+        this.pipeline!.nodeRemoved.subscribe((node) => {
+            const index = this.cards.findIndex(
+                (card) => card.node.id === node.id
+            )!;
+            this.cards.splice(index, 1);
+        });
+    }
 
     ngAfterViewInit() {
         this.Line = this.lineService.onContainer(
@@ -70,8 +104,16 @@ export class DiagramComponent implements OnInit, AfterViewInit {
         );
     }
 
-    addCard() {
-        this.cards.push(new Card(0, 2, true, 'پردازش', 'دلال اطلاعات'));
+    updateCardInputs(node: PipelineNode) {
+        const card = this.findCard(node.id)!;
+        for (let i = 0; i < card.inputs.length; i++) {
+            if (node.inputs[i] === null) card.inputs[i] = null;
+            else card.inputs[i] = this.findCard(node.inputs[i]!)!;
+        }
+    }
+
+    findCard(id: number) {
+        return this.cards.find((card) => card.node.id === id);
     }
 
     inputDropEnterPredicate(drag: CdkDrag, drop: CdkDropList<DropListData>) {
@@ -81,24 +123,25 @@ export class DiagramComponent implements OnInit, AfterViewInit {
     buttonDrop(event: CdkDragDrop<DropListData>) {
         if (event.previousContainer === event.container) return;
 
-        if (
-            event.container.data.type === 'output' ||
-            event.container.data.type === 'remove'
-        ) {
-            if (event.previousContainer.data.type === 'input')
-                event.previousContainer.data.list!.pop();
-        } else if (event.container.data.type === 'input') {
-            if (event.container.data.list!.length > 0)
-                event.container.data.list!.pop();
+        const previous = event.previousContainer.data;
+        const current = event.container.data;
 
-            if (event.previousContainer.data.type === 'input') {
-                event.container.data.list!.push(
-                    event.previousContainer.data.list!.pop()!
-                );
-            } else if (event.previousContainer.data.type === 'output') {
-                event.container.data.list!.push(
-                    event.previousContainer.data.card!
-                );
+        if (current.type === 'output' || current.type === 'remove') {
+            if (previous.type === 'input') {
+                previous.card!.node.inputs[previous.index!] = null;
+                this.pipeline!.markNodeAsEdited(previous.card!.node.id);
+            }
+        } else if (current.type === 'input') {
+            if (previous.type === 'input') {
+                current.card!.node.inputs[current.index!] =
+                    previous.card!.node.inputs[previous.index!];
+                previous.card!.node.inputs[previous.index!] = null;
+                this.pipeline!.markNodeAsEdited(previous.card!.node.id);
+                this.pipeline!.markNodeAsEdited(current.card!.node.id);
+            } else if (previous.type === 'output') {
+                current.card!.node.inputs[current.index!] =
+                    previous.card!.node.id;
+                this.pipeline!.markNodeAsEdited(current.card!.node.id);
             }
         }
     }
@@ -120,23 +163,20 @@ export class DiagramComponent implements OnInit, AfterViewInit {
         event.source.reset();
     }
 
-    cardDragStarted(event: CdkDragStart) {
+    cardDragStarted(event: CdkDragStart<Card>) {
         event.source.element.nativeElement.classList.remove('snap-animation');
     }
 
-    cardDragEnded(event: CdkDragEnd) {
+    cardDragEnded(event: CdkDragEnd<Card>) {
         event.source.element.nativeElement.classList.add('snap-animation');
-        event.source.data.position = {
-            x: snapTo(event.source.getFreeDragPosition().x, 4 * remInPixels()),
-            y: snapTo(event.source.getFreeDragPosition().y, 4 * remInPixels()),
+        event.source.data.node.position = {
+            x: Math.round(
+                -event.source.getFreeDragPosition().x / GRID_IN_PIXELS
+            ),
+            y: Math.round(
+                event.source.getFreeDragPosition().y / GRID_IN_PIXELS
+            ),
         };
+        event.source.data.updatePosition();
     }
-}
-
-function snapTo(x: number, grid: number) {
-    return Math.round(x / grid) * grid;
-}
-
-function remInPixels() {
-    return parseFloat(getComputedStyle(document.documentElement).fontSize);
 }

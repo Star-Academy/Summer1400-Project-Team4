@@ -17,7 +17,7 @@
                 #pipelineNameInput="matInput"
                 matInput
                 type="text"
-                [(ngModel)]="pipelineName"
+                [(ngModel)]="pipeline.name"
             />
             <button
                 [style.visibility]="pipelineNameInput.focused ? '' : 'hidden'"
@@ -153,6 +153,14 @@
         </div>
     </mat-sidenav>
     <mat-sidenav-content>
-        <app-diagram></app-diagram>
+        <app-diagram [pipeline]="pipeline"></app-diagram>
+        <div class="top-right-container">
+            <button mat-raised-button color="primary" (click)="addNode()">
+                <mat-icon>add</mat-icon>
+            </button>
+            <button mat-raised-button color="accent" (click)="exportPipeline()">
+                <mat-icon>download</mat-icon>
+            </button>
+        </div>
     </mat-sidenav-content>
 </mat-sidenav-container>

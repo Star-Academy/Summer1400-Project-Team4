@@ -18,11 +18,7 @@
         <div
             class="remove-connection-container"
             cdkDropList
-            [cdkDropListData]="
-                $any({
-                    type: 'remove'
-                })
-            "
+            [cdkDropListData]="$any({ type: 'remove' })"
             (cdkDropListDropped)="buttonDrop($event)"
         ></div>
         <div
@@ -47,25 +43,21 @@
                 </mat-card-header>
                 <div class="drop-placeholder input-drop-placeholder">
                     <div
-                        *ngFor="let input of card.inputs"
+                        *ngFor="let input of card.inputs; let index = index"
                         class="empty-button-placeholder"
                         cdkDropList
                         [cdkDropListData]="
-                            $any({
-                                type: 'input',
-                                card: card,
-                                list: input
-                            })
+                            $any({ type: 'input', card: card, index: index })
                         "
                         [cdkDropListEnterPredicate]="inputDropEnterPredicate"
                         (cdkDropListDropped)="buttonDrop($event)"
                     >
                         <app-anchor
-                            *ngFor="let child of input"
+                            *ngIf="input !== null"
                             [lineContainer]="lineContainer"
-                            [connectionBegin]="child.outputPlaceholderElement"
+                            [connectionBegin]="input.outputPlaceholderElement"
                             [reposition]="reposition"
-                            [dragData]="child"
+                            [dragData]="input"
                         >
                             <div class="drag-button"></div>
                         </app-anchor>
@@ -81,12 +73,7 @@
                         *ngIf="card.hasOutput"
                         class="full-button-placeholder"
                         cdkDropList
-                        [cdkDropListData]="
-                            $any({
-                                card: card,
-                                type: 'output'
-                            })
-                        "
+                        [cdkDropListData]="$any({ card: card, type: 'output' })"
                         (cdkDropListDropped)="buttonDrop($event)"
                     >
                         <app-anchor
@@ -104,9 +91,4 @@
         </div>
     </div>
     <div #lineContainer class="line-container"></div>
-    <div class="top-right-container">
-        <button mat-raised-button color="primary" (click)="addCard()">
-            <mat-icon>add</mat-icon>
-        </button>
-    </div>
 </div>
