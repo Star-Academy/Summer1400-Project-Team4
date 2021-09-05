@@ -14,30 +14,36 @@ export class DesignerComponent implements OnInit, AfterViewInit {
     ngOnInit(): void {}
 
     ngAfterViewInit(): void {
-        this.pipeline.createNode('ثبت احوال', PipelineNodeType.datasetInput, {
-            x: 3,
-            y: 5,
-        });
+        const personalId = this.pipeline.createNode(
+            'اطلاعات شخصی',
+            PipelineNodeType.datasetInput,
+            { x: 3, y: 5 }
+        );
 
-        // cards: Card[] = [
-        //     new Card(1, 0, true, 'ثبت احوال', 'External Datasbase', {
-        //         x: -120,
-        //         y: 200,
-        //     }),
-        //     new Card(2, 0, true, 'بانک مرکزی', 'External Datasbase', {
-        //         x: -120,
-        //         y: 400,
-        //     }),
-        //     new Card(3, 1, true, 'اشخاص مهم', 'Filter', { x: -400, y: 160 }),
-        //     new Card(10, 1, false, 'CIA', 'External Datasbase', {
-        //         x: -800,
-        //         y: 200,
-        //     }),
-        //     new Card(11, 1, false, 'MI12', 'External Datasbase', {
-        //         x: -800,
-        //         y: 400,
-        //     }),
-        // ];
+        const accountId = this.pipeline.createNode(
+            'اطلاعات بانکی',
+            PipelineNodeType.datasetInput,
+            { x: 3, y: 10 }
+        );
+
+        const vipId = this.pipeline.createNode(
+            'اشخاص مهم',
+            PipelineNodeType.filter,
+            { x: 10, y: 4 },
+            [personalId]
+        );
+
+        this.pipeline.createNode(
+            'CIA',
+            PipelineNodeType.datasetOutput,
+            { x: 20, y: 5 },
+            [vipId]
+        );
+
+        this.pipeline.createNode('MI7', PipelineNodeType.datasetOutput, {
+            x: 20,
+            y: 10,
+        });
     }
 
     addNode() {
@@ -45,9 +51,10 @@ export class DesignerComponent implements OnInit, AfterViewInit {
             x: 3,
             y: 1,
         });
-        // this.cards.push(
-        //     new Card(7, 1, true, 'صافی نمونه', 'Filter', { x: -400, y: 40 })
-        // );
+        this.pipeline.createNode('صافی نمونه', PipelineNodeType.filter, {
+            x: 10,
+            y: 1,
+        });
     }
 
     exportPipeline() {

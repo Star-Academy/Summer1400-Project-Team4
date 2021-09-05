@@ -14,7 +14,7 @@ import {
     OnInit,
     ViewChild,
 } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import {
     Pipeline,
     PipelineNode,
@@ -102,6 +102,10 @@ export class DiagramComponent implements OnInit, AfterViewInit {
         this.Line = this.lineService.onContainer(
             this.lineContainer?.nativeElement
         );
+
+        window.addEventListener('load', () => {
+            this.reposition.next();
+        });
     }
 
     updateCardInputs(node: PipelineNode) {

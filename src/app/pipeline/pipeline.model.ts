@@ -61,13 +61,21 @@ export class Pipeline {
     createNode(
         name: string,
         type: PipelineNodeType,
-        position = { x: 0, y: 0 }
+        position = { x: 0, y: 0 },
+        inputs?: (number | null)[]
     ) {
+        if (inputs !== undefined) {
+            if (inputs.length !== pipelineNodeNumInputs[type])
+                throw new Error('invalid number of inputs');
+        } else {
+            inputs = new Array(pipelineNodeNumInputs[type]).fill(null);
+        }
+
         const node: PipelineNode = {
             id: this.nextId,
             name: name,
             type: type,
-            inputs: new Array(pipelineNodeNumInputs[type]).fill(null),
+            inputs: inputs,
             position: position,
         };
 
