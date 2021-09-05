@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication2.models;
@@ -23,6 +22,13 @@ namespace WebApplication2.Controllers
             return Startup.EtlContext.Users.First(u => u.UserId == userId).Pipelines.ToList();
         }
 
+        [HttpGet]
+        [Route("/{userId:int}/Datasets")]
+        public List<Dataset> GetUserDataset(int userId)
+        {
+            return Startup.EtlContext.Users.First(u => u.UserId == userId).Datasets.ToList();
+        }
+
         [HttpPost]
         [Route("/{userId:int}/Pipelines")]
         public IActionResult AddToUserPipelines(int userId, Pipeline pipeline)
@@ -35,6 +41,28 @@ namespace WebApplication2.Controllers
                 var pipelines = user.Pipelines.ToList();
                 pipelines.Add(pipeline);
                 user.Pipelines = pipelines;
+            }
+            else
+            {
+                return BadRequest("no user found with this id");
+            }
+
+            Startup.EtlContext.SaveChanges();
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("/{userId:int}/Datasets")]
+        public IActionResult AddToUserDatasets(int userId, Dataset dataset)
+        {
+            var user = Startup.EtlContext.Users.FirstOrDefault(u => u.UserId == userId);
+
+            if (user != null)
+            {
+                user.Datasets ??= new List<Dataset>();
+                var datasets = user.Datasets.ToList();
+                datasets.Add(dataset);
+                user.Datasets = datasets;
             }
             else
             {
