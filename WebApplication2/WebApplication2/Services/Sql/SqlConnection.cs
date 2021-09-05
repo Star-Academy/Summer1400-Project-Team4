@@ -14,11 +14,6 @@ namespace WebApplication2.Services.Sql
             Initialize();
         }
 
-        ~SqlConnection()
-        {
-            _sqlConnection.Close();
-        }
-
         public void Initialize()
         {
             _sqlConnection = new Microsoft.Data.SqlClient.SqlConnection(_connectionString);
@@ -32,6 +27,11 @@ namespace WebApplication2.Services.Sql
                 CommandText = query, CommandType = CommandType.Text, Connection = _sqlConnection
             };
             sqlCommand.ExecuteReader();
+        }
+
+        ~SqlConnection()
+        {
+            _sqlConnection.Close();
         }
     }
 }

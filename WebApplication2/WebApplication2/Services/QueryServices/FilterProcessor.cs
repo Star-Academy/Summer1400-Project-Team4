@@ -1,5 +1,4 @@
-﻿using System;
-using WebApplication2.Services.Sql;
+﻿using WebApplication2.Services.Sql;
 
 namespace WebApplication2.Services.QueryServices
 {
@@ -12,7 +11,8 @@ namespace WebApplication2.Services.QueryServices
 
         public sealed override string Instruction { get; set; }
 
-        public override void Handle(ISqlConnection applyingSql, string startingDatasetName, string destinationDatasetName)
+        public override void Handle(ISqlConnection applyingSql, string startingDatasetName,
+            string destinationDatasetName)
         {
             applyingSql.SendQuery("SELECT * " +
                                   $"INTO {destinationDatasetName}" +

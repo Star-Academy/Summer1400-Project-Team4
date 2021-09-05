@@ -79,10 +79,7 @@ namespace WebApplication2.Controllers
         public IActionResult UpdateUserPipeline(int userId, int pipelineId, Pipeline pipeline)
         {
             var selectedPipeline = Startup.EtlContext.Pipelines.FirstOrDefault(p => p.PipelineId == pipelineId);
-            if (selectedPipeline == null)
-            {
-                return BadRequest("no pipeline found with this id");
-            }
+            if (selectedPipeline == null) return BadRequest("no pipeline found with this id");
 
             selectedPipeline.PipelineName = pipeline.PipelineName;
             selectedPipeline.Processes = pipeline.Processes;
@@ -95,10 +92,7 @@ namespace WebApplication2.Controllers
         public IActionResult ExecutePipeline(int userId, int datasetId, int pipelineId, int destination)
         {
             var pipeline = Startup.EtlContext.Pipelines.FirstOrDefault(p => p.PipelineId == pipelineId);
-            if (pipeline == null)
-            {
-                return BadRequest("no pipeline found with this id");
-            }
+            if (pipeline == null) return BadRequest("no pipeline found with this id");
 
             var pipelineExecutor =
                 new PipelineExecutor(@"Data Source=localhost\SQLExpress,1433;Database=ETL;Integrated Security=sspi;",
@@ -108,9 +102,7 @@ namespace WebApplication2.Controllers
             var destinationDataset = Startup.EtlContext.Datasets.FirstOrDefault(p => p.DatasetId == destination);
 
             if (startingDataset == null || destinationDataset == null)
-            {
                 return BadRequest("no datasets found with these IDs");
-            }
 
             pipelineExecutor.Execute(startingDataset.DatasetName, destinationDataset.DatasetName);
 

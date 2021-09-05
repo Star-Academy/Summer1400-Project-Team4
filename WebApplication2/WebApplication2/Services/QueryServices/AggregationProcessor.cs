@@ -12,7 +12,8 @@ namespace WebApplication2.Services.QueryServices
 
         public sealed override string Instruction { get; set; }
 
-        public override void Handle(ISqlConnection applyingSql, string startingDatasetName, string destinationDatasetName)
+        public override void Handle(ISqlConnection applyingSql, string startingDatasetName,
+            string destinationDatasetName)
         {
             throw new NotImplementedException();
         }
