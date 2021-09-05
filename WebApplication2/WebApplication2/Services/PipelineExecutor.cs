@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using WebApplication2.models;
 using WebApplication2.Services.QueryServices;
@@ -19,11 +20,29 @@ namespace WebApplication2.Services
 
         public void Execute(string startingDatasetName, string destinationDatasetName)
         {
+            string startingTempTableName;
+            string endingTempTableName = "";
             foreach (var query in _queriesList)
             {
-                query.Handle(_sqlConnection, startingDatasetName, destinationDatasetName);
+                if (query == _queriesList[0])
+                {
+                    startingTempTableName = startingDatasetName;
+                }
+                else
+                {
+                    startingTempTableName = endingTempTableName;
+                }
+
+                if (query == _queriesList[^1])
+                {
+                    endingTempTableName = destinationDatasetName;
+                }
+                else
+                {
+                    endingTempTableName = Guid.NewGuid().ToString("n");
+                }
+                query.Handle(_sqlConnection, startingTempTableName, endingTempTableName);
             }
-            // _queriesList.ForEach(query => query.Handle(_sqlConnection));
         }
     }
 }
