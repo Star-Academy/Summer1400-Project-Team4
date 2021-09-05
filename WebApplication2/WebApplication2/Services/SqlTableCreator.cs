@@ -1,30 +1,37 @@
-﻿using System.Data;
+﻿using System;
+using System.Text;
 using Microsoft.Data.SqlClient;
 
 namespace WebApplication2.Services
 {
     public class SqlTableCreator : ITableCreator
     {
-        private DataTable _dataTable;
-
-        public SqlTableCreator(DataTable dataTable)
+        private string _sourceTableName;
+        private string _destTableName;
+        private string _serverName;
+        private string _databaseName;
+        
+        public void CopySql(string serverName, string databaseName, string sourceTableName, string destTableName)
         {
-            _dataTable = dataTable;
+            _sourceTableName = sourceTableName;
+            _destTableName = destTableName;
+            _serverName = serverName;
+            _databaseName = databaseName;
+            if (serverName == "localhost")
+                _serverName = string.Empty;
+            DoQuery();
         }
 
-        public void SqlTableToDataTableConvertor(SqlConnection sqlConnection, string tableName)
+        private void DoQuery()
         {
-            var queryString = $"SELECT * FROM {tableName}";
-            sqlConnection.Open();
-            using var dataAdapter = new SqlDataAdapter(queryString, sqlConnection);
-            dataAdapter.Fill(_dataTable);
-            dataAdapter.Dispose();
-            sqlConnection.Close();
+            using var connection = new ClientDbConnector().Connect("localhost", "newdb");
+            connection.Open();
+            var builder = new StringBuilder();
+            builder.Append($"SELECT * INTO {_destTableName} FROM {_serverName}.{_databaseName}.{_sourceTableName}");
+            using var sqlCommand = new SqlCommand(builder.ToString(), connection);
+            sqlCommand.ExecuteNonQuery();
         }
 
-        public void DataTableToServerDataTableConvertor()
-        {
-            
-        }
+        
     }
 }

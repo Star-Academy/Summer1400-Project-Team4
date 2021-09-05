@@ -4,6 +4,6 @@ namespace WebApplication2.Services
 {
     public interface ITableCreator
     {
-        public void SqlTableToDataTableConvertor(SqlConnection sqlConnection, string tableName);
+        public void CopySql(string serverName, string databaseName, string sourceTableName, string destTableName);
     }
 }
