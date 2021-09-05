@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication2.models;
@@ -46,7 +47,7 @@ namespace WebApplication2.Controllers
 
         [HttpPut]
         [Route("/{userId:int}/Pipelines/{pipelineId:int}")]
-        public IActionResult AddToUserPipelines(int userId, int pipelineId, Pipeline pipeline)
+        public IActionResult UpdateUserPipeline(int userId, int pipelineId, Pipeline pipeline)
         {
             var selectedPipeline = Startup.EtlContext.Pipelines.FirstOrDefault(p => p.PipelineId == pipelineId);
             if (selectedPipeline == null)
@@ -57,6 +58,20 @@ namespace WebApplication2.Controllers
             selectedPipeline.PipelineName = pipeline.PipelineName;
             selectedPipeline.Processes = pipeline.Processes;
             Startup.EtlContext.SaveChanges();
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("/{userId:int}/datasets/{datasetId:int}/execute")]
+        public IActionResult ExecutePipeline(int userId, int datasetId, int pipelineId, int destination)
+        {
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("/{userId:int}/datasets/{datasetId:int}/preview")]
+        public IActionResult ExecutePreviewOfPipeline(int userId, int datasetId, Pipeline pipeline)
+        {
             return Ok();
         }
     }
