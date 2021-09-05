@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using WebApplication2.models;
 using WebApplication2.Services.QueryServices;
 using WebApplication2.Services.Sql;
 
@@ -10,13 +11,13 @@ namespace WebApplication2.Services
         private readonly List<QueryProcessor> _queriesList;
         private readonly SqlConnection _sqlConnection;
 
-        public PipelineExecutor(string connectionString, string jsonPipeline)
+        public PipelineExecutor(string connectionString, Pipeline pipeline)
         {
-            _queriesList = JsonPipelineInterpreter.GetQueriesList(jsonPipeline).ToList();
+            _queriesList = JsonPipelineInterpreter.GetQueriesList(pipeline).ToList();
             _sqlConnection = new SqlConnection(connectionString);
         }
 
-        public void Execute()
+        public void Execute(string startingDatasetName, string destinationDatasetName)
         {
             _queriesList.ForEach(query => query.Handle(_sqlConnection));
         }

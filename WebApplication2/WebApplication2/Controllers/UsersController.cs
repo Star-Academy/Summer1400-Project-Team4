@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication2.models;
+using WebApplication2.Services;
 
 namespace WebApplication2.Controllers
 {
@@ -93,6 +94,26 @@ namespace WebApplication2.Controllers
         [Route("/{userId:int}/datasets/{datasetId:int}/execute")]
         public IActionResult ExecutePipeline(int userId, int datasetId, int pipelineId, int destination)
         {
+            var pipeline = Startup.EtlContext.Pipelines.FirstOrDefault(p => p.PipelineId == pipelineId);
+            if (pipeline == null)
+            {
+                return BadRequest("no pipeline found with this id");
+            }
+
+            var pipelineExecutor =
+                new PipelineExecutor(@"Data Source=localhost\SQLExpress,1433;Database=ETL;Integrated Security=sspi;",
+                    pipeline);
+
+            var startingDataset = Startup.EtlContext.Datasets.FirstOrDefault(p => p.DatasetId == datasetId);
+            var destinationDataset = Startup.EtlContext.Datasets.FirstOrDefault(p => p.DatasetId == destination);
+
+            if (startingDataset == null || destinationDataset == null)
+            {
+                return BadRequest("no datasets found with these IDs");
+            }
+
+            pipelineExecutor.Execute(startingDataset.DatasetName, destinationDataset.DatasetName);
+
             return Ok();
         }
 

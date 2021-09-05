@@ -8,9 +8,8 @@ namespace WebApplication2.Services
 {
     public static class JsonPipelineInterpreter
     {
-        public static IEnumerable<QueryProcessor> GetQueriesList(string pipelineJson)
+        public static IEnumerable<QueryProcessor> GetQueriesList(Pipeline pipeline)
         {
-            var pipeline = JsonSerializer.Deserialize<Pipeline>(pipelineJson);
             var queriesList = new List<QueryProcessor>();
             if (pipeline?.Processes == null) throw new Exception("There are no processes to handle");
 
