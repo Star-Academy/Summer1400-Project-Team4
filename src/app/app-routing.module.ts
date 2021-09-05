@@ -3,13 +3,19 @@ import { RouterModule, Routes } from '@angular/router';
 import { LandingComponent } from './components/landing/landing.component';
 import { DashbordComponent } from './components/dashbord/dashbord.component';
 import { PostsComponent } from './components/posts/posts.component';
-import { PipelineComponent } from './components/pipeline/pipeline.component';
 import {UserComponent} from "./components/user/user.component";
 import {LoginComponent} from "./components/user/login/login.component";
 import {SignupComponent} from "./components/user/signup/signup.component";
 import {EditProfileComponent} from "./components/user/edit-profile/edit-profile.component";
 
 const routes: Routes = [
+    {
+        path: 'pipeline',
+        loadChildren: () =>
+            import('./pipeline/pipeline.module').then(
+                (module) => module.PipelineModule
+            ),
+    },
   {
     path: 'user',
     component: UserComponent,
@@ -28,7 +34,6 @@ const routes: Routes = [
       },
     ],
   },
-    { path: 'pipeline', component: PipelineComponent },
     {
         path: '',
         component: LandingComponent,

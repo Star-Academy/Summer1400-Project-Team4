@@ -8,16 +8,19 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatInputModule } from '@angular/material/input';
-import {MatCardModule} from '@angular/material/card';
+import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
-import {MatBadgeModule} from '@angular/material/badge';
-import {MatTableModule} from '@angular/material/table';
-import {ScrollingModule} from '@angular/cdk/scrolling';
-import {TableVirtualScrollModule} from 'ng-table-virtual-scroll';
-import {MatDialogModule} from '@angular/material/dialog';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatTableModule } from '@angular/material/table';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { TableVirtualScrollModule } from 'ng-table-virtual-scroll';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatRippleModule } from '@angular/material/core';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+
 const material = [
     MatSnackBarModule ,
     MatFormFieldModule,
@@ -36,6 +39,9 @@ const material = [
     MatBadgeModule,
     ScrollingModule,
     TableVirtualScrollModule,
+    DragDropModule,
+    MatButtonToggleModule,
+    MatRippleModule,
     MatDialogModule,
     FormsModule,
     ReactiveFormsModule,

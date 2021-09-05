@@ -1,0 +1,112 @@
+<div
+    class="diagram-container"
+    [style.background-position]="
+        'right ' +
+        (-baseOffset.x - dragOffset.x) +
+        'px top ' +
+        (baseOffset.y + dragOffset.y) +
+        'px'
+    "
+>
+    <div
+        class="card-container"
+        cdkDropListGroup
+        cdkDrag
+        (cdkDragEnded)="updateOffset($event)"
+        (cdkDragMoved)="positionConnections(); updateDragOffset($event)"
+    >
+        <div
+            class="remove-connection-container"
+            cdkDropList
+            [cdkDropListData]="
+                $any({
+                    type: 'remove'
+                })
+            "
+            (cdkDropListDropped)="buttonDrop($event)"
+        ></div>
+        <div
+            class="offset-container"
+            [style.transform]="
+                'translate(' + baseOffset.x + 'px, ' + baseOffset.y + 'px)'
+            "
+        >
+            <mat-card
+                *ngFor="let card of cards"
+                cdkDrag
+                [cdkDragData]="card"
+                [cdkDragFreeDragPosition]="card.position"
+                (cdkDragStarted)="cardDragStarted($event)"
+                (cdkDragEnded)="cardDragEnded($event)"
+                (cdkDragMoved)="positionConnections()"
+                (transitionend)="positionConnections()"
+            >
+                <mat-card-header>
+                    <mat-card-title>{{ card.title }}</mat-card-title>
+                    <mat-card-subtitle>{{ card.subtitle }}</mat-card-subtitle>
+                </mat-card-header>
+                <div class="drop-placeholder input-drop-placeholder">
+                    <div
+                        *ngFor="let input of card.inputs"
+                        class="empty-button-placeholder"
+                        cdkDropList
+                        [cdkDropListData]="
+                            $any({
+                                type: 'input',
+                                card: card,
+                                list: input
+                            })
+                        "
+                        [cdkDropListEnterPredicate]="inputDropEnterPredicate"
+                        (cdkDropListDropped)="buttonDrop($event)"
+                    >
+                        <app-anchor
+                            *ngFor="let child of input"
+                            [lineContainer]="lineContainer"
+                            [connectionBegin]="child.outputPlaceholderElement"
+                            [reposition]="reposition"
+                            [dragData]="child"
+                        >
+                            <div class="drag-button"></div>
+                        </app-anchor>
+                    </div>
+                </div>
+                <div
+                    #connectionBegin
+                    spy-element
+                    (onInit)="card.outputPlaceholderElement = connectionBegin"
+                    class="drop-placeholder output-drop-placeholder"
+                >
+                    <div
+                        *ngIf="card.hasOutput"
+                        class="full-button-placeholder"
+                        cdkDropList
+                        [cdkDropListData]="
+                            $any({
+                                card: card,
+                                type: 'output'
+                            })
+                        "
+                        (cdkDropListDropped)="buttonDrop($event)"
+                    >
+                        <app-anchor
+                            [lineContainer]="lineContainer"
+                            [connectionBegin]="connectionBegin"
+                            [connectionRestVisibility]="false"
+                            [reposition]="reposition"
+                            [dragData]="card"
+                        >
+                            <div class="drag-button"></div>
+                        </app-anchor>
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+    </div>
+    <div #lineContainer class="line-container"></div>
+    <div class="top-right-container">
+        <button mat-raised-button color="primary" (click)="addCard()">
+            <mat-icon>add</mat-icon>
+        </button>
+    </div>
+</div>

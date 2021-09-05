@@ -5,6 +5,12 @@
     </a>
 
     <span class="pipeline-info">
+        <button title="اجرا" mat-icon-button mat-raised-button mat-tip>
+            <mat-icon class="mat-icon-rtl-mirror" color="primary">
+                play_arrow
+            </mat-icon>
+        </button>
+
         <mat-form-field floatLabel="never">
             <mat-label>نام خط لوله</mat-label>
             <input
@@ -21,59 +27,52 @@
                 <mat-icon>edit</mat-icon>
             </button>
         </mat-form-field>
-
-        <button title="اجرا" mat-icon-button mat-raised-button mat-tip>
-            <mat-icon class="mat-icon-rtl-mirror" color="primary">
-                play_arrow
-            </mat-icon>
-        </button>
     </span>
 
     <nav>
-        <ul>
-            <li>
-                <button title="دانلود" mat-icon-button>
-                    <mat-icon>file_upload</mat-icon>
-                </button>
-            </li>
+        <button title="دانلود" mat-icon-button>
+            <mat-icon>file_upload</mat-icon>
+        </button>
 
-            <li>
-                <button title="پنجره تنظیمات" mat-icon-button>
-                    <mat-icon>vertical_split</mat-icon>
-                </button>
-            </li>
+        <!-- <mat-button-toggle-group
+            name="ingredients"
+            aria-label="Ingredients"
+            multiple
+        >
+            <mat-button-toggle
+                ><mat-icon
+            color="primary">vertical_split</mat-icon></mat-button-toggle
+            >
+            <mat-button-toggle
+                ><mat-icon>horizontal_split</mat-icon></mat-button-toggle
+            >
+            <mat-button-toggle
+                ><mat-icon class="mat-icon-rtl-mirror">vertical_split</mat-icon></mat-button-toggle
+            >
+        </mat-button-toggle-group> -->
 
-            <li>
-                <button title="پنجره پیش‌نمایش" mat-icon-button>
-                    <mat-icon>horizontal_split</mat-icon>
-                </button>
-            </li>
-
-            <li>
-                <button mat-button [matMenuTriggerFor]="accountMenu">
-                    <mat-icon>person</mat-icon>
-                </button>
-                <mat-menu #accountMenu="matMenu">
-                    <button mat-menu-item>
-                        <mat-icon>manage_accounts</mat-icon>
-                        مدیریت حساب
-                    </button>
-                    <button mat-menu-item>
-                        <mat-icon>exit_to_app</mat-icon>
-                        خروج
-                    </button>
-                </mat-menu>
-            </li>
-        </ul>
+        <button mat-button [matMenuTriggerFor]="accountMenu">
+            <mat-icon>person</mat-icon>
+        </button>
+        <mat-menu #accountMenu="matMenu">
+            <button mat-menu-item>
+                <mat-icon>manage_accounts</mat-icon>
+                مدیریت حساب
+            </button>
+            <button mat-menu-item>
+                <mat-icon>exit_to_app</mat-icon>
+                خروج
+            </button>
+        </mat-menu>
     </nav>
 </mat-toolbar>
 
 <mat-sidenav-container>
     <mat-sidenav mode="side" opened>
         <div class="config-pane">
-            <h2>تجمع</h2>
+            <div class="config-content">
+                <h2>تجمع</h2>
 
-            <div>
                 <h3>گروه‌بندی بر اساس</h3>
                 <mat-accordion>
                     <mat-expansion-panel>
@@ -147,12 +146,13 @@
                     </mat-expansion-panel>
                 </mat-accordion>
             </div>
-        </div>
-
-        <div class="config-actions">
-            <button mat-raised-button>لغو تغییرات</button>
-            <button mat-raised-button color="primary">ذخیره</button>
+            <div class="config-actions">
+                <button mat-raised-button>لغو تغییرات</button>
+                <button mat-raised-button color="primary">ذخیره</button>
+            </div>
         </div>
     </mat-sidenav>
-    <mat-sidenav-content> constent. </mat-sidenav-content>
+    <mat-sidenav-content>
+        <app-diagram></app-diagram>
+    </mat-sidenav-content>
 </mat-sidenav-container>

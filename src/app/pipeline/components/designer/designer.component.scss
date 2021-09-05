@@ -1,3 +1,6 @@
+@use '../../../../theme.scss' as theme;
+@use '~@angular/material' as mat;
+
 :host {
     display: grid;
     grid-template-rows: auto 1fr;
@@ -8,10 +11,11 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    z-index: 2;
 }
 
 .logo-name {
-    font-size: large;
+    font-size: mat.font-size(theme.$typography-config, 'title');
 }
 
 .pipeline-info {
@@ -19,39 +23,45 @@
     flex-direction: row;
     align-items: baseline;
     gap: var(--density-large);
+    font-size: mat.font-size(theme.$typography-config, 'subheading-2');
 
-    &:not(:focus) .mat-form-field-underline {
-        display: none;
+    ::ng-deep .mat-form-field-underline {
+        background-color: transparent;
     }
 }
 
-ul {
+nav {
     display: flex;
     flex-direction: row;
+    align-items: center;
     gap: var(--density-large);
-
-    li {
-        list-style: none;
-    }
 }
 
-mat-sidenav {
+.mat-sidenav {
     width: 30rem;
 }
 
 .config-pane {
-    padding: var(--density-large);
-
     display: grid;
-    grid-template-rows: auto 1fr auto;
+    grid-template-rows: 1fr auto;
+    height: 100%;
+}
+
+.config-content {
+    padding: var(--density-large);
 }
 
 .config-actions {
+    background-color: theme.mat-color(theme.$background-palette, 'card');
     padding: var(--density-large);
     position: sticky;
     bottom: 0;
     display: flex;
     justify-content: space-between;
+}
+
+.mat-form-field {
+    width: 100%;
 }
 
 .propery-input {

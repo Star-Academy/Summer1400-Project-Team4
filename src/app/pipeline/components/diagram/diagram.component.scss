@@ -1,0 +1,135 @@
+@use '../../../../theme.scss' as theme;
+@use '~@angular/material' as mat;
+
+::ng-deep :root {
+    --arrow-color: #{theme.mat-color(theme.$primary-palette)};
+}
+
+.diagram-container {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+
+    background-size: 4rem 4rem;
+    background-image: linear-gradient(to right, #eee 0.1rem, transparent 0.1rem),
+        linear-gradient(to bottom, #eee 0.1rem, transparent 0.1rem);
+}
+
+.card-container {
+    width: 100%;
+    height: 100%;
+
+    &.cdk-drag-dragging {
+        cursor: grab;
+    }
+}
+
+.offset-container {
+    width: 0;
+    height: 0;
+    overflow: visible;
+}
+
+.mat-card {
+    position: absolute;
+    width: 20rem;
+    height: 8rem;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    cursor: pointer;
+
+    transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+    &.snap-animation {
+        transition: transform 200ms ease-in-out,
+            box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @include mat.elevation(2);
+    &:active {
+        @include mat.elevation(6);
+        cursor: move;
+    }
+}
+
+.mat-card-title,
+.mat-card-subtitle {
+    text-align: center;
+}
+
+.drop-placeholder {
+    position: absolute;
+    width: 0;
+    height: 8rem;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.input-drop-placeholder {
+    top: 0;
+    right: 0;
+}
+
+.output-drop-placeholder {
+    top: 0;
+    left: 0;
+}
+
+@mixin button-placeholder {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 100%;
+}
+
+.empty-button-placeholder {
+    @include button-placeholder;
+    background-color: theme.mat-color(theme.$primary-palette, 'lighter');
+}
+
+.full-button-placeholder {
+    @include button-placeholder;
+    background-color: theme.mat-color(theme.$primary-palette);
+}
+
+@mixin drag-button {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 100%;
+}
+
+.drag-button {
+    @include drag-button;
+    background-color: theme.mat-color(theme.$primary-palette);
+}
+
+.line-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+}
+
+.top-right-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: var(--density-large);
+}
+
+.remove-connection-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+
+    .drag-button {
+        display: none;
+    }
+}
