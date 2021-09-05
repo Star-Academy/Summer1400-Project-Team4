@@ -6,7 +6,7 @@ namespace WebApplication2.Services
     {
         public SqlConnection Connect(string host, string database)
         {
-            var connectionString = $"Server= {host} ; Database= {database}; Integrated Security=SSPI;";
+            var connectionString = $"Server={host};Database={database};Trusted_Connection=true";
             var connection = new SqlConnection(connectionString);
             return connection;
         }
