@@ -17,8 +17,13 @@ import { TableVirtualScrollModule } from 'ng-table-virtual-scroll';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatRippleModule } from '@angular/material/core';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 const material = [
+    MatSnackBarModule ,
+    MatFormFieldModule,
     MatTableModule,
     MatSidenavModule,
     MatButtonModule,
@@ -37,6 +42,9 @@ const material = [
     DragDropModule,
     MatButtonToggleModule,
     MatRippleModule,
+    MatDialogModule,
+    FormsModule,
+    ReactiveFormsModule,
 ];
 
 @NgModule({

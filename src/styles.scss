@@ -46,3 +46,12 @@ body {
 
 @include mat.core(theme.$theme);
 @include mat.all-component-themes(theme.$theme);
+
+.custom-dialog-container .mat-dialog-container {
+    background-color: #7948cb;
+    width: 500px;
+}
+
+.red-snackbar {
+    background: #B00020;
+}

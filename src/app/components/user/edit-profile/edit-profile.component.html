@@ -1,0 +1,67 @@
+<div class="contentWrapper">
+  <div class="formContent">
+    <h2> صفحه ویرایش </h2>
+    <div>
+      <img alt="user Icon" [src] = "imageSrc"   />
+
+    </div>
+
+    <!-- Login Form -->
+    <form [formGroup]="form">
+      <div class="example-container">
+        <label class="profile-changing" for="avatar">تغییر عکس پروفایل</label>
+        <input style="display: none" (change)="onFileChange($event)" type="file" name="avatar" accept="image/png,image/jpeg" id="avatar" />
+
+        <mat-form-field style="margin-left: 0.7rem" appearance="fill" >
+          <mat-label> نام </mat-label>
+          <input formControlName="name" matInput required>
+          <mat-hint *ngIf="isFieldValid('name')">
+            نام نباید خالی باشد
+          </mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" >
+          <mat-label> ایمیل </mat-label>
+          <input formControlName="email" matInput required>
+          <mat-hint *ngIf="isFieldValid('email')">
+            لطفا ایمیل معتبری وارد کنید
+          </mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>نام کاربری</mat-label>
+          <input #input formControlName="username" matInput maxlength="10" required>
+          <mat-hint *ngIf="isFieldValid('username')">
+            نام کاربری نباید خالی باشد
+          </mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>رمز عبور</mat-label>
+          <input #password [type]="hide ? 'password' : 'text'" formControlName="password" matInput minlength="4" maxlength="10"
+                 required>
+          <button (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" mat-icon-button
+                  matSuffix>
+            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+          <mat-hint *ngIf="isFieldValid('password') && password.value.length == 0">
+            رمز عبور نباید خالی باشد
+          </mat-hint>
+          <mat-hint *ngIf="isFieldValid('password') && password.value.length != 0">
+            طول رمز عبور حداقل 4 کاراکتر است
+          </mat-hint>
+        </mat-form-field>
+
+      </div>
+
+    </form>
+
+    <button (click)="handle_log_in()" [disabled]="!form.valid" color="primary" mat-raised-button> ویرایش </button>
+    <!-- home linking -->
+    <div class="formFooter">
+      <a href=''> انصراف </a>
+    </div>
+
+  </div>
+
+</div>

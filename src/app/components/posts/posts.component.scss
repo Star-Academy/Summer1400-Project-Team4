@@ -3,23 +3,37 @@
 @include mat.core();
 
 $my-primary: mat.define-palette(mat.$amber-palette);
-.card
-{
-  width:90%;
-  padding: 2rem;
+//.card
+//{
+//  width:90%;
+//  padding: 2rem;
+//}
+//mat-icon
+//{
+//  font-size: 1.5vw;
+//}
+//ul li
+//{
+//  list-style: none;
+//}
+//.mat-card-title
+//{
+//  &:hover
+//  {
+//    color: #14b4b4;
+//  }
+//}
+
+table {
+  width: 70%;
+  height: 600px;
 }
-mat-icon
-{
-  font-size: 1.5vw;
+
+cdk-virtual-scroll-viewport {
+  height: 100vh;
 }
-ul li
-{
-  list-style: none;
-}
-.mat-card-title
-{
-  &:hover
-  {
-    color: #14b4b4;
-  }
+
+.wrapper {
+  height: 52rem;
+  overflow: auto;
 }

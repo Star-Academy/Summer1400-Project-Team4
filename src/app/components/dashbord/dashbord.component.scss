@@ -1,14 +1,17 @@
-
 .wrapper {
-  height:52rem;
+  height: 52rem;
   overflow: auto;
 }
 
 table {
   width: 70%;
+  height: 600px;
 }
 
 .col-sm {
   width: 70px;
 }
 
+cdk-virtual-scroll-viewport {
+  height: 100vh;
+}
