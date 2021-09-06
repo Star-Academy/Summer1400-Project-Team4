@@ -30,9 +30,9 @@
             }"
         },
         {
-            "Name": "filter",
-            "Instruction": "(state = 'California' AND supplier_id <> 900) OR (supplier_id = 100)"
-        },
+            "Name": "join",
+            "Instruction": "{\"Type\": \"FULL OUTER JOIN\",\"JoinWith\": \"10\",\"LeftTableKey\": \"StudentNumber\",\"RightTableKey\": \"StudentNumber2\",}"
+        }, 
         {
             "Name": "filter",
             "Instruction": "(state = 'California' AND supplier_id <> 900) OR (supplier_id = 100)"
