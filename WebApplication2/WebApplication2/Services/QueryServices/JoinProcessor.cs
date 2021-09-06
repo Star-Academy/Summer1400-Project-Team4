@@ -16,10 +16,12 @@ namespace WebApplication2.Services.QueryServices
         public override void Handle(ISqlConnection applyingSql, string startingDatasetName,
             string destinationDatasetName)
         {
+            Console.WriteLine(destinationDatasetName);
+            Console.WriteLine(startingDatasetName);
             applyingSql.SendQuery("SELECT * " +
                                   $"INTO {destinationDatasetName} " +
                                   $"FROM {startingDatasetName} " +
-                                  $"{InterpretToSql(Instruction, startingDatasetName)}");
+                                  $"{InterpretToSql(Instruction.Replace("\\\"", "\""), startingDatasetName)}");
         }
 
         private static string InterpretToSql(string instruction, string startingDatasetName)

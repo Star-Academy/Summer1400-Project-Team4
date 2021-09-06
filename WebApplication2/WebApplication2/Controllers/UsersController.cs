@@ -96,7 +96,7 @@ namespace WebApplication2.Controllers
             if (pipeline == null) return BadRequest("no pipeline found with this id");
 
             var pipelineExecutor =
-                new PipelineExecutor(@"Data Source=localhost\SQLExpress,1433;Database=ETL;Integrated Security=sspi;",
+                new PipelineExecutor(@"Data Source=localhost\SQLExpress,1433;Database=ETL;Integrated Security=sspi;MultipleActiveResultSets=True;",
                     pipeline);
 
             // var startingDataset = Startup.EtlContext.Datasets.FirstOrDefault(p => p.DatasetId == datasetId);
@@ -106,7 +106,7 @@ namespace WebApplication2.Controllers
             //     return BadRequest("no datasets found with these IDs");
             //
             // pipelineExecutor.Execute(startingDataset.DatasetName, destinationDataset.DatasetName);
-            pipelineExecutor.Execute("_" + datasetId, "_" + datasetId);
+            pipelineExecutor.Execute("_" + datasetId, "_" + destination);
 
             return Ok();
         }
