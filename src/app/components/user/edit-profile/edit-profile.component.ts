@@ -16,13 +16,13 @@ const message = 'ویرایش موفقیت آمیز در حال انتقال ب�
 
 export class EditProfileComponent implements OnInit {
   public userData!: userSignUp;
-  public imageSrc: string | undefined = "";
+  public imageSrc!: string | undefined;
   public form!: FormGroup;
   public hide = true;
   public disableBtn: boolean = false;
-  public firstName: string = "";
-  public email: string = "";
-  public userName: string = "";
+  public firstName!: string;
+  public email!: string ;
+  public userName!: string ;
 
   constructor(public snackBar: MatSnackBar, private formBuilder: FormBuilder, public router: Router,
               public userService: UserService, public auth: AuthService) {
@@ -35,7 +35,7 @@ export class EditProfileComponent implements OnInit {
     }
     this.userService.getUserInfos(userId).subscribe(res => {
       this.userData = res.user;
-      // console.log(this.userData);
+      console.log(this.userData);
       this.firstName = res.user.first_name;
       this.email = res.user.email;
       this.userName = res.user.username;
@@ -98,9 +98,6 @@ export class EditProfileComponent implements OnInit {
       reader.readAsDataURL(file);
       reader.onload = () => {
         this.imageSrc = reader.result as string;
-        this.form.patchValue({
-          avatarSource: reader.result
-        });
       }
     }
   }
