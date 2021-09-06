@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Hosting;
 using WebApplication2.Loader;
+using WebApplication2.Model;
 using WebApplication2.Services;
 
 namespace WebApplication2
@@ -24,8 +25,7 @@ namespace WebApplication2
 
         private static void CsvLoadExample()
         {
-            var csvLoader = new CsvLoader();
-            csvLoader.Load("E:/covid.csv", "csvTable");
+            
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

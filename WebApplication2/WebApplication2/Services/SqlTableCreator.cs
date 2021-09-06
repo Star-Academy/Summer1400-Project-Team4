@@ -24,7 +24,7 @@ namespace WebApplication2.Services
 
         private void DoQuery()
         {
-            using var connection = new ClientDbConnector().Connect("localhost", "newdb");
+            using var connection = new DbConnector().Connect("localhost", "newdb");
             connection.Open();
             var builder = new StringBuilder();
             builder.Append($"SELECT * INTO {_destTableName} FROM {_serverName}.{_databaseName}.{_sourceTableName}");

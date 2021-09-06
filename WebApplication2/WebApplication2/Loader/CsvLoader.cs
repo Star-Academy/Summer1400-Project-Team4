@@ -1,82 +1,96 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using Microsoft.Data.SqlClient;
+using WebApplication2.Model;
+using WebApplication2.Services;
+
 namespace WebApplication2.Loader
 {
     public class CsvLoader
     {
-        private string _filePath;
-        private string[] _firstLine;
-        private string _tableName;
+        private readonly CsvProp _csvProp;
         private StreamReader _streamReader;
-        public string NewTableCommand { get; private set; }
-        public string ImportCsvCommand { get; private set; }
-        public string FieldTerminator = ",";
-        public string RowTerminator = "\\n";
-        public int FirstRow = 2;
+        private const int FirstRow = 2;
 
-        public void Load(string filePath, string newTableName)
+        public CsvLoader(CsvProp csvProp)
         {
-            _filePath = filePath;
-            _tableName = newTableName;
-            _streamReader = new StreamReader(_filePath);
-            _firstLine = _streamReader.ReadLine()?.Split(FieldTerminator);
-            CreateNewTableCommand();
-            ImportFromCsvCommand();
-            ExecuteCommands();
+            _csvProp = csvProp;
         }
 
-        private void ImportFromCsvCommand()
+        public bool TransportCsvToSql()
+        {
+            var newTableQuery = GenerateCreateTableQuery();
+            var bulkQuery = GenerateBulkQuery();
+            ExecuteCommands(newTableQuery);
+            ExecuteCommands(bulkQuery);
+            return true;
+        }
+
+        private string GenerateBulkQuery()
         {
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append($"BULK INSERT {_tableName}\n");
-            stringBuilder.Append($"FROM '{_filePath}'\n");
+            stringBuilder.Append($"BULK INSERT {_csvProp.TableName}\n");
+            stringBuilder.Append($"FROM '{_csvProp.FilePath}'\n");
             stringBuilder.Append("WITH (\n" +
                                  $"FIRSTROW = {FirstRow},\n" +
-                                 $"FIELDTERMINATOR = '{FieldTerminator}',\n" +
-                                 $"ROWTERMINATOR = '{RowTerminator}',\n" +
+                                 $"FIELDTERMINATOR = '{_csvProp.FieldTerminator}',\n" +
+                                 $"ROWTERMINATOR = '{_csvProp.RowTerminator}',\n" +
                                  "TABLOCK\n" +
                                  ");");
-            ImportCsvCommand = stringBuilder.ToString();
+            return stringBuilder.ToString();
         }
 
-        private void CreateNewTableCommand()
+        private string GenerateCreateTableQuery()
         {
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append("CREATE TABLE " + _tableName + " (\n");
-            foreach (var s in _firstLine)
+            stringBuilder.Append("CREATE TABLE " + _csvProp.TableName + " (\n");
+            var fields = _streamReader.ReadLine()?.Split(_csvProp.FieldTerminator);
+            Debug.Assert(fields != null, nameof(fields) + " != null");
+            if (_csvProp.DoesHaveHeader)
             {
-                stringBuilder.Append(s + " NVARCHAR(255),\n");
+                foreach (var header in fields)
+                {
+                    stringBuilder.Append(header + " NVARCHAR(255),\n");
+                }
             }
+            else
+            {
+                for (var i = 0; i < fields.Length; i++)
+                {
+                    stringBuilder.Append($"field{i + 1} " + " NVARCHAR(255),\n");
+                }
+            }
+
+
             stringBuilder.Append(");");
-            NewTableCommand = stringBuilder.ToString();
+            return stringBuilder.ToString();
         }
 
 
         public string[] GetColumn(int columnNumber)
         {
             var column = new List<string>();
-            _streamReader = new StreamReader(_filePath);
+            _streamReader = new StreamReader(_csvProp.FilePath);
             while (!_streamReader.EndOfStream)
             {
-                var row = _streamReader.ReadLine()?.Split(FieldTerminator);
+                var row = _streamReader.ReadLine()?.Split(_csvProp.FieldTerminator);
                 if (row != null) column.Add(row[columnNumber]);
             }
+
             return column.ToArray();
         }
 
-        private void ExecuteCommands()
+        private void ExecuteCommands(string query)
         {
-            using var connection = new ClientDbConnector().Connect("localhost", "newdb");
+            using var connection = new DbConnector().Connect("localhost", "newdb");
             connection.Open();
-            var sqlCommand = new SqlCommand(NewTableCommand, connection);
+            var sqlCommand = new SqlCommand(query, connection);
             sqlCommand.ExecuteNonQuery();
             sqlCommand.Dispose();
-            sqlCommand = new SqlCommand(ImportCsvCommand, connection);
-            sqlCommand.ExecuteNonQuery();
-            sqlCommand.Dispose();
+            connection.Close();
         }
     }
 }
