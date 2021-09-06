@@ -6,8 +6,8 @@
 
 ## pipeline json
 <div dir="rtl">
-سینتکس instruction رو به صورت دیفالت همون سینکتکس sql server در نظر بگیرین.
-    
+برای قسمت جوین توی instruction برا این که کارتون راحتتر باشه فرمت جیسون گذاشتم که بتونین با فیلدا راحت کار کنین. فقط حواستون باشه که این (https://stackoverflow.com/questions/25570712/is-it-possible-to-wrap-json-in-json-field-like-a-string)[جیسون توی جیسون] هستش
+
 </div>
 
 <pre>
@@ -19,8 +19,13 @@
             "Instruction": "(state = 'California' AND supplier_id <> 900) OR (supplier_id = 100)"
         },
         {
-            "Name": "filter",
-            "Instruction": "(state = 'California' AND supplier_id <> 900) OR (supplier_id = 100)"
+            "Name": "join",
+            "Instruction": "{
+                \"Type\": \"INNER JOIN\",
+                \"JoinWith\": \"_{datasetId}\",
+                \"LeftTableKey\": \"width\",
+                \"RightTableKey\": \"latitude\",
+            }"
         },
         {
             "Name": "filter",
