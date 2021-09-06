@@ -14,7 +14,7 @@ namespace WebApplication2.Controllers
         [HttpGet]
         public List<User> GetUsers()
         {
-            return Startup.EtlContext.Users.Include(a => a.Pipelines).Include(a => a.Datasets).ToList();
+            return Startup.EtlContext.Users.Include(a => a.Pipelines).Include(a => a.Pipelines.Select(p => p.Processes)).Include(a => a.Datasets).ToList();
         }
 
         [HttpGet]

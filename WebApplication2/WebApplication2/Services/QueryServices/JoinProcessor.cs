@@ -15,7 +15,10 @@ namespace WebApplication2.Services.QueryServices
         public override void Handle(ISqlConnection applyingSql, string startingDatasetName,
             string destinationDatasetName)
         {
-            throw new NotImplementedException();
+            applyingSql.SendQuery("SELECT * " +
+                                  $"INTO {destinationDatasetName} " +
+                                  $"FROM {startingDatasetName} " +
+                                  $"WHERE {Instruction} ");
         }
     }
 }
