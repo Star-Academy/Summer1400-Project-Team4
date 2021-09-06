@@ -4,7 +4,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { PipelineComponent } from './components/pipeline/pipeline.component';
 import { MaterialModule } from './material/material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { LandingComponent } from './components/landing/landing.component';
@@ -23,33 +22,32 @@ import { EditProfileComponent } from './components/user/edit-profile/edit-profil
 import {UserService} from "./services/user.service";
 import {AuthService} from "./services/auth/auth.service";
 @NgModule({
-    declarations: [
-        AppComponent,
-        PipelineComponent,
-        LandingComponent,
-        DashbordComponent,
-        HeaderComponent,
-        FooterComponent,
-        SidebarComponent,
-        PostsComponent,
-        LoginSignupAlertComponent,
-        UserComponent,
-        LoginComponent,
-        SignupComponent,
-        LoginFailedComponent,
-        EditProfileComponent
-    ], entryComponents : [LoginSignupAlertComponent , LoginFailedComponent],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        HttpClientModule,
-        BrowserAnimationsModule,
-        MaterialModule,
-        FlexLayoutModule,
-        FormsModule,
-    ],
-     providers :[UserService , AuthService] ,
-    bootstrap: [AppComponent],
-    exports: [],
+  declarations: [
+    AppComponent,
+    LandingComponent,
+    DashbordComponent,
+    HeaderComponent,
+    FooterComponent,
+    SidebarComponent,
+    PostsComponent,
+    LoginSignupAlertComponent,
+    UserComponent,
+    LoginComponent,
+    SignupComponent,
+    LoginFailedComponent,
+    EditProfileComponent
+  ], entryComponents : [LoginSignupAlertComponent , LoginFailedComponent],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MaterialModule,
+    FlexLayoutModule,
+    FormsModule,
+  ],
+  providers :[UserService , AuthService] ,
+  bootstrap: [AppComponent],
+  exports: [],
 })
 export class AppModule {}
