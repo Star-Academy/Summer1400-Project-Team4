@@ -24,7 +24,7 @@
             "Name": "join",
             "Instruction": "{
                 \"Type\": \"INNER JOIN\",
-                \"JoinWith\": \"_{datasetId}\",
+                \"JoinWith\": \"{datasetId}\",
                 \"LeftTableKey\": \"width\",
                 \"RightTableKey\": \"latitude\",
             }"
