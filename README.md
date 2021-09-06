@@ -6,8 +6,8 @@
 
 ## pipeline json
 <div dir="rtl">
-    
-برای قسمت جوین توی instruction برا این که کارتون راحتتر باشه فرمت جیسون گذاشتم که بتونین با فیلدا راحت کار کنین. فقط حواستون باشه که این]جیسون توی جیسون]) https://stackoverflow.com/questions/25570712/is-it-possible-to-wrap-json-in-json-field-like-a-string ( هستش
+
+برای قسمت جوین توی instruction برا این که کارتون راحتتر باشه فرمت جیسون گذاشتم که بتونین با فیلدا راحت کار کنین. فقط حواستون باشه که این]جیسون توی جیسون](https://stackoverflow.com/questions/25570712/is-it-possible-to-wrap-json-in-json-field-like-a-string) هستش
 
 </div>
 
