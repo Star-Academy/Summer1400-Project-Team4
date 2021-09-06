@@ -14,6 +14,7 @@ namespace WebApplication2.Services.QueryServices
         public override void Handle(ISqlConnection applyingSql, string startingDatasetName,
             string destinationDatasetName)
         {
+            //todo Drop existing destination table before use INTO
             applyingSql.SendQuery("SELECT * " +
                                   $"INTO {destinationDatasetName} " +
                                   $"FROM {startingDatasetName} " +
