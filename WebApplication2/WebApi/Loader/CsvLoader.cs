@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
 using Microsoft.Data.SqlClient;
-using WebApplication2.Model;
-using WebApplication2.Services;
+using WebApi.Model;
+using WebApi.Services;
 
-namespace WebApplication2.Loader
+namespace WebApi.Loader
 {
     public class CsvLoader
     {
@@ -17,8 +16,7 @@ namespace WebApplication2.Loader
 
         public CsvLoader(CsvProp csvProp)
         {
-            _csvProp = csvProp;
-        }
+            _csvProp = csvProp; }
 
         public bool TransportCsvToSql()
         {
@@ -68,8 +66,7 @@ namespace WebApplication2.Loader
             stringBuilder.Append(");");
             return stringBuilder.ToString();
         }
-
-
+        
         public string[] GetColumn(int columnNumber)
         {
             var column = new List<string>();

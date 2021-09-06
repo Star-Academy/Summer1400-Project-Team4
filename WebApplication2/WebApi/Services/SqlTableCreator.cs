@@ -2,7 +2,7 @@
 using System.Text;
 using Microsoft.Data.SqlClient;
 
-namespace WebApplication2.Services
+namespace WebApi.Services
 {
     public class SqlTableCreator : ITableCreator
     {

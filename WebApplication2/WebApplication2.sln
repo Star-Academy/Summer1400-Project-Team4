@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication2", "WebApplication2\WebApplication2.csproj", "{CA4E2833-A76F-44ED-8625-CCA0D06984A4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "WebApi\WebApi.csproj", "{CA4E2833-A76F-44ED-8625-CCA0D06984A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlMapperLib", "SqlMapperLib\SqlMapperLib.csproj", "{39DCAE9D-1096-4003-9A0F-EBD25342B405}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,5 +14,9 @@ Global
 		{CA4E2833-A76F-44ED-8625-CCA0D06984A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA4E2833-A76F-44ED-8625-CCA0D06984A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA4E2833-A76F-44ED-8625-CCA0D06984A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39DCAE9D-1096-4003-9A0F-EBD25342B405}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39DCAE9D-1096-4003-9A0F-EBD25342B405}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39DCAE9D-1096-4003-9A0F-EBD25342B405}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39DCAE9D-1096-4003-9A0F-EBD25342B405}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Hosting;
-using WebApplication2.Loader;
-using WebApplication2.Model;
-using WebApplication2.Services;
+using WebApi.Services;
+using WebApi.Loader;
+using WebApi.Model;
 
-namespace WebApplication2
+namespace WebApi
 {
     public class Program
     {

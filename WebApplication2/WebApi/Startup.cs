@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 
-namespace WebApplication2
+namespace WebApi
 {
     public class Startup
     {
@@ -23,7 +23,7 @@ namespace WebApplication2
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo {Title = "WebApplication2", Version = "v1"});
+                c.SwaggerDoc("v1", new OpenApiInfo {Title = "WebApi", Version = "v1"});
             });
             //default sever config
             const string connectionString = "Server= localhost ; Database= ETLproject; Integrated Security=SSPI;";
@@ -37,7 +37,7 @@ namespace WebApplication2
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApplication2 v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApi v1"));
             }
 
             app.UseHttpsRedirection();

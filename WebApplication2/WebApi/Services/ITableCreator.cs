@@ -1,6 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 
-namespace WebApplication2.Services
+namespace WebApi.Services
 {
     public interface ITableCreator
     {
