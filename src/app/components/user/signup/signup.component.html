@@ -7,19 +7,19 @@
     </div>
 
     <!-- Login Form -->
-    <form [formGroup]="form">
+    <form (submit)="handleSignUp($event)" [formGroup]="form">
       <div class="example-container">
-        <mat-form-field style="margin-left: 0.7rem" appearance="fill" >
-          <mat-label> نام </mat-label>
-          <input formControlName="name" matInput required>
-          <mat-hint *ngIf="isFieldValid('name')">
+        <mat-form-field appearance="fill" style="margin-left: 0.7rem">
+          <mat-label> نام</mat-label>
+          <input formControlName="firstName" matInput name="firstName" required>
+          <mat-hint *ngIf="isFieldValid('firstName')">
             نام نباید خالی باشد
           </mat-hint>
         </mat-form-field>
 
-        <mat-form-field appearance="fill" >
-          <mat-label> ایمیل </mat-label>
-          <input formControlName="email" matInput required>
+        <mat-form-field appearance="fill">
+          <mat-label> ایمیل</mat-label>
+          <input formControlName="email" matInput name="email" required>
           <mat-hint *ngIf="isFieldValid('email')">
             لطفا ایمیل معتبری وارد کنید
           </mat-hint>
@@ -27,7 +27,7 @@
 
         <mat-form-field appearance="fill">
           <mat-label>نام کاربری</mat-label>
-          <input #input formControlName="username" matInput maxlength="10" required>
+          <input #input formControlName="username" matInput maxlength="10" name="username" required>
           <mat-hint *ngIf="isFieldValid('username')">
             نام کاربری نباید خالی باشد
           </mat-hint>
@@ -35,10 +35,12 @@
 
         <mat-form-field appearance="fill">
           <mat-label>رمز عبور</mat-label>
-          <input #password [type]="hide ? 'password' : 'text'" formControlName="password" matInput minlength="4" maxlength="10"
+          <input #password [type]="hide ? 'password' : 'text'" formControlName="password" matInput maxlength="10"
+                 minlength="4" name="password"
                  required>
           <button (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" mat-icon-button
-                  matSuffix>
+                  matSuffix
+                  type="button">
             <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
           </button>
           <mat-hint *ngIf="isFieldValid('password') && password.value.length == 0">
@@ -48,12 +50,11 @@
             طول رمز عبور حداقل 4 کاراکتر است
           </mat-hint>
         </mat-form-field>
-
+        <button [disabled]="!form.valid || disableBtn" color="primary" mat-raised-button type="submit"> ثبت نام</button>
       </div>
 
     </form>
 
-    <button (click)="handle_log_in()" [disabled]="!form.valid" color="primary" mat-raised-button> ثبت نام</button>
     <!-- login linking -->
     <div class="formFooter">
       <p>قبلا ثبت نام کرده اید ؟ </p>

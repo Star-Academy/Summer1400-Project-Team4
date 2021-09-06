@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from "@angular/material/dialog";
 
 @Component({
@@ -9,20 +9,20 @@ import {MatDialog} from "@angular/material/dialog";
 })
 export class LoginSignupAlertComponent implements OnInit {
 
-  constructor(private router: Router , public dialog : MatDialog) { }
+  constructor(private router: Router, public dialog: MatDialog) {
+  }
 
   ngOnInit(): void {
   }
 
-  Navigate(toLogin: boolean)
-  {
+  Navigate(toLogin: boolean) {
     if (this.dialog.openDialogs.length > 0)
       this.dialog.closeAll();
     if (toLogin) {
-      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => this.router.navigate(['/user', 'login']));
+      this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => this.router.navigate(['/user', 'login']));
     } else {
       this.router
-        .navigateByUrl('/', { skipLocationChange: true })
+        .navigateByUrl('/', {skipLocationChange: true})
         .then(() => this.router.navigate(['/user', 'signup']));
     }
   }
