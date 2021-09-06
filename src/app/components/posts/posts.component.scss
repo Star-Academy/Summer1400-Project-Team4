@@ -1,8 +1,5 @@
 @use '~@angular/material' as mat;
 
-@include mat.core();
-
-$my-primary: mat.define-palette(mat.$amber-palette);
 //.card
 //{
 //  width:90%;

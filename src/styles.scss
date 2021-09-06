@@ -48,7 +48,7 @@ body {
 @include mat.all-component-themes(theme.$theme);
 
 .custom-dialog-container .mat-dialog-container {
-    background-color: #7948cb;
+    background-color: theme.mat-color(theme.$primary-palette);
     width: 500px;
 }
 
