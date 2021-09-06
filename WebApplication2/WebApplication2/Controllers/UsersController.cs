@@ -92,7 +92,7 @@ namespace WebApplication2.Controllers
         [Route("/{userId:int}/datasets/{datasetId:int}/execute")]
         public IActionResult ExecutePipeline(int userId, int datasetId, int pipelineId, int destination)
         {
-            var pipeline = Startup.EtlContext.Pipelines.FirstOrDefault(p => p.PipelineId == pipelineId);
+            var pipeline = Startup.EtlContext.Pipelines.Include(a => a.Processes).FirstOrDefault(p => p.PipelineId == pipelineId);
             if (pipeline == null) return BadRequest("no pipeline found with this id");
 
             var pipelineExecutor =
