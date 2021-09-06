@@ -20,8 +20,9 @@ import { MatRippleModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 const material = [
+    ReactiveFormsModule,
     MatSnackBarModule,
     MatFormFieldModule,
     MatTableModule,
@@ -43,6 +44,7 @@ const material = [
     MatButtonToggleModule,
     MatRippleModule,
     MatDialogModule,
+    FormsModule
 ];
 
 @NgModule({
