@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
-import {LoginSignupAlertComponent} from "../messages/login-signup-alert/login-signup-alert.component";
 import {TableVirtualScrollDataSource} from "ng-table-virtual-scroll";
 import {PeriodicElement} from "../dashbord/dashbord.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {HttpClient} from "@angular/common/http";
 
 const buffer = 200;
+const message = 'نمونه های بیشتر لود شدند  ...';
 
 @Component({
   selector: 'app-posts',
@@ -16,35 +16,47 @@ export class PostsComponent implements OnInit {
 
   displayedColumns = ['position', 'name'];
   dataSource!: TableVirtualScrollDataSource<PeriodicElement>;
+  public enableScroll: boolean = true;
 
-  constructor(public dialog: MatDialog , public snackBar : MatSnackBar) {
+  constructor(public snackBar: MatSnackBar, public http: HttpClient) {
   }
 
-  // @ts-ignore
-  onTableScroll(e) {
+  onTableScroll(e: { target: any; }) {
+    console.log("datasource length : " + this.dataSource.data.length);
     const tableViewHeight = e.target.offsetHeight // viewport: 52rem
     const tableScrollHeight = e.target.scrollHeight // the length of loaded datas exist in hole table
     const scrollLocation = e.target.scrollTop; // how far user scrolled
     const limit = tableScrollHeight - tableViewHeight - buffer;
-    // console.log('tableViewHeight : ' + tableViewHeight)
-    // console.log('tableScrollHeight : ' + tableScrollHeight)
-    // console.log('scrollLocation : ' + scrollLocation)
-    // console.log('limit : ' + limit)
+    console.log('tableViewHeight : ' + tableViewHeight)
+    console.log('tableScrollHeight : ' + tableScrollHeight)
+    console.log('scrollLocation : ' + scrollLocation)
+    console.log('limit : ' + limit)
 
-    if (scrollLocation > limit) {
-      //http post
-      // alert("loading more samples");
-        this.dataSource.data = this.dataSource.data.concat(ELEM);
+    if (scrollLocation > limit && this.enableScroll) {
+      console.log('scrollLocation : ' + scrollLocation)
+      this.enableScroll = false;
+      (this.http.get<Object>('https://songs.code-star.ir' + '/song/all').subscribe(res => {
+          this.dataSource.data = this.dataSource.data.concat(ELEM);
+          this.snackBar.open(message, '', {
+            duration: 1000, verticalPosition: "bottom",
+            horizontalPosition: "center", panelClass: 'purple-snackbar'
+          });
+          console.log('scroll height : ' + e.target.scrollHeight)
+          console.log(res);
+        }, error => {
+          console.log('error')
+        }, () => {
+          console.log('complete');
+          this.enableScroll = true;
+        }
+      ))
     }
+    console.log('*'.repeat(25))
   }
 
   ngOnInit(): void {
     this.dataSource = new TableVirtualScrollDataSource(ELEM);
 
-    this.dialog.open(LoginSignupAlertComponent, {
-      panelClass: 'custom-dialog-container', disableClose: false,
-      closeOnNavigation: false
-    });
     // console.log("ngOnInit");
     // setTimeout(()=>{
     //   this.dataSource.data[0].name = "opotoniom";

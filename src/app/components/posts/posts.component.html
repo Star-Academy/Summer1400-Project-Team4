@@ -152,7 +152,8 @@
 
 <!--</div>-->
 <p style="padding-right: 10px"> پست </p>
-<cdk-virtual-scroll-viewport (scroll)="onTableScroll($event)" class="wrapper mat-elevation-z2" tvsItemSize>
+<cdk-virtual-scroll-viewport (scroll)="onTableScroll($event)" [style.overflow]="enableScroll ? 'auto' : 'hidden'"
+                             class="wrapper mat-elevation-z2" tvsItemSize>
   <table #table *ngIf="dataSource" [dataSource]="dataSource" class="mat-elevation-z8" mat-table
          style="margin-right: 6rem">
 
@@ -167,7 +168,6 @@
       <th *matHeaderCellDef mat-header-cell> نام</th>
       <td *matCellDef="let element" mat-cell> {{element.name}} </td>
     </ng-container>
-
 
     <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
 

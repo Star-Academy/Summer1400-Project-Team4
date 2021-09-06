@@ -88,4 +88,8 @@ export class DashbordComponent implements OnInit {
 
   getNextBatch(event: any) {
   }
+
+  clickName(element: PeriodicElement) {
+    console.log(element);
+  }
 }

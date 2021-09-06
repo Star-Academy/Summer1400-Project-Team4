@@ -4,15 +4,16 @@
 
   <div class="profile">
     <div class="sidebarHeader">
-      <h2>نام کاربری</h2>
+      <h2>{{name}}</h2>
     </div>
-    <img alt="" src="assets/h.jpg">
+    <img alt="" [src] = "imgSrc" >
   </div>
 
   <mat-divider></mat-divider>
 
-  <a mat-list-item routerLinkActive="list-item-active" routerLink="/"> داشبورد </a>
-  <a mat-list-item routerLinkActive="list-item-active" routerLink="/posts"> دیتاست </a>
+  <a mat-list-item routerLinkActive="list-item-active" routerLink="/"> دیتاست </a>
+  <a mat-list-item routerLinkActive="list-item-active" routerLink="/posts"> پست (پیش نمایش) </a>
+  <a mat-list-item routerLinkActive="list-item-active" routerLink="/user/edit_profile"> ویرایش پروفایل </a>
 
   <mat-divider></mat-divider>
 

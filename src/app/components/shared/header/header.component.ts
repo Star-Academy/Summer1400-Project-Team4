@@ -1,5 +1,7 @@
 import { EventEmitter } from '@angular/core';
 import { Component, OnInit , Output } from '@angular/core';
+import {Router} from "@angular/router";
+import { ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-header',
@@ -8,9 +10,11 @@ import { Component, OnInit , Output } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
-  @Output()  toggleForSideBar : EventEmitter<any> = new EventEmitter();
+  @Output()  toggleForSideBar  : EventEmitter<ElementRef> = new EventEmitter();
+  @Output()  toggleForLogOut: EventEmitter<ElementRef> = new EventEmitter();
 
-  constructor() { }
+
+  constructor(public router : Router) { }
 
   ngOnInit(): void {
   }
@@ -19,4 +23,8 @@ export class HeaderComponent implements OnInit {
     this.toggleForSideBar.emit();
   }
 
+  logOut()
+  {
+    this.toggleForLogOut.emit();
+  }
 }

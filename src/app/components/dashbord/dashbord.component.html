@@ -10,7 +10,8 @@
     <!-- Name Column -->
     <ng-container matColumnDef="name">
       <th *matHeaderCellDef mat-header-cell> نام</th>
-      <td *matCellDef="let element" mat-cell> {{element.name}}
+      <td (click)="clickName(element)" *matCellDef="let element" mat-cell>
+        <button mat-button> {{element.name}} </button>
       </td>
     </ng-container>
 
