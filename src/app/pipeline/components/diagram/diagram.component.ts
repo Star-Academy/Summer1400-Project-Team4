@@ -46,6 +46,10 @@ class Card {
         return pipelineNodeInfo[this.node.type].title;
     }
 
+    get typeInfo() {
+        return pipelineNodeInfo[this.node.type];
+    }
+
     updatePosition() {
         this.position = {
             x: -this.node.position.x * GRID_IN_PIXELS,

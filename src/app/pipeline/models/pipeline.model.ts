@@ -2,15 +2,17 @@ import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Subject } from 'rxjs';
 
 export enum PipelineNodeType {
-    datasetInput = 'datasetInput',
-    datasetOutput = 'datasetOutput',
+    datasetInput = 'dataset_input',
+    datasetOutput = 'dataset_output',
     filter = 'filter',
     join = 'join',
+    select = 'select',
 }
 
 export interface PipelineNodeInfo {
     type: PipelineNodeType;
     title: string;
+    altTitle: string;
     numInputs: number;
     hasOutput: boolean;
     iconName: string;
@@ -19,33 +21,45 @@ export interface PipelineNodeInfo {
 export const pipelineNodeInfo: {
     [type in PipelineNodeType]: PipelineNodeInfo;
 } = {
-    datasetInput: {
+    [PipelineNodeType.datasetInput]: {
         type: PipelineNodeType.datasetInput,
         title: 'دیتاست ورودی',
+        altTitle: '',
         numInputs: 0,
         hasOutput: true,
-        iconName: 'arrow_downward',
+        iconName: 'file_download',
     },
-    datasetOutput: {
+    [PipelineNodeType.datasetOutput]: {
         type: PipelineNodeType.datasetOutput,
         title: 'دیتاست خروجی',
+        altTitle: '',
         numInputs: 1,
         hasOutput: false,
-        iconName: 'arrow_upward',
+        iconName: 'publish',
     },
-    filter: {
+    [PipelineNodeType.filter]: {
         type: PipelineNodeType.filter,
         title: 'فیلتر',
+        altTitle: 'Filter',
         numInputs: 1,
         hasOutput: true,
         iconName: 'filter_alt',
     },
-    join: {
+    [PipelineNodeType.join]: {
         type: PipelineNodeType.join,
         title: 'الحاق',
+        altTitle: 'Join',
         numInputs: 2,
         hasOutput: true,
         iconName: 'merge_type',
+    },
+    [PipelineNodeType.select]: {
+        type: PipelineNodeType.select,
+        title: 'انتخاب',
+        altTitle: 'Select',
+        numInputs: 1,
+        hasOutput: true,
+        iconName: 'edit',
     },
 };
 

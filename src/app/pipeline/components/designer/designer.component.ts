@@ -15,15 +15,9 @@ export class DesignerComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit(): void {
         const personalId = this.pipeline.createNode(
-            'اطلاعات شخصی',
+            'ثبت احوال',
             PipelineNodeType.datasetInput,
             { x: 3, y: 5 }
-        );
-
-        const accountId = this.pipeline.createNode(
-            'اطلاعات بانکی',
-            PipelineNodeType.datasetInput,
-            { x: 3, y: 10 }
         );
 
         const vipId = this.pipeline.createNode(
@@ -39,22 +33,6 @@ export class DesignerComponent implements OnInit, AfterViewInit {
             { x: 20, y: 5 },
             [vipId]
         );
-
-        this.pipeline.createNode('MI7', PipelineNodeType.datasetOutput, {
-            x: 20,
-            y: 10,
-        });
-    }
-
-    addNode() {
-        this.pipeline.createNode('الحاق', PipelineNodeType.join, {
-            x: 3,
-            y: 1,
-        });
-        this.pipeline.createNode('صافی نمونه', PipelineNodeType.filter, {
-            x: 10,
-            y: 1,
-        });
     }
 
     exportPipeline() {
