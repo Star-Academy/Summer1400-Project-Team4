@@ -1,7 +1,7 @@
 <mat-toolbar color="primary">
     <a routerLink="/" mat-flat-button disableRipple color="primary">
         <mat-icon>call_split</mat-icon>
-        <span class="logo-name"> اجراگر خط لوله</span>
+        <span class="logo-name"> سناریوچی</span>
     </a>
 
     <span class="pipeline-info">
@@ -12,7 +12,7 @@
         </button>
 
         <mat-form-field floatLabel="never">
-            <mat-label>نام خط لوله</mat-label>
+            <mat-label>نام سناریو</mat-label>
             <input
                 #pipelineNameInput="matInput"
                 matInput
@@ -23,6 +23,8 @@
                 [style.visibility]="pipelineNameInput.focused ? '' : 'hidden'"
                 matSuffix
                 mat-icon-button
+                disabled
+                style="color: inherit"
             >
                 <mat-icon>edit</mat-icon>
             </button>
@@ -69,90 +71,111 @@
 
 <mat-sidenav-container>
     <mat-sidenav mode="side" opened>
-        <div class="config-pane">
-            <div class="config-content">
-                <h2>تجمع</h2>
+        <div class="config-pane" *ngIf="selectedNode !== undefined">
+            <mat-form-field class="node-name-input">
+                <input
+                    #nodeNameInput="matInput"
+                    matInput
+                    type="text"
+                    [(ngModel)]="selectedNode.name"
+                />
+                <button
+                    [style.visibility]="nodeNameInput.focused ? '' : 'hidden'"
+                    matSuffix
+                    mat-icon-button
+                    disabled
+                    style="color: inherit"
+                >
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <mat-hint class="node-type-info">
+                    <mat-icon>
+                        {{ pipelineNodeInfo[selectedNode.type].iconName }}
+                    </mat-icon>
+                    <span>{{ pipelineNodeInfo[selectedNode.type].title }}</span>
+                </mat-hint>
+            </mat-form-field>
 
-                <h3>گروه‌بندی بر اساس</h3>
-                <mat-accordion>
-                    <mat-expansion-panel>
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>
-                                <bdo dir="ltr">.Op</bdo>
-                            </mat-panel-title>
-                        </mat-expansion-panel-header>
-                        <mat-form-field>
-                            <mat-label>نام متغیر</mat-label>
-                            <input
-                                matInput
-                                type="text"
-                                value=".Op"
-                                class="propery-input"
-                            />
-                        </mat-form-field>
-                    </mat-expansion-panel>
-                    <mat-expansion-panel>
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>
-                                <bdo dir="ltr">.Position</bdo>
-                            </mat-panel-title>
-                        </mat-expansion-panel-header>
-                        <mat-form-field>
-                            <mat-label>نام متغیر</mat-label>
-                            <input
-                                matInput
-                                type="text"
-                                value=".Position"
-                                class="propery-input"
-                            />
-                        </mat-form-field>
-                    </mat-expansion-panel>
-                </mat-accordion>
-                <br />
-                <h3>عملیات</h3>
-                <mat-accordion>
-                    <mat-expansion-panel>
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>
-                                <span>
-                                    بیشینه
-                                    <bdo dir="ltr">.Price</bdo>
-                                    به عنوان Total
-                                </span>
-                            </mat-panel-title>
-                        </mat-expansion-panel-header>
-                        <mat-form-field>
-                            <mat-label>نام متغیر</mat-label>
-                            <input
-                                matInput
-                                type="text"
-                                value=".Price"
-                                class="propery-input"
-                            />
-                        </mat-form-field>
-                        <mat-form-field>
-                            <mat-label>نوع عملیت</mat-label>
-                            <input matInput type="text" value="بیشینه" />
-                        </mat-form-field>
-                        <mat-form-field>
-                            <mat-label>نام متغیر خروجی</mat-label>
-                            <input
-                                matInput
-                                type="text"
-                                value="Total"
-                                class="propery-input"
-                            />
-                        </mat-form-field>
-                    </mat-expansion-panel>
-                </mat-accordion>
-            </div>
-            <div class="config-actions">
-                <button mat-raised-button>لغو تغییرات</button>
-                <button mat-raised-button color="primary">ذخیره</button>
-            </div>
+            <br />
+            <h3>گروه‌بندی بر اساس</h3>
+            <mat-accordion>
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <bdo dir="ltr">.Op</bdo>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <mat-form-field>
+                        <mat-label>نام متغیر</mat-label>
+                        <input
+                            matInput
+                            type="text"
+                            value=".Op"
+                            class="propery-input"
+                        />
+                    </mat-form-field>
+                </mat-expansion-panel>
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <bdo dir="ltr">.Position</bdo>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <mat-form-field>
+                        <mat-label>نام متغیر</mat-label>
+                        <input
+                            matInput
+                            type="text"
+                            value=".Position"
+                            class="propery-input"
+                        />
+                    </mat-form-field>
+                </mat-expansion-panel>
+            </mat-accordion>
+            <br />
+            <h3>عملیات</h3>
+            <mat-accordion>
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <span>
+                                بیشینه
+                                <bdo dir="ltr">.Price</bdo>
+                                به عنوان Total
+                            </span>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <mat-form-field>
+                        <mat-label>نام متغیر</mat-label>
+                        <input
+                            matInput
+                            type="text"
+                            value=".Price"
+                            class="propery-input"
+                        />
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>نوع عملیت</mat-label>
+                        <input matInput type="text" value="بیشینه" />
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>نام متغیر خروجی</mat-label>
+                        <input
+                            matInput
+                            type="text"
+                            value="Total"
+                            class="propery-input"
+                        />
+                    </mat-form-field>
+                </mat-expansion-panel>
+            </mat-accordion>
         </div>
     </mat-sidenav>
     <mat-sidenav-content>
-        <app-diagram [pipeline]="pipeline"></app-diagram>
+        <app-diagram
+            #diagram
+            [pipeline]="pipeline"
+            (selectedNode)="selectedNode = $event"
+        ></app-diagram>
     </mat-sidenav-content>
 </mat-sidenav-container>

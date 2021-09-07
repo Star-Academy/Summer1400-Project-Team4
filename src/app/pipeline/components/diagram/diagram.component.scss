@@ -57,8 +57,12 @@
     }
 
     @include mat.elevation(2);
-    &:active {
-        @include mat.elevation(6);
+    &.selected {
+        @include mat.elevation(4, theme.mat-color(theme.$primary-palette), 3);
+    }
+
+    &.cdk-drag-dragging {
+        @include mat.elevation(6, theme.mat-color(theme.$primary-palette), 3);
         cursor: move;
     }
 
@@ -70,6 +74,13 @@
         justify-content: center;
         gap: var(--density-smaller);
     }
+}
+
+.more-menu-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: var(--density-small);
 }
 
 .drop-placeholder {
@@ -97,6 +108,10 @@
     width: 2rem;
     height: 2rem;
     border-radius: 100%;
+
+    > * {
+        position: absolute;
+    }
 }
 
 .empty-button-placeholder {

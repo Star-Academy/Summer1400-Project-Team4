@@ -1,5 +1,5 @@
 import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Subject } from 'rxjs';
+import { ReplaySubject, Subject } from 'rxjs';
 
 export enum PipelineNodeType {
     datasetInput = 'dataset_input',
@@ -7,6 +7,7 @@ export enum PipelineNodeType {
     filter = 'filter',
     join = 'join',
     select = 'select',
+    aggregate = 'aggregate',
 }
 
 export interface PipelineNodeInfo {
@@ -49,7 +50,7 @@ export const pipelineNodeInfo: {
         type: PipelineNodeType.join,
         title: 'الحاق',
         altTitle: 'Join',
-        numInputs: 2,
+        numInputs: 1,
         hasOutput: true,
         iconName: 'merge_type',
     },
@@ -60,6 +61,14 @@ export const pipelineNodeInfo: {
         numInputs: 1,
         hasOutput: true,
         iconName: 'edit',
+    },
+    [PipelineNodeType.aggregate]: {
+        type: PipelineNodeType.aggregate,
+        title: 'تجمیع',
+        altTitle: 'Aggregate',
+        numInputs: 1,
+        hasOutput: true,
+        iconName: 'stacked_bar_chart',
     },
 };
 
@@ -77,6 +86,7 @@ export class Pipeline {
     nodeAdded = new Subject<PipelineNode>();
     nodeEdited = new Subject<PipelineNode>();
     nodeRemoved = new Subject<PipelineNode>();
+    loaded = new ReplaySubject<void>(1);
 
     constructor(public name: string) {}
 
@@ -192,7 +202,7 @@ export class Pipeline {
     export() {
         return {
             name: this.name,
-            nodes: this.nodes,
+            processes: this.nodes,
         };
     }
 }

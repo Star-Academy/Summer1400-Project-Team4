@@ -7,11 +7,15 @@ import {
     CdkDropList,
 } from '@angular/cdk/drag-drop';
 import {
+    AfterViewChecked,
     AfterViewInit,
+    ChangeDetectorRef,
     Component,
     ElementRef,
+    EventEmitter,
     Input,
     OnInit,
+    Output,
     ViewChild,
 } from '@angular/core';
 import { Subject } from 'rxjs';
@@ -29,13 +33,15 @@ const REM_IN_PIXLES = parseFloat(
 const GRID_IN_PIXELS = 4 * REM_IN_PIXLES;
 
 class Card {
-    constructor(public node: PipelineNode, public hasOutput: boolean) {
+    constructor(public node: PipelineNode) {
         this.inputs = Array(node.inputs.length).fill(null);
+        this.hasOutput = this.typeInfo.hasOutput;
         this.updatePosition();
     }
 
-    position!: { x: number; y: number };
     inputs: (Card | null)[];
+    hasOutput: boolean;
+    position!: { x: number; y: number };
     outputPlaceholderElement?: HTMLElement;
 
     get title() {
@@ -69,8 +75,12 @@ interface DropListData {
     templateUrl: './diagram.component.html',
     styleUrls: ['./diagram.component.scss'],
 })
-export class DiagramComponent implements OnInit, AfterViewInit {
+export class DiagramComponent
+    implements OnInit, AfterViewInit, AfterViewChecked
+{
     @Input() pipeline!: Pipeline;
+    @Output('selectedNode') selectedNodeEvent =
+        new EventEmitter<PipelineNode>();
     @ViewChild('lineContainer') lineContainer?: ElementRef<HTMLElement>;
     @ViewChild('cardContainer') cardContainer?: ElementRef<HTMLElement>;
 
@@ -80,17 +90,25 @@ export class DiagramComponent implements OnInit, AfterViewInit {
     dragOffset = { x: 0, y: 0 };
     cards: Card[] = [];
     reposition = new Subject<void>();
+    selectedCard?: Card;
+    shouldReposition = false;
 
     Card = Card;
     nodeTypes = Object.values(pipelineNodeInfo);
+    log = console.log;
 
     constructor(private lineService: LineService) {}
 
     ngOnInit(): void {
+        this.pipeline.nodes.forEach((node) => {
+            this.cards.push(new Card(node));
+        });
+        this.pipeline.nodes.forEach((node) => {
+            this.updateCardInputs(node);
+        });
+
         this.pipeline.nodeAdded.subscribe((node) => {
-            this.cards.push(
-                new Card(node, pipelineNodeInfo[node.type].hasOutput)
-            );
+            this.cards.push(new Card(node));
             this.updateCardInputs(node);
         });
 
@@ -104,6 +122,10 @@ export class DiagramComponent implements OnInit, AfterViewInit {
             )!;
             this.cards.splice(index, 1);
         });
+
+        this.pipeline.loaded.subscribe(() => {
+            this.autoView();
+        });
     }
 
     ngAfterViewInit() {
@@ -114,6 +136,35 @@ export class DiagramComponent implements OnInit, AfterViewInit {
         window.addEventListener('load', () => {
             this.reposition.next();
         });
+    }
+
+    ngAfterViewChecked(): void {
+        //if (this.shouldReposition) {
+            this.reposition.next();
+            this.shouldReposition = false;
+        //}
+    }
+
+    updateSelectedCard(card?: Card) {
+        this.selectedCard = card;
+        this.selectedNodeEvent.emit(card?.node);
+    }
+
+    autoView() {
+        if (this.pipeline.nodes.length > 0) {
+            const offset = this.pipeline.nodes.reduce(
+                (min, node) => ({
+                    x: Math.min(min.x, node.position.x),
+                    y: Math.min(min.y, node.position.y),
+                }),
+                { x: Number.POSITIVE_INFINITY, y: Number.POSITIVE_INFINITY }
+            );
+
+            this.baseOffset = {
+                x: (offset.x - 2) * GRID_IN_PIXELS,
+                y: -(offset.y - 2) * GRID_IN_PIXELS,
+            };
+        }
     }
 
     updateCardInputs(node: PipelineNode) {
@@ -156,10 +207,6 @@ export class DiagramComponent implements OnInit, AfterViewInit {
                 this.pipeline.markNodeAsEdited(current.card!.node.id);
             }
         }
-    }
-
-    positionConnections() {
-        this.reposition.next();
     }
 
     updateDragOffset(event: CdkDragMove) {
@@ -224,5 +271,11 @@ export class DiagramComponent implements OnInit, AfterViewInit {
             event.source.data.type,
             position
         );
+    }
+
+    removeNode(id: number) {
+        this.pipeline.removeNode(id);
+        if (this.selectedCard?.node?.id === id)
+            this.updateSelectedCard(undefined);
     }
 }

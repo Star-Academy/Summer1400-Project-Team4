@@ -1,19 +1,37 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { PipelineNodeType, Pipeline } from '../../models/pipeline.model';
+import {
+    AfterContentInit,
+    AfterViewInit,
+    Component,
+    OnInit,
+    ViewChild,
+} from '@angular/core';
+import {
+    PipelineNodeType,
+    Pipeline,
+    PipelineNode,
+    pipelineNodeInfo,
+} from '../../models/pipeline.model';
+import { DiagramComponent } from '../diagram/diagram.component';
 
 @Component({
     selector: 'app-pipeline',
     templateUrl: './designer.component.html',
     styleUrls: ['./designer.component.scss'],
 })
-export class DesignerComponent implements OnInit, AfterViewInit {
-    pipeline = new Pipeline('خط لوله جدید');
+export class DesignerComponent
+    implements OnInit, AfterViewInit, AfterContentInit
+{
+    pipeline = new Pipeline('سناریو جدید');
+    selectedNode?: PipelineNode;
+    @ViewChild('diagram') diagram!: DiagramComponent;
+    
+    pipelineNodeInfo = pipelineNodeInfo;
 
     constructor() {}
 
     ngOnInit(): void {}
 
-    ngAfterViewInit(): void {
+    ngAfterContentInit(): void {
         const personalId = this.pipeline.createNode(
             'ثبت احوال',
             PipelineNodeType.datasetInput,
@@ -33,7 +51,11 @@ export class DesignerComponent implements OnInit, AfterViewInit {
             { x: 20, y: 5 },
             [vipId]
         );
+
+        this.pipeline.loaded.next();
     }
+
+    ngAfterViewInit(): void {}
 
     exportPipeline() {
         this.pipeline.reorder();

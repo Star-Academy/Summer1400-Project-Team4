@@ -16,7 +16,9 @@
                 cdkDropListGroup
                 cdkDrag
                 (cdkDragEnded)="updateOffset($event)"
-                (cdkDragMoved)="positionConnections(); updateDragOffset($event)"
+                (cdkDragMoved)="
+                    shouldReposition = true; updateDragOffset($event)
+                "
             >
                 <div
                     class="remove-connection-container"
@@ -37,13 +39,17 @@
                     <mat-card
                         *ngFor="let card of cards"
                         class="diagram-card"
+                        [class.selected]="
+                            selectedCard?.node?.id === card.node.id
+                        "
+                        (click)="updateSelectedCard(card)"
                         cdkDrag
                         [cdkDragData]="card"
                         [cdkDragFreeDragPosition]="card.position"
                         (cdkDragStarted)="cardDragStarted($event)"
                         (cdkDragEnded)="cardDragEnded($event)"
-                        (cdkDragMoved)="positionConnections()"
-                        (transitionend)="positionConnections()"
+                        (cdkDragMoved)="shouldReposition = true"
+                        (transitionend)="shouldReposition = true"
                     >
                         <mat-card-header>
                             <mat-card-title>{{ card.title }}</mat-card-title>
@@ -51,9 +57,26 @@
                                 <mat-icon>
                                     {{ card.typeInfo.iconName }}
                                 </mat-icon>
-                                {{ card.subtitle }}
+                                <span>{{ card.subtitle }}</span>
                             </mat-card-subtitle>
                         </mat-card-header>
+                        <div class="more-menu-container">
+                            <button
+                                mat-icon-button
+                                [matMenuTriggerFor]="moreMenu"
+                            >
+                                <mat-icon>more_vert</mat-icon>
+                            </button>
+                            <mat-menu #moreMenu="matMenu">
+                                <button
+                                    mat-menu-item
+                                    (click)="removeNode(card.node.id)"
+                                >
+                                    <mat-icon>delete</mat-icon>
+                                    <span>حذف</span>
+                                </button>
+                            </mat-menu>
+                        </div>
                         <div class="drop-placeholder input-drop-placeholder">
                             <div
                                 *ngFor="
@@ -81,6 +104,7 @@
                                         input.outputPlaceholderElement
                                     "
                                     [reposition]="reposition"
+                                    (shouldReposition)="shouldReposition = true"
                                     [dragData]="input"
                                 >
                                     <div class="drag-button"></div>
@@ -151,7 +175,7 @@
                         (cdkDragEnded)="addNode($event)"
                     >
                         <mat-icon>{{ node.iconName }}</mat-icon>
-                        {{ node.title }}
+                        <span>{{ node.title }}</span>
 
                         <div *cdkDragPreview>
                             <mat-card class="diagram-card preview-diagram-card">
@@ -160,7 +184,10 @@
                                         {{ node.title }}
                                     </mat-card-title>
                                     <mat-card-subtitle>
-                                        {{ node.title }}
+                                        <mat-icon>
+                                            {{ node.iconName }}
+                                        </mat-icon>
+                                        <span>{{ node.title }}</span>
                                     </mat-card-subtitle>
                                 </mat-card-header>
                                 <div

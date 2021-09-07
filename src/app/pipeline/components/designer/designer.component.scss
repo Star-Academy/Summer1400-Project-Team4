@@ -42,22 +42,26 @@ nav {
 }
 
 .config-pane {
-    display: grid;
-    grid-template-rows: 1fr auto;
-    height: 100%;
-}
-
-.config-content {
-    padding: var(--density-large);
-}
-
-.config-actions {
-    background-color: theme.mat-color(theme.$background-palette, 'card');
-    padding: var(--density-large);
-    position: sticky;
-    bottom: 0;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    min-height: 100%;
+    padding: var(--density-large);
+    padding-top: 0;
+}
+
+.node-name-input {
+    font-size: mat.font-size(theme.$typography-config, 'title');
+
+    ::ng-deep .mat-form-field-underline {
+        background-color: transparent;
+    }
+}
+
+.node-type-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--density-small);
 }
 
 .mat-form-field {
