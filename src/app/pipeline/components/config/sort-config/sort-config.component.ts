@@ -1,5 +1,13 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, Input, OnInit } from '@angular/core';
+import {
+    AfterViewChecked,
+    ChangeDetectorRef,
+    Component,
+    Input,
+    OnInit,
+    ViewChild,
+} from '@angular/core';
+import { MatExpansionPanel } from '@angular/material/expansion';
 
 interface SortOrder {
     name: string;
@@ -15,10 +23,12 @@ interface SortConfig {
     templateUrl: './sort-config.component.html',
     styleUrls: ['./sort-config.component.scss'],
 })
-export class SortConfigComponent implements OnInit {
+export class SortConfigComponent implements OnInit, AfterViewChecked {
     @Input() config?: SortConfig;
+    @ViewChild('firstExpansionPanel') firstExpansionPanel?: MatExpansionPanel;
+    expandNewOrder = false;
 
-    constructor() {}
+    constructor(private cdref: ChangeDetectorRef) {}
 
     ngOnInit(): void {
         if (this.config !== undefined) {
@@ -28,8 +38,17 @@ export class SortConfigComponent implements OnInit {
         }
     }
 
+    ngAfterViewChecked(): void {
+        if (this.expandNewOrder) {
+            this.expandNewOrder = false;
+            this.firstExpansionPanel?.open();
+            this.cdref.detectChanges();
+        }
+    }
+
     addOrder() {
-        this.config?.orders?.push({ name: '', descending: false });
+        this.config?.orders?.unshift({ name: '', descending: false });
+        this.expandNewOrder = true;
     }
 
     removeOrder(index: number) {

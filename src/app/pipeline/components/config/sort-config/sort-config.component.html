@@ -12,6 +12,7 @@
     >
         <mat-expansion-panel
             *ngFor="let order of config.orders; let index = index"
+            #firstExpansionPanel
             cdkDrag
         >
             <mat-expansion-panel-header>
