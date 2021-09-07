@@ -71,6 +71,7 @@
 
 <mat-sidenav-container>
     <mat-sidenav mode="side" opened>
+        <h2 class="no-selected-node" *ngIf="selectedNode === undefined">پردازشی انتخاب نشده</h2>
         <div class="config-pane" *ngIf="selectedNode !== undefined">
             <mat-form-field class="node-name-input">
                 <input

@@ -41,6 +41,12 @@ nav {
     width: 30rem;
 }
 
+.no-selected-node {
+    padding: var(--density-larger);
+    text-align: center;
+    color: theme.mat-color(theme.$foreground-palette, secondary-text);
+}
+
 .config-pane {
     display: flex;
     flex-direction: column;

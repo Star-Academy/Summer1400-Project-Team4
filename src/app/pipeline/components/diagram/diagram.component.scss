@@ -83,6 +83,14 @@
     margin: var(--density-small);
 }
 
+.remove-menu-item {
+    color: theme.mat-color(theme.$warn-palette, text);
+
+    > .mat-icon {
+        color: theme.mat-color(theme.$warn-palette);
+    }
+}
+
 .drop-placeholder {
     position: absolute;
     width: 0;

@@ -70,7 +70,11 @@
                             <mat-menu #moreMenu="matMenu">
                                 <button
                                     mat-menu-item
+                                    class="remove-menu-item"
                                     (click)="removeNode(card.node.id)"
+                                    disableRipple
+                                    matRipple
+                                    matRippleColor="rgba(255, 0, 0, 0.2)"
                                 >
                                     <mat-icon>delete</mat-icon>
                                     <span>حذف</span>
