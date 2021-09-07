@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {Token, userLogin , userSignUp , UserEditData} from "../interfaces/interface";
@@ -11,10 +11,17 @@ const httpOptions = {
     'Content-Type': 'application/json',
   }),
 };
+const getRequestHeader = {
+  headers  : new HttpHeaders({
+    'Cache-Control':  'no-cache , no-store, must-revalidate',
+    'Pragma': 'no-cache',
+    'Expires': '0'
+    }),
+};
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
+export class UserService  {
 
   constructor(private http: HttpClient) {}
 
@@ -30,7 +37,7 @@ export class UserService {
 
   getUserInfos(id: string | null) : Observable<UserEditData>
   {
-    return this.http.get<UserEditData>(`${API}/user/one/${id}`)
+    return this.http.get<UserEditData>(`${API}/user/one/${id}` , getRequestHeader)
   }
   updateUserInfos( userData : Object) : Observable<void>
   {

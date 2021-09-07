@@ -61,5 +61,5 @@ body {
 }
 .purple-snackbar
 {
-  background-color: mediumpurple;
+  background-color: theme.mat-color(theme.$primary-palette);
 }

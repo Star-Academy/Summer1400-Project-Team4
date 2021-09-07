@@ -35,7 +35,7 @@ export class EditProfileComponent implements OnInit {
     }
     this.userService.getUserInfos(userId).subscribe(res => {
       this.userData = res.user;
-      // console.log(this.userData);
+      console.log(this.userData);
       this.firstName = res.user.first_name;
       this.email = res.user.email;
       this.userName = res.user.username;
@@ -64,7 +64,7 @@ export class EditProfileComponent implements OnInit {
     const tokenData = {token: this.auth.getToken()};
     let userdata: Object;
     if (this.form.value.password) {
-      userdata = {...tokenData, ...this.form.value};
+      userdata = {...tokenData, ...this.form.value , ...{avatar: this.imageSrc} };
     } else {
       userdata = {
         token: this.auth.getToken(), username: this.userName, email: this.email,
