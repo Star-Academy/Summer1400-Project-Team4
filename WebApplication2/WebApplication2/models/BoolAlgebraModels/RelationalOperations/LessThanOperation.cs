@@ -6,5 +6,9 @@
         {
             Command = "<"; 
         }
+
+        public LessThanOperation()
+        {
+        }
     }
 }

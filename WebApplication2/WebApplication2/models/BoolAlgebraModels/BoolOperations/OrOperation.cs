@@ -6,5 +6,9 @@
         {
             Command = "OR";
         }
+
+        public OrOperation()
+        {
+        }
     }
 }
