@@ -1,94 +1,196 @@
-<div
-    class="diagram-container"
-    [style.background-position]="
-        'right ' +
-        (-baseOffset.x - dragOffset.x) +
-        'px top ' +
-        (baseOffset.y + dragOffset.y) +
-        'px'
-    "
->
-    <div
-        class="card-container"
-        cdkDropListGroup
-        cdkDrag
-        (cdkDragEnded)="updateOffset($event)"
-        (cdkDragMoved)="positionConnections(); updateDragOffset($event)"
-    >
+<mat-sidenav-container hasBackdrop="false">
+    <mat-sidenav-content>
         <div
-            class="remove-connection-container"
-            cdkDropList
-            [cdkDropListData]="$any({ type: 'remove' })"
-            (cdkDropListDropped)="buttonDrop($event)"
-        ></div>
-        <div
-            class="offset-container"
-            [style.transform]="
-                'translate(' + baseOffset.x + 'px, ' + baseOffset.y + 'px)'
+            class="diagram-container"
+            [style.background-position]="
+                'right ' +
+                (-baseOffset.x - dragOffset.x) +
+                'px top ' +
+                (baseOffset.y + dragOffset.y) +
+                'px'
             "
         >
-            <mat-card
-                *ngFor="let card of cards"
+            <div
+                class="card-container"
+                #cardContainer
+                cdkDropListGroup
                 cdkDrag
-                [cdkDragData]="card"
-                [cdkDragFreeDragPosition]="card.position"
-                (cdkDragStarted)="cardDragStarted($event)"
-                (cdkDragEnded)="cardDragEnded($event)"
-                (cdkDragMoved)="positionConnections()"
-                (transitionend)="positionConnections()"
+                (cdkDragEnded)="updateOffset($event)"
+                (cdkDragMoved)="positionConnections(); updateDragOffset($event)"
             >
-                <mat-card-header>
-                    <mat-card-title>{{ card.title }}</mat-card-title>
-                    <mat-card-subtitle>{{ card.subtitle }}</mat-card-subtitle>
-                </mat-card-header>
-                <div class="drop-placeholder input-drop-placeholder">
-                    <div
-                        *ngFor="let input of card.inputs; let index = index"
-                        class="empty-button-placeholder"
-                        cdkDropList
-                        [cdkDropListData]="
-                            $any({ type: 'input', card: card, index: index })
-                        "
-                        [cdkDropListEnterPredicate]="inputDropEnterPredicate"
-                        (cdkDropListDropped)="buttonDrop($event)"
-                    >
-                        <app-anchor
-                            *ngIf="input !== null"
-                            [lineContainer]="lineContainer"
-                            [connectionBegin]="input.outputPlaceholderElement"
-                            [reposition]="reposition"
-                            [dragData]="input"
-                        >
-                            <div class="drag-button"></div>
-                        </app-anchor>
-                    </div>
-                </div>
                 <div
-                    #connectionBegin
-                    spy-element
-                    (onInit)="card.outputPlaceholderElement = connectionBegin"
-                    class="drop-placeholder output-drop-placeholder"
+                    class="remove-connection-container"
+                    cdkDropList
+                    [cdkDropListData]="$any({ type: 'remove' })"
+                    (cdkDropListDropped)="buttonDrop($event)"
+                ></div>
+                <div
+                    class="offset-container"
+                    [style.transform]="
+                        'translate(' +
+                        baseOffset.x +
+                        'px, ' +
+                        baseOffset.y +
+                        'px)'
+                    "
                 >
-                    <div
-                        *ngIf="card.hasOutput"
-                        class="full-button-placeholder"
-                        cdkDropList
-                        [cdkDropListData]="$any({ card: card, type: 'output' })"
-                        (cdkDropListDropped)="buttonDrop($event)"
+                    <mat-card
+                        *ngFor="let card of cards"
+                        class="diagram-card"
+                        cdkDrag
+                        [cdkDragData]="card"
+                        [cdkDragFreeDragPosition]="card.position"
+                        (cdkDragStarted)="cardDragStarted($event)"
+                        (cdkDragEnded)="cardDragEnded($event)"
+                        (cdkDragMoved)="positionConnections()"
+                        (transitionend)="positionConnections()"
                     >
-                        <app-anchor
-                            [lineContainer]="lineContainer"
-                            [connectionBegin]="connectionBegin"
-                            [connectionRestVisibility]="false"
-                            [reposition]="reposition"
-                            [dragData]="card"
+                        <mat-card-header>
+                            <mat-card-title>{{ card.title }}</mat-card-title>
+                            <mat-card-subtitle>{{
+                                card.subtitle
+                            }}</mat-card-subtitle>
+                        </mat-card-header>
+                        <div class="drop-placeholder input-drop-placeholder">
+                            <div
+                                *ngFor="
+                                    let input of card.inputs;
+                                    let index = index
+                                "
+                                class="empty-button-placeholder"
+                                cdkDropList
+                                [cdkDropListData]="
+                                    $any({
+                                        type: 'input',
+                                        card: card,
+                                        index: index
+                                    })
+                                "
+                                [cdkDropListEnterPredicate]="
+                                    inputDropEnterPredicate
+                                "
+                                (cdkDropListDropped)="buttonDrop($event)"
+                            >
+                                <app-anchor
+                                    *ngIf="input !== null"
+                                    [lineContainer]="lineContainer"
+                                    [connectionBegin]="
+                                        input.outputPlaceholderElement
+                                    "
+                                    [reposition]="reposition"
+                                    [dragData]="input"
+                                >
+                                    <div class="drag-button"></div>
+                                </app-anchor>
+                            </div>
+                        </div>
+                        <div
+                            #connectionBegin
+                            spy-element
+                            (onInit)="
+                                card.outputPlaceholderElement = connectionBegin
+                            "
+                            class="drop-placeholder output-drop-placeholder"
                         >
-                            <div class="drag-button"></div>
-                        </app-anchor>
-                    </div>
+                            <div
+                                *ngIf="card.hasOutput"
+                                class="full-button-placeholder"
+                                cdkDropList
+                                [cdkDropListData]="
+                                    $any({ card: card, type: 'output' })
+                                "
+                                (cdkDropListDropped)="buttonDrop($event)"
+                            >
+                                <app-anchor
+                                    [lineContainer]="lineContainer"
+                                    [connectionBegin]="connectionBegin"
+                                    [connectionRestVisibility]="false"
+                                    [reposition]="reposition"
+                                    [dragData]="card"
+                                >
+                                    <div class="drag-button"></div>
+                                </app-anchor>
+                            </div>
+                        </div>
+                    </mat-card>
                 </div>
-            </mat-card>
+            </div>
+            <div #lineContainer class="line-container"></div>
+            <div
+                class="add-node-button-container"
+                [class.invisible]="addSidePane.opened"
+            >
+                <button
+                    mat-raised-button
+                    color="primary"
+                    (click)="addSidePane.open()"
+                >
+                    <mat-icon>add</mat-icon>
+                </button>
+            </div>
         </div>
-    </div>
-    <div #lineContainer class="line-container"></div>
-</div>
+    </mat-sidenav-content>
+    <mat-sidenav #addSidePane position="end" mode="side">
+        <div class="add-node-pane">
+            <h3>
+                پردازش جدید
+                <button mat-icon-button (click)="addSidePane.close()">
+                    <mat-icon>chevron_left</mat-icon>
+                </button>
+            </h3>
+
+            <div class="add-node-list">
+                <div cdkDropList *ngFor="let node of nodeTypes">
+                    <mat-card
+                        class="add-node-card"
+                        cdkDrag
+                        [cdkDragData]="node"
+                        (cdkDragEnded)="addNode($event)"
+                    >
+                        <mat-icon>{{ node.iconName }}</mat-icon>
+                        {{ node.title }}
+
+                        <div *cdkDragPreview>
+                            <mat-card class="diagram-card preview-diagram-card">
+                                <mat-card-header>
+                                    <mat-card-title>
+                                        {{ node.title }}
+                                    </mat-card-title>
+                                    <mat-card-subtitle>
+                                        {{ node.title }}
+                                    </mat-card-subtitle>
+                                </mat-card-header>
+                                <div
+                                    class="
+                                        drop-placeholder
+                                        input-drop-placeholder
+                                    "
+                                >
+                                    <div
+                                        *ngFor="
+                                            let input of [].constructor(
+                                                node.numInputs
+                                            )
+                                        "
+                                        class="empty-button-placeholder"
+                                    ></div>
+                                </div>
+                                <div
+                                    class="
+                                        drop-placeholder
+                                        output-drop-placeholder
+                                    "
+                                >
+                                    <div
+                                        *ngIf="node.hasOutput"
+                                        class="full-button-placeholder"
+                                    ></div>
+                                </div>
+                            </mat-card>
+                        </div>
+                    </mat-card>
+                </div>
+            </div>
+        </div>
+    </mat-sidenav>
+</mat-sidenav-container>

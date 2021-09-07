@@ -8,27 +8,45 @@ export enum PipelineNodeType {
     join = 'join',
 }
 
-export const pipelineNodeTypeReadableNames: {
-    [type in PipelineNodeType]: string;
+export interface PipelineNodeInfo {
+    type: PipelineNodeType;
+    title: string;
+    numInputs: number;
+    hasOutput: boolean;
+    iconName: string;
+}
+
+export const pipelineNodeInfo: {
+    [type in PipelineNodeType]: PipelineNodeInfo;
 } = {
-    datasetInput: 'دیتاست ورودی',
-    datasetOutput: 'دیتاست خروجی',
-    filter: 'فیلتر',
-    join: 'الحاق',
-};
-
-export const pipelineNodeNumInputs: { [type in PipelineNodeType]: number } = {
-    datasetInput: 0,
-    datasetOutput: 1,
-    filter: 1,
-    join: 2,
-};
-
-export const pipelineNodeHasOutput: { [type in PipelineNodeType]: boolean } = {
-    datasetInput: true,
-    datasetOutput: false,
-    filter: true,
-    join: true,
+    datasetInput: {
+        type: PipelineNodeType.datasetInput,
+        title: 'دیتاست ورودی',
+        numInputs: 0,
+        hasOutput: true,
+        iconName: 'arrow_downward',
+    },
+    datasetOutput: {
+        type: PipelineNodeType.datasetOutput,
+        title: 'دیتاست خروجی',
+        numInputs: 1,
+        hasOutput: false,
+        iconName: 'arrow_upward',
+    },
+    filter: {
+        type: PipelineNodeType.filter,
+        title: 'فیلتر',
+        numInputs: 1,
+        hasOutput: true,
+        iconName: 'filter_alt',
+    },
+    join: {
+        type: PipelineNodeType.join,
+        title: 'الحاق',
+        numInputs: 2,
+        hasOutput: true,
+        iconName: 'merge_type',
+    },
 };
 
 export interface PipelineNode {
@@ -65,10 +83,10 @@ export class Pipeline {
         inputs?: (number | null)[]
     ) {
         if (inputs !== undefined) {
-            if (inputs.length !== pipelineNodeNumInputs[type])
+            if (inputs.length !== pipelineNodeInfo[type].numInputs)
                 throw new Error('invalid number of inputs');
         } else {
-            inputs = new Array(pipelineNodeNumInputs[type]).fill(null);
+            inputs = new Array(pipelineNodeInfo[type].numInputs).fill(null);
         }
 
         const node: PipelineNode = {

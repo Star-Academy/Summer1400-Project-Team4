@@ -30,7 +30,7 @@
     </span>
 
     <nav>
-        <button title="دانلود" mat-icon-button>
+        <button title="دانلود" mat-icon-button (click)="exportPipeline()">
             <mat-icon>file_upload</mat-icon>
         </button>
 
@@ -154,13 +154,5 @@
     </mat-sidenav>
     <mat-sidenav-content>
         <app-diagram [pipeline]="pipeline"></app-diagram>
-        <div class="top-right-container">
-            <button mat-raised-button color="primary" (click)="addNode()">
-                <mat-icon>add</mat-icon>
-            </button>
-            <button mat-raised-button color="accent" (click)="exportPipeline()">
-                <mat-icon>download</mat-icon>
-            </button>
-        </div>
     </mat-sidenav-content>
 </mat-sidenav-container>

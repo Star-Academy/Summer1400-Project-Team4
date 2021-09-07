@@ -18,9 +18,9 @@ import { Subject } from 'rxjs';
 import {
     Pipeline,
     PipelineNode,
-    pipelineNodeHasOutput,
-    pipelineNodeTypeReadableNames,
-} from '../../pipeline.model';
+    PipelineNodeInfo,
+    pipelineNodeInfo,
+} from '../../models/pipeline.model';
 import { LineService } from '../../services/line.service';
 
 const REM_IN_PIXLES = parseFloat(
@@ -43,7 +43,7 @@ class Card {
     }
 
     get subtitle() {
-        return pipelineNodeTypeReadableNames[this.node.type];
+        return pipelineNodeInfo[this.node.type].title;
     }
 
     updatePosition() {
@@ -66,8 +66,9 @@ interface DropListData {
     styleUrls: ['./diagram.component.scss'],
 })
 export class DiagramComponent implements OnInit, AfterViewInit {
-    @Input() pipeline?: Pipeline;
-    @ViewChild('lineContainer') lineContainer?: ElementRef;
+    @Input() pipeline!: Pipeline;
+    @ViewChild('lineContainer') lineContainer?: ElementRef<HTMLElement>;
+    @ViewChild('cardContainer') cardContainer?: ElementRef<HTMLElement>;
 
     private Line?: object;
     lines: any[] = [];
@@ -77,20 +78,23 @@ export class DiagramComponent implements OnInit, AfterViewInit {
     reposition = new Subject<void>();
 
     Card = Card;
+    nodeTypes = Object.values(pipelineNodeInfo);
 
     constructor(private lineService: LineService) {}
 
     ngOnInit(): void {
-        this.pipeline!.nodeAdded.subscribe((node) => {
-            this.cards.push(new Card(node, pipelineNodeHasOutput[node.type]));
+        this.pipeline.nodeAdded.subscribe((node) => {
+            this.cards.push(
+                new Card(node, pipelineNodeInfo[node.type].hasOutput)
+            );
             this.updateCardInputs(node);
         });
 
-        this.pipeline!.nodeEdited.subscribe((node) => {
+        this.pipeline.nodeEdited.subscribe((node) => {
             this.updateCardInputs(node);
         });
 
-        this.pipeline!.nodeRemoved.subscribe((node) => {
+        this.pipeline.nodeRemoved.subscribe((node) => {
             const index = this.cards.findIndex(
                 (card) => card.node.id === node.id
             )!;
@@ -100,7 +104,7 @@ export class DiagramComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit() {
         this.Line = this.lineService.onContainer(
-            this.lineContainer?.nativeElement
+            this.lineContainer!.nativeElement
         );
 
         window.addEventListener('load', () => {
@@ -133,19 +137,19 @@ export class DiagramComponent implements OnInit, AfterViewInit {
         if (current.type === 'output' || current.type === 'remove') {
             if (previous.type === 'input') {
                 previous.card!.node.inputs[previous.index!] = null;
-                this.pipeline!.markNodeAsEdited(previous.card!.node.id);
+                this.pipeline.markNodeAsEdited(previous.card!.node.id);
             }
         } else if (current.type === 'input') {
             if (previous.type === 'input') {
                 current.card!.node.inputs[current.index!] =
                     previous.card!.node.inputs[previous.index!];
                 previous.card!.node.inputs[previous.index!] = null;
-                this.pipeline!.markNodeAsEdited(previous.card!.node.id);
-                this.pipeline!.markNodeAsEdited(current.card!.node.id);
+                this.pipeline.markNodeAsEdited(previous.card!.node.id);
+                this.pipeline.markNodeAsEdited(current.card!.node.id);
             } else if (previous.type === 'output') {
                 current.card!.node.inputs[current.index!] =
                     previous.card!.node.id;
-                this.pipeline!.markNodeAsEdited(current.card!.node.id);
+                this.pipeline.markNodeAsEdited(current.card!.node.id);
             }
         }
     }
@@ -182,5 +186,39 @@ export class DiagramComponent implements OnInit, AfterViewInit {
             ),
         };
         event.source.data.updatePosition();
+    }
+
+    addNode(event: CdkDragEnd<PipelineNodeInfo>) {
+        const rect = this.cardContainer!.nativeElement.getBoundingClientRect();
+        if (
+            event.dropPoint.x < rect.left ||
+            event.dropPoint.x > rect.right ||
+            event.dropPoint.y < rect.top ||
+            event.dropPoint.y > rect.bottom
+        )
+            return;
+
+        const dropPoint = {
+            x:
+                rect.right -
+                event.dropPoint.x -
+                2.5 * GRID_IN_PIXELS +
+                this.baseOffset.x,
+            y:
+                event.dropPoint.y -
+                rect.top -
+                GRID_IN_PIXELS -
+                this.baseOffset.y,
+        };
+        const position = {
+            x: Math.round(dropPoint.x / GRID_IN_PIXELS),
+            y: Math.round(dropPoint.y / GRID_IN_PIXELS),
+        };
+
+        this.pipeline.createNode(
+            event.source.data.title,
+            event.source.data.type,
+            position
+        );
     }
 }

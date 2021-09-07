@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { PipelineNodeType, Pipeline } from '../../pipeline.model';
+import { PipelineNodeType, Pipeline } from '../../models/pipeline.model';
 
 @Component({
     selector: 'app-pipeline',
