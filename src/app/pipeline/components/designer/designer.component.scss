@@ -42,8 +42,14 @@ nav {
 }
 
 .no-selected-node {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    gap: var(--density-normal);
     padding: var(--density-larger);
-    text-align: center;
+
     color: theme.mat-color(theme.$foreground-palette, secondary-text);
 }
 
