@@ -70,8 +70,10 @@
 </mat-toolbar>
 
 <mat-sidenav-container>
-    <mat-sidenav mode="side" opened>
-        <h2 class="no-selected-node" *ngIf="selectedNode === undefined">پردازشی انتخاب نشده</h2>
+    <mat-sidenav mode="side" opened disableClose>
+        <h2 class="no-selected-node" *ngIf="selectedNode === undefined">
+            پردازشی انتخاب نشده
+        </h2>
         <div class="config-pane" *ngIf="selectedNode !== undefined">
             <mat-form-field class="node-name-input">
                 <input
@@ -90,86 +92,38 @@
                     <mat-icon>edit</mat-icon>
                 </button>
                 <mat-hint class="node-type-info">
-                    <mat-icon>
+                    <mat-icon
+                        [class.mat-icon-rtl-mirror]="
+                            pipelineNodeInfo[selectedNode.type].iconMirrored
+                        "
+                    >
                         {{ pipelineNodeInfo[selectedNode.type].iconName }}
                     </mat-icon>
                     <span>{{ pipelineNodeInfo[selectedNode.type].title }}</span>
                 </mat-hint>
             </mat-form-field>
 
-            <br />
-            <h3>گروه‌بندی بر اساس</h3>
-            <mat-accordion>
-                <mat-expansion-panel>
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            <bdo dir="ltr">.Op</bdo>
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    <mat-form-field>
-                        <mat-label>نام متغیر</mat-label>
-                        <input
-                            matInput
-                            type="text"
-                            value=".Op"
-                            class="propery-input"
-                        />
-                    </mat-form-field>
-                </mat-expansion-panel>
-                <mat-expansion-panel>
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            <bdo dir="ltr">.Position</bdo>
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    <mat-form-field>
-                        <mat-label>نام متغیر</mat-label>
-                        <input
-                            matInput
-                            type="text"
-                            value=".Position"
-                            class="propery-input"
-                        />
-                    </mat-form-field>
-                </mat-expansion-panel>
-            </mat-accordion>
-            <br />
-            <h3>عملیات</h3>
-            <mat-accordion>
-                <mat-expansion-panel>
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            <span>
-                                بیشینه
-                                <bdo dir="ltr">.Price</bdo>
-                                به عنوان Total
-                            </span>
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    <mat-form-field>
-                        <mat-label>نام متغیر</mat-label>
-                        <input
-                            matInput
-                            type="text"
-                            value=".Price"
-                            class="propery-input"
-                        />
-                    </mat-form-field>
-                    <mat-form-field>
-                        <mat-label>نوع عملیت</mat-label>
-                        <input matInput type="text" value="بیشینه" />
-                    </mat-form-field>
-                    <mat-form-field>
-                        <mat-label>نام متغیر خروجی</mat-label>
-                        <input
-                            matInput
-                            type="text"
-                            value="Total"
-                            class="propery-input"
-                        />
-                    </mat-form-field>
-                </mat-expansion-panel>
-            </mat-accordion>
+            <div [ngSwitch]="selectedNode.type">
+                <app-input-config
+                    *ngSwitchCase="PipelineNodeType.datasetInput"
+                    [config]="$any(selectedNode.config)"
+                ></app-input-config>
+                <app-output-config
+                    *ngSwitchCase="PipelineNodeType.datasetOutput"
+                    [config]="$any(selectedNode.config)"
+                ></app-output-config>
+                <app-sort-config
+                    *ngSwitchCase="PipelineNodeType.sort"
+                    [config]="$any(selectedNode.config)"
+                ></app-sort-config>
+                <app-filter-config
+                    *ngSwitchCase="PipelineNodeType.filter"
+                    [config]="$any(selectedNode.config)"
+                ></app-filter-config>
+                <app-aggregate-config
+                    *ngSwitchCase="PipelineNodeType.aggregate"
+                ></app-aggregate-config>
+            </div>
         </div>
     </mat-sidenav>
     <mat-sidenav-content>

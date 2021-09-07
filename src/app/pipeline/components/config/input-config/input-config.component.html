@@ -1,0 +1,13 @@
+<div *ngIf="config !== undefined">
+    <h3>اطلاعات دیتاست</h3>
+    <mat-form-field class="wide-field">
+        <mat-label>نام دیتاست</mat-label>
+        <input
+            matInput
+            [(ngModel)]="config.datasetName"
+            type="text"
+            class="propery-input"
+            required
+        />
+    </mat-form-field>
+</div>

@@ -53,6 +53,23 @@ nav {
     min-height: 100%;
     padding: var(--density-large);
     padding-top: 0;
+    gap: var(--density-larger);
+
+    ::ng-deep .wide-field {
+        width: 100%;
+    }
+
+    ::ng-deep .propery-input {
+        direction: ltr;
+        text-align: left;
+    }
+
+    ::ng-deep .config-title-add {
+        display: flex;
+        flex-direction: row;
+        align-items: baseline;
+        justify-content: space-between;
+    }
 }
 
 .node-name-input {
@@ -68,13 +85,4 @@ nav {
     flex-direction: row;
     align-items: center;
     gap: var(--density-small);
-}
-
-.mat-form-field {
-    width: 100%;
-}
-
-.propery-input {
-    direction: ltr;
-    text-align: left;
 }

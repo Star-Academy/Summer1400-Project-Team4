@@ -20,6 +20,8 @@ import { MatRippleModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSortModule } from '@angular/material/sort';
 
 const material = [
     MatSnackBarModule,
@@ -43,6 +45,8 @@ const material = [
     MatButtonToggleModule,
     MatRippleModule,
     MatDialogModule,
+    MatCheckboxModule,
+    MatSortModule,
 ];
 
 @NgModule({

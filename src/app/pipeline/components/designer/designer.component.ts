@@ -24,8 +24,9 @@ export class DesignerComponent
     pipeline = new Pipeline('سناریو جدید');
     selectedNode?: PipelineNode;
     @ViewChild('diagram') diagram!: DiagramComponent;
-    
+
     pipelineNodeInfo = pipelineNodeInfo;
+    PipelineNodeType = PipelineNodeType;
 
     constructor() {}
 

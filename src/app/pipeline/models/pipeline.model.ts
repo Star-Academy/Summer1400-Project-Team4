@@ -4,9 +4,10 @@ import { ReplaySubject, Subject } from 'rxjs';
 export enum PipelineNodeType {
     datasetInput = 'dataset_input',
     datasetOutput = 'dataset_output',
-    filter = 'filter',
-    join = 'join',
     select = 'select',
+    filter = 'filter',
+    sort = 'sort',
+    join = 'join',
     aggregate = 'aggregate',
 }
 
@@ -17,6 +18,7 @@ export interface PipelineNodeInfo {
     numInputs: number;
     hasOutput: boolean;
     iconName: string;
+    iconMirrored: boolean;
 }
 
 export const pipelineNodeInfo: {
@@ -29,6 +31,7 @@ export const pipelineNodeInfo: {
         numInputs: 0,
         hasOutput: true,
         iconName: 'file_download',
+        iconMirrored: false,
     },
     [PipelineNodeType.datasetOutput]: {
         type: PipelineNodeType.datasetOutput,
@@ -37,22 +40,7 @@ export const pipelineNodeInfo: {
         numInputs: 1,
         hasOutput: false,
         iconName: 'publish',
-    },
-    [PipelineNodeType.filter]: {
-        type: PipelineNodeType.filter,
-        title: 'فیلتر',
-        altTitle: 'Filter',
-        numInputs: 1,
-        hasOutput: true,
-        iconName: 'filter_alt',
-    },
-    [PipelineNodeType.join]: {
-        type: PipelineNodeType.join,
-        title: 'الحاق',
-        altTitle: 'Join',
-        numInputs: 1,
-        hasOutput: true,
-        iconName: 'merge_type',
+        iconMirrored: false,
     },
     [PipelineNodeType.select]: {
         type: PipelineNodeType.select,
@@ -61,6 +49,34 @@ export const pipelineNodeInfo: {
         numInputs: 1,
         hasOutput: true,
         iconName: 'edit',
+        iconMirrored: false,
+    },
+    [PipelineNodeType.sort]: {
+        type: PipelineNodeType.sort,
+        title: 'مرتب‌سازی',
+        altTitle: 'Sort',
+        numInputs: 1,
+        hasOutput: true,
+        iconName: 'sort_by_alpha',
+        iconMirrored: false,
+    },
+    [PipelineNodeType.filter]: {
+        type: PipelineNodeType.filter,
+        title: 'فیلتر',
+        altTitle: 'Filter',
+        numInputs: 1,
+        hasOutput: true,
+        iconName: 'filter_alt',
+        iconMirrored: false,
+    },
+    [PipelineNodeType.join]: {
+        type: PipelineNodeType.join,
+        title: 'الحاق',
+        altTitle: 'Join',
+        numInputs: 1,
+        hasOutput: true,
+        iconName: 'merge_type',
+        iconMirrored: false,
     },
     [PipelineNodeType.aggregate]: {
         type: PipelineNodeType.aggregate,
@@ -69,6 +85,7 @@ export const pipelineNodeInfo: {
         numInputs: 1,
         hasOutput: true,
         iconName: 'stacked_bar_chart',
+        iconMirrored: true,
     },
 };
 
@@ -78,6 +95,7 @@ export interface PipelineNode {
     type: PipelineNodeType;
     inputs: (number | null)[];
     position: { x: number; y: number };
+    config: object;
 }
 
 export class Pipeline {
@@ -119,6 +137,7 @@ export class Pipeline {
             type: type,
             inputs: inputs,
             position: position,
+            config: {},
         };
 
         this.addNode(node);

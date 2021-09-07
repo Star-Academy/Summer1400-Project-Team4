@@ -1,0 +1,56 @@
+<div *ngIf="config !== undefined">
+    <div class="config-title-add">
+        <h3>مرتب‌سازی براساس</h3>
+        <button mat-icon-button color="primary" (click)="addOrder()">
+            <mat-icon>add</mat-icon>
+        </button>
+    </div>
+    <mat-accordion
+        *ngIf="config.orders !== undefined"
+        cdkDropList
+        (cdkDropListDropped)="dropOrder($event)"
+    >
+        <mat-expansion-panel
+            *ngFor="let order of config.orders; let index = index"
+            cdkDrag
+        >
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    <mat-icon cdkDragHandle class="drag-handle">
+                        drag_handle
+                    </mat-icon>
+                    <span>
+                        <bdo dir="ltr">{{ order.name }}</bdo>
+                    </span>
+                    <mat-icon class="sort-icon">
+                        {{ order.descending ? 'south' : 'north' }}
+                    </mat-icon>
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-form-field class="wide-field">
+                <mat-label>نام متغیر</mat-label>
+                <input
+                    matInput
+                    type="text"
+                    [(ngModel)]="order.name"
+                    class="propery-input"
+                    required
+                />
+            </mat-form-field>
+            <div class="inline-row">
+                <mat-checkbox [(ngModel)]="order.descending">
+                    نزولی
+                </mat-checkbox>
+                <button
+                    mat-raised-button
+                    color="warn"
+                    class="delete-button"
+                    (click)="removeOrder(index)"
+                >
+                    <mat-icon>delete</mat-icon>
+                    حذف
+                </button>
+            </div>
+        </mat-expansion-panel>
+    </mat-accordion>
+</div>

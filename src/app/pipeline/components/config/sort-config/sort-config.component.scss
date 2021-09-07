@@ -1,0 +1,26 @@
+@use '../../../../../theme.scss' as theme;
+
+mat-panel-title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    user-select: none;
+}
+
+.drag-handle {
+    color: theme.mat-color(theme.$foreground-palette, secondary-text);
+    margin-left: var(--density-small);
+    cursor: move;
+}
+
+.sort-icon {
+    transform: scale(0.7, 0.7);
+}
+
+.inline-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}

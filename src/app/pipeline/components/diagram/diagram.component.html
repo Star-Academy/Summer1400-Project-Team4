@@ -54,7 +54,11 @@
                         <mat-card-header>
                             <mat-card-title>{{ card.title }}</mat-card-title>
                             <mat-card-subtitle>
-                                <mat-icon>
+                                <mat-icon
+                                    [class.mat-icon-rtl-mirror]="
+                                        card.typeInfo.iconMirrored
+                                    "
+                                >
                                     {{ card.typeInfo.iconName }}
                                 </mat-icon>
                                 <span>{{ card.subtitle }}</span>
@@ -178,7 +182,11 @@
                         [cdkDragData]="node"
                         (cdkDragEnded)="addNode($event)"
                     >
-                        <mat-icon>{{ node.iconName }}</mat-icon>
+                        <mat-icon
+                            [class.mat-icon-rtl-mirror]="node.iconMirrored"
+                        >
+                            {{ node.iconName }}
+                        </mat-icon>
                         <span>{{ node.title }}</span>
 
                         <div *cdkDragPreview>
@@ -188,7 +196,11 @@
                                         {{ node.title }}
                                     </mat-card-title>
                                     <mat-card-subtitle>
-                                        <mat-icon>
+                                        <mat-icon
+                                            [class.mat-icon-rtl-mirror]="
+                                                node.iconMirrored
+                                            "
+                                        >
                                             {{ node.iconName }}
                                         </mat-icon>
                                         <span>{{ node.title }}</span>
