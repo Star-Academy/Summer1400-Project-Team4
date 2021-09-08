@@ -1,8 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-
-interface OutputConfig {
-    datasetName: string;
-}
+import { OutputConfig } from 'src/app/pipeline/models/config.model';
 
 @Component({
     selector: 'app-output-config',

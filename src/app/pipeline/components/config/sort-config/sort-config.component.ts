@@ -8,15 +8,7 @@ import {
     ViewChild,
 } from '@angular/core';
 import { MatExpansionPanel } from '@angular/material/expansion';
-
-interface SortOrder {
-    name: string;
-    descending: boolean;
-}
-
-interface SortConfig {
-    orders?: SortOrder[];
-}
+import { SortConfig } from 'src/app/pipeline/models/config.model';
 
 @Component({
     selector: 'app-sort-config',

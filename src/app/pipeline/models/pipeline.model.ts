@@ -1,5 +1,6 @@
 import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { ReplaySubject, Subject } from 'rxjs';
+import { InputConfig, OutputConfig } from './config.model';
 
 export enum PipelineNodeType {
     datasetInput = 'dataset_input',
@@ -98,6 +99,33 @@ export interface PipelineNode {
     config: object;
 }
 
+export function initializePipelineNodeConfig(type: PipelineNodeType): object {
+    switch (type) {
+        case PipelineNodeType.datasetInput:
+            return {
+                datasetId: null,
+            };
+        case PipelineNodeType.datasetOutput:
+            return {
+                datasetId: null,
+            };
+        case PipelineNodeType.select:
+            return {};
+        case PipelineNodeType.filter:
+            return {
+                condition: '',
+            };
+        case PipelineNodeType.sort:
+            return {
+                orders: [],
+            };
+        case PipelineNodeType.join:
+            return {};
+        case PipelineNodeType.aggregate:
+            return {};
+    }
+}
+
 export class Pipeline {
     nodes: PipelineNode[] = [];
 
@@ -137,7 +165,7 @@ export class Pipeline {
             type: type,
             inputs: inputs,
             position: position,
-            config: {},
+            config: initializePipelineNodeConfig(type),
         };
 
         this.addNode(node);
@@ -219,9 +247,52 @@ export class Pipeline {
     }
 
     export() {
+        function removeConfigAndType(node: PipelineNode): any {
+            let out: any = { ...node };
+            delete out.config;
+            delete out.type;
+            return out;
+        }
+
+        const inputDatasetNodes = this.nodes.filter(
+            (node) => node.type === PipelineNodeType.datasetInput
+        );
+        if (inputDatasetNodes.length !== 1)
+            throw new Error('only one input node is currently permitted');
+
+        const outputDatasetNodes = this.nodes.filter(
+            (node) => node.type === PipelineNodeType.datasetOutput
+        );
+        if (inputDatasetNodes.length > 1)
+            throw new Error('at most one output node is currently permitted');
+
         return {
             name: this.name,
-            processes: this.nodes,
+            inputDatasetId: (inputDatasetNodes[0].config as InputConfig)
+                .datasetId,
+            inputDataset: removeConfigAndType(inputDatasetNodes[0]),
+            outputDatasetId:
+                outputDatasetNodes.length > 0
+                    ? (inputDatasetNodes[0].config as OutputConfig).datasetId
+                    : null,
+            outputDataset:
+                outputDatasetNodes.length > 0
+                    ? removeConfigAndType(outputDatasetNodes[0])
+                    : null,
+            processes: this.nodes
+                .filter(
+                    (node) =>
+                        node.type !== PipelineNodeType.datasetInput &&
+                        node.type !== PipelineNodeType.datasetOutput
+                )
+                .map((node) => ({
+                    id: node.id,
+                    name: node.name,
+                    type: node.type,
+                    inputs: node.inputs,
+                    position: node.position,
+                    instruction: JSON.stringify(node.config),
+                })),
         };
     }
 }

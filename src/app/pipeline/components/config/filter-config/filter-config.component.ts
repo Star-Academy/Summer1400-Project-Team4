@@ -1,8 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-
-interface FilterConfig {
-    condition: string;
-}
+import { FilterConfig } from 'src/app/pipeline/models/config.model';
 
 @Component({
     selector: 'app-filter-config',
