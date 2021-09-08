@@ -56,26 +56,47 @@ https://github.com/Star-Academy/Summer1400-Project-Team4/tree/MiddlewareProcess/
 </div>
 <pre>
 {
-    "Command": "AND",
-    "_leftStatement": {
-      "Command": "OR",
-      "_leftStatement": {
-        "Command": "=",
-        "_field": "name",
-        "_value": "\"arash\""
-      },
-      "_rightStatement": {
-        "Command": "<",
-        "_field": "age",
-        "_value": "19"
-      }
+  "Command": "AND",
+  "_statements": [
+    {
+      "Command": "=",
+      "_field": "name",
+      "_value": "ali"
     },
-    "_rightStatement": {
-      "Command": "<",
-      "_field": "fatherName",
-      "_value": "\"saeed\""
+    {
+      "Command": "OR",
+      "_statements": [
+        {
+          "Command": "<",
+          "_field": "age",
+          "_value": "19"
+        },
+        {
+          "Command": ">",
+          "_field": "mark",
+          "_value": "19.5"
+        }
+      ]
+    },
+    {
+      "Command": "AND",
+      "_statements": [
+        {
+          "Command": "=",
+          "_field": "uni",
+          "_value": "sharif"
+        },
+        {
+          "Command": "=",
+          "_field": "intern",
+          "_value": "codestar"
+        }
+      ]
     }
+  ]
 }
+
+
 
 </pre>
 
