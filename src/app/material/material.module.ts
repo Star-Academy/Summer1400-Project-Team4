@@ -22,6 +22,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSortModule } from '@angular/material/sort';
+import { MatSelectModule } from '@angular/material/select';
 
 const material = [
     MatSnackBarModule,
@@ -47,6 +48,7 @@ const material = [
     MatDialogModule,
     MatCheckboxModule,
     MatSortModule,
+    MatSelectModule,
 ];
 
 @NgModule({
