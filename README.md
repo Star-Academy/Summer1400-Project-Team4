@@ -9,7 +9,9 @@
 
 برای قسمت جوین توی instruction برا این که کارتون راحتتر باشه فرمت جیسون گذاشتم که بتونین با فیلدا راحت کار کنین. فقط حواستون باشه که این]جیسون توی جیسون](https://stackoverflow.com/questions/25570712/is-it-possible-to-wrap-json-in-json-field-like-a-string) هستش
 
-    
+برای درک بیشتر ساختار بولین داخل اینتسراکشن فیلتر به این لینک برین:
+https://github.com/Star-Academy/Summer1400-Project-Team4/tree/MiddlewareProcess/WebApplication2/WebApplication2/models/BoolAlgebraModels
+
 </div>
 
 <pre>
@@ -18,7 +20,9 @@
     "Processes": [
         {
             "Name": "filter",
-            "Instruction": "(state = 'California' AND supplier_id <> 900) OR (supplier_id = 100)"
+            "Instruction": "
+{"Command":"AND","_leftStatement":{"Command":"OR","_leftStatement":{"Command":"=","_field":"name","_value":"\"arash\""},"_rightStatement":{"Command":"<","_field":"age","_value":"19"}
+},"_rightStatement":{"Command":"<","_field":"fatherName","_value":"\"saeed\""}}"
         },
         {
             "Name": "join",
@@ -46,6 +50,34 @@
 }
 </pre>
 
+
+<div dir="rtl">
+اینم از یه ساختار تمیز برای اینستراکشن فیلتر:
+</div>
+<pre>
+{
+    "Command": "AND",
+    "_leftStatement": {
+      "Command": "OR",
+      "_leftStatement": {
+        "Command": "=",
+        "_field": "name",
+        "_value": "\"arash\""
+      },
+      "_rightStatement": {
+        "Command": "<",
+        "_field": "age",
+        "_value": "19"
+      }
+    },
+    "_rightStatement": {
+      "Command": "<",
+      "_field": "fatherName",
+      "_value": "\"saeed\""
+    }
+}
+
+</pre>
 
 ## API
 

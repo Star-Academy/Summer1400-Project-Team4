@@ -1,9 +1,14 @@
-﻿namespace WebApplication2.models.BoolAlgebraModels
+﻿using Newtonsoft.Json;
+
+namespace WebApplication2.models.BoolAlgebraModels
 {
     public abstract class RelationalOperation : IStatement
     {
+        [JsonProperty]
         protected string Command;
+        [JsonProperty]
         private readonly string _field;
+        [JsonProperty]
         private readonly string _value; 
 
         protected RelationalOperation(string field, string value)
