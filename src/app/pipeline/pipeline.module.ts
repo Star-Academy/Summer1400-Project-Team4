@@ -13,6 +13,7 @@ import { AggregateConfigComponent } from './components/config/aggregate-config/a
 import { OutputConfigComponent } from './components/config/output-config/output-config.component';
 import { FilterConfigComponent } from './components/config/filter-config/filter-config.component';
 import { SortConfigComponent } from './components/config/sort-config/sort-config.component';
+import { JoinConfigComponent } from './components/config/join-config/join-config.component';
 
 const routes: Routes = [
     {
@@ -32,6 +33,7 @@ const routes: Routes = [
         OutputConfigComponent,
         FilterConfigComponent,
         SortConfigComponent,
+        JoinConfigComponent,
     ],
     imports: [
         CommonModule,

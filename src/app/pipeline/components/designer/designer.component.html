@@ -113,14 +113,18 @@
                     *ngSwitchCase="PipelineNodeType.datasetOutput"
                     [config]="$any(selectedNode.config)"
                 ></app-output-config>
-                <app-sort-config
-                    *ngSwitchCase="PipelineNodeType.sort"
-                    [config]="$any(selectedNode.config)"
-                ></app-sort-config>
                 <app-filter-config
                     *ngSwitchCase="PipelineNodeType.filter"
                     [config]="$any(selectedNode.config)"
                 ></app-filter-config>
+                <app-sort-config
+                    *ngSwitchCase="PipelineNodeType.sort"
+                    [config]="$any(selectedNode.config)"
+                ></app-sort-config>
+                <app-join-config
+                    *ngSwitchCase="PipelineNodeType.join"
+                    [config]="$any(selectedNode.config)"
+                ></app-join-config>
                 <app-aggregate-config
                     *ngSwitchCase="PipelineNodeType.aggregate"
                 ></app-aggregate-config>

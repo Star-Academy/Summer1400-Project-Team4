@@ -1,0 +1,41 @@
+<div *ngIf="config !== undefined">
+    <h3>اطلاعات دیتاست</h3>
+    <mat-form-field class="wide-field">
+        <mat-label>نوع</mat-label>
+        <mat-select [(ngModel)]="config.type">
+            <mat-option *ngFor="let type of joinType" [value]="type">
+                {{ joinTypeInfo[type].title }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field class="wide-field">
+        <mat-label>دیتاست راست</mat-label>
+        <mat-select [(ngModel)]="config.joinWith" required>
+            <mat-option></mat-option>
+            <mat-option [value]="1"> اطلاعات کاربری </mat-option>
+            <mat-option [value]="2"> اطلاعات بانکی </mat-option>
+            <mat-option [value]="3"> اطلاعات آبااجدادی </mat-option>
+        </mat-select>
+        <mat-error>لطفاً یک دیتاست انتخاب کنید</mat-error>
+    </mat-form-field>
+    <mat-form-field class="wide-field">
+        <mat-label>کلید چپ</mat-label>
+        <input
+            matInput
+            type="text"
+            [(ngModel)]="config.leftTableKey"
+            class="propery-input"
+            required
+        />
+    </mat-form-field>
+    <mat-form-field class="wide-field">
+        <mat-label>کلید راست</mat-label>
+        <input
+            matInput
+            type="text"
+            [(ngModel)]="config.rightTableKey"
+            class="propery-input"
+            required
+        />
+    </mat-form-field>
+</div>

@@ -1,6 +1,6 @@
 import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { ReplaySubject, Subject } from 'rxjs';
-import { InputConfig, OutputConfig } from './config.model';
+import { InputConfig, JoinType, OutputConfig } from './config.model';
 
 export enum PipelineNodeType {
     datasetInput = 'dataset_input',
@@ -103,11 +103,11 @@ export function initializePipelineNodeConfig(type: PipelineNodeType): object {
     switch (type) {
         case PipelineNodeType.datasetInput:
             return {
-                datasetId: null,
+                datasetId: undefined,
             };
         case PipelineNodeType.datasetOutput:
             return {
-                datasetId: null,
+                datasetId: undefined,
             };
         case PipelineNodeType.select:
             return {};
@@ -120,7 +120,12 @@ export function initializePipelineNodeConfig(type: PipelineNodeType): object {
                 orders: [],
             };
         case PipelineNodeType.join:
-            return {};
+            return {
+                type: JoinType.inner,
+                joinWith: undefined,
+                leftTableKey: '',
+                rightTableKey: '',
+            };
         case PipelineNodeType.aggregate:
             return {};
     }
@@ -248,13 +253,6 @@ export class Pipeline {
     }
 
     export() {
-        function removeConfigAndType(node: PipelineNode): any {
-            let out: any = { ...node };
-            delete out.config;
-            delete out.type;
-            return out;
-        }
-
         const inputDatasetNodes = this.nodes.filter(
             (node) => node.type === PipelineNodeType.datasetInput
         );
