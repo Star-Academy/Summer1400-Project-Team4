@@ -57,7 +57,11 @@
             <mat-icon>person</mat-icon>
         </button>
         <mat-menu #accountMenu="matMenu">
-            <button mat-menu-item>
+            <button mat-menu-item routerLink="/">
+                <mat-icon>dashboard</mat-icon>
+                داشبورد
+            </button>
+            <button mat-menu-item routerLink="/user/edit_profile">
                 <mat-icon>manage_accounts</mat-icon>
                 مدیریت حساب
             </button>
