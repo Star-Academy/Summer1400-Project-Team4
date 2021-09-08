@@ -1,4 +1,5 @@
-﻿using WebApplication2.Services.Sql;
+﻿using Newtonsoft.Json;
+using WebApplication2.Services.Sql;
 
 namespace WebApplication2.Services.QueryServices
 {
@@ -18,7 +19,13 @@ namespace WebApplication2.Services.QueryServices
             applyingSql.SendQuery("SELECT * " +
                                   $"INTO {destinationDatasetName} " +
                                   $"FROM {startingDatasetName} " +
-                                  $"WHERE {Instruction} ");
+                                  $"WHERE {InterpretToSql(Instruction)} ");
+        }
+
+        private static string InterpretToSql(string instruction)
+        {
+            var filterBooleanStatement = JsonConvert.DeserializeObject<dynamic>(instruction);
+            return filterBooleanStatement.ToString();
         }
     }
 }
