@@ -21,9 +21,9 @@ export interface SortConfig {
 
 export enum JoinType {
     inner = 'inner join',
-    left = 'left join',
-    right = 'right join',
-    full = 'full join',
+    left = 'left outer join',
+    right = 'right outer join',
+    full = 'full outer join',
 }
 
 export const joinTypeInfo: { [type in JoinType]: { title: string } } = {
