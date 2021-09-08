@@ -1,5 +1,4 @@
-﻿using System;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using WebApplication2.Services.Sql;
 
 namespace WebApplication2.Services.QueryServices
@@ -19,7 +18,7 @@ namespace WebApplication2.Services.QueryServices
             applyingSql.SendQuery("SELECT * " +
                                   $"INTO {destinationDatasetName} " +
                                   $"FROM {startingDatasetName} " +
-                                  $"{InterpretToSql(Instruction, startingDatasetName)}");
+                                  $"{InterpretToSql(Instruction.Replace("\\\"", "\""), startingDatasetName)}");
         }
 
         private static string InterpretToSql(string instruction, string startingDatasetName)
