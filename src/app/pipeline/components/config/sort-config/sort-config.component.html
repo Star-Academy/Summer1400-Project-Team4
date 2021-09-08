@@ -12,7 +12,7 @@
     >
         <mat-expansion-panel
             *ngFor="let order of config.orders; let index = index"
-            #firstExpansionPanel
+            #orderPanel
             cdkDrag
         >
             <mat-expansion-panel-header>
@@ -21,7 +21,7 @@
                         drag_handle
                     </mat-icon>
                     <span>
-                        <bdo dir="ltr">{{ order.name }}</bdo>
+                        <bdo dir="ltr">{{ order.fieldName }}</bdo>
                     </span>
                     <mat-icon class="sort-icon">
                         {{ order.descending ? 'south' : 'north' }}
@@ -33,7 +33,7 @@
                 <input
                     matInput
                     type="text"
-                    [(ngModel)]="order.name"
+                    [(ngModel)]="order.fieldName"
                     class="propery-input"
                     required
                 />
@@ -45,7 +45,6 @@
                 <button
                     mat-raised-button
                     color="warn"
-                    class="delete-button"
                     (click)="removeOrder(index)"
                 >
                     <mat-icon>delete</mat-icon>

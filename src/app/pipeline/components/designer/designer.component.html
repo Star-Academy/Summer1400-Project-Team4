@@ -127,6 +127,7 @@
                 ></app-join-config>
                 <app-aggregate-config
                     *ngSwitchCase="PipelineNodeType.aggregate"
+                    [config]="$any(selectedNode.config)"
                 ></app-aggregate-config>
             </div>
         </div>

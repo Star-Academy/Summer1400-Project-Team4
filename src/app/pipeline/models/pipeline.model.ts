@@ -127,7 +127,10 @@ export function initializePipelineNodeConfig(type: PipelineNodeType): object {
                 rightTableKey: '',
             };
         case PipelineNodeType.aggregate:
-            return {};
+            return {
+                groupBy: [],
+                operations: [],
+            };
     }
 }
 
