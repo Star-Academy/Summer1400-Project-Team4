@@ -6,9 +6,5 @@
         {
             Command = "AND";
         }
-
-        public AndOperation()
-        {
-        }
     }
 }

@@ -2,18 +2,14 @@
 {
     public abstract class BoolOperation : IStatement
     {
-        public string Command{ get; set; }
-        public IStatement _leftStatement{ get; set; }
-        public IStatement _rightStatement{ get; set; }
+        protected string Command;
+        private readonly IStatement _leftStatement;
+        private readonly IStatement _rightStatement;
 
         protected BoolOperation(IStatement leftStatement, IStatement rightStatement)
         {
             _leftStatement = leftStatement;
             _rightStatement = rightStatement;
-        }
-
-        protected BoolOperation()
-        {
         }
 
         public override string ToString()

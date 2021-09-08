@@ -2,18 +2,14 @@
 {
     public abstract class RelationalOperation : IStatement
     {
-        public string Command { get; set; }
-        public string _field { get; set; }
-        public string _value { get; set; }
+        protected string Command;
+        private readonly string _field;
+        private readonly string _value; 
 
         protected RelationalOperation(string field, string value)
         {
             _field = field;
             _value = value;
-        }
-
-        public RelationalOperation()
-        {
         }
 
         public override string ToString()
