@@ -1,4 +1,4 @@
-﻿namespace WebApi.Model
+﻿namespace WebApi.models
 {
     public class CsvProp
     {

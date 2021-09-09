@@ -3,7 +3,6 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Hosting;
 using WebApi.Services;
 using WebApi.Loader;
-using WebApi.Model;
 using Microsoft.Extensions.Hosting;
 
 namespace WebApi
