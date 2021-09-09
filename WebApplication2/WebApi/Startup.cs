@@ -28,6 +28,7 @@ namespace WebApi
             //default sever config
             const string connectionString = "Server= localhost ; Database= ETLproject; Integrated Security=SSPI;";
             services.AddSingleton(new SqlConnection(connectionString));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
