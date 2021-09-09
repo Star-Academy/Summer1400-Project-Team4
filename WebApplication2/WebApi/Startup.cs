@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using WebApplication2.Database;
 
 namespace WebApplication2
 {
@@ -16,7 +15,6 @@ namespace WebApplication2
         }
 
         public IConfiguration Configuration { get; }
-        public static EtlContext EtlContext { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -24,10 +22,8 @@ namespace WebApplication2
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo {Title = "WebApplication2", Version = "v1"});
+                c.SwaggerDoc("v1", new OpenApiInfo {Title = "WebApi", Version = "v1"});
             });
-            EtlContext = new EtlContext();
-            EtlContext.Database.EnsureCreated();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -37,7 +33,7 @@ namespace WebApplication2
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApplication2 v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApi v1"));
             }
 
             app.UseHttpsRedirection();
