@@ -1,4 +1,4 @@
-﻿namespace WebApplication2.Services.Sql
+﻿namespace WebApi.Services.Sql
 {
     public interface ISqlConnection
     {

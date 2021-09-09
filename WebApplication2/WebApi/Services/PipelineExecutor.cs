@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using WebApplication2.models;
-using WebApplication2.Services.QueryServices;
-using WebApplication2.Services.Sql;
+using WebApi.models;
+using WebApi.Services.QueryServices;
+using WebApi.Services.Sql;
 
-namespace WebApplication2.Services
+namespace WebApi.Services
 {
     public class PipelineExecutor
     {

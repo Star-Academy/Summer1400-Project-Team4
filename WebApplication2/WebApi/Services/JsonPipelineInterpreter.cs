@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using WebApplication2.models;
-using WebApplication2.Services.QueryServices;
+using WebApi.models;
+using WebApi.Services.QueryServices;
 
-namespace WebApplication2.Services
+namespace WebApi.Services
 {
     public static class JsonPipelineInterpreter
     {

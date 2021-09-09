@@ -1,11 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using WebApplication2.models;
-using WebApplication2.Services;
+﻿using Microsoft.AspNetCore.Mvc;
 
-namespace WebApplication2.Controllers
+namespace WebApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]

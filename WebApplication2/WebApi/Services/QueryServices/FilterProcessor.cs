@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
-using WebApplication2.Services.Sql;
+using WebApi.Services.Sql;
 
-namespace WebApplication2.Services.QueryServices
+namespace WebApi.Services.QueryServices
 {
     public class FilterProcessor : QueryProcessor
     {

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace WebApplication2.models.BoolAlgebraModels
+namespace WebApi.models.BoolAlgebraModels
 {
     public abstract class RelationalOperation : IStatement
     {

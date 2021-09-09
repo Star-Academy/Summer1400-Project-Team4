@@ -1,4 +1,4 @@
-﻿namespace WebApplication2.models.BoolAlgebraModels
+﻿namespace WebApi.models.BoolAlgebraModels
 {
     public interface IStatement
     {

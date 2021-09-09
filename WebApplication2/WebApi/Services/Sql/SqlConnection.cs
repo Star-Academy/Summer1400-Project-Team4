@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using Microsoft.Data.SqlClient;
 
-namespace WebApplication2.Services.Sql
+namespace WebApi.Services.Sql
 {
     public class SqlConnection : ISqlConnection
     {

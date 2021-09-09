@@ -1,4 +1,4 @@
-﻿namespace WebApplication2.models
+﻿namespace WebApi.models
 {
     public class Process
     {

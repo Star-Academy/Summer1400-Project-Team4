@@ -1,4 +1,4 @@
-﻿namespace WebApplication2.models.BoolAlgebraModels.BoolOperations
+﻿namespace WebApi.models.BoolAlgebraModels.BoolOperations
 {
     public class OrOperation : BoolOperation
     {

@@ -1,4 +1,4 @@
-﻿namespace WebApplication2.models.BoolAlgebraModels.RelationalOperations
+﻿namespace WebApi.models.BoolAlgebraModels.RelationalOperations
 {
     public class BiggerThanOperation : RelationalOperation
     {
