@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -24,6 +25,10 @@ namespace WebApi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "WebApi", Version = "v1"});
             });
+            //default sever config
+            const string connectionString = "Server= localhost ; Database= ETLproject; Integrated Security=SSPI;";
+            services.AddSingleton(new SqlConnection(connectionString));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
