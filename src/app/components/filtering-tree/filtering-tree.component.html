@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+</head>
+<body>
+
+<mat-sidenav-container hasBackdrop="false">
+
+  <mat-sidenav-content>
+    <mat-sidenav-container hasBackdrop="true">
+      <mat-sidenav-content>
+        <div mat-dialog-content style="width: 100%">
+          <div id="graph-container">
+
+            <div
+              [class.invisible]="addSidePane.opened"
+              class="add-node-button-container"
+            >
+              <button
+                (click)="addSidePane.open()"
+                color="primary"
+                mat-raised-button
+              >
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+
+          </div>
+        </div>
+        <div mat-dialog-actions>
+          <button [mat-dialog-close]="true" color="accent" mat-raised-button
+                  style="margin-top: 5rem ; margin-right: 2rem">ذخیره
+          </button>
+          <button color="accent" mat-dialog-close mat-raised-button style="margin-top: 5rem;margin-right: 2rem">انصراف
+          </button>
+        </div>
+      </mat-sidenav-content>
+      <mat-sidenav #addSidePane [opened]=false mode="side" position="end">
+        <mat-nav-list>
+          <h4>ایجاد گره ی جدید
+            <button (click)="addSidePane.close()" mat-icon-button>
+              <mat-icon> chevron_left</mat-icon>
+            </button>
+          </h4>
+
+          <mat-divider></mat-divider>
+          <div style="justify-content: center;align-items: center; display: flex;flex-direction: column">
+            <button (click)="handleAddNode('AND')" color="primary" mat-raised-button>افزودن AND</button>
+            <button (click)="handleAddNode('OR')" color="primary" mat-raised-button style="width: 10.3rem">افزودن OR
+            </button>
+
+            <mat-accordion>
+              <mat-expansion-panel style="width: 95%">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <bdo dir="rtl">طراحی گره شرطی</bdo>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <form [formGroup]="form">
+
+                  <mat-form-field>
+                    <mat-label>نام متغیر</mat-label>
+                    <input class="propery-input" formControlName="valueName" matInput name="valueName" required
+                           type="text"/>
+                  </mat-form-field>
+
+                  <mat-form-field>
+                    <mat-label>عملگر</mat-label>
+                    <mat-select formControlName="operation">
+                      <mat-option value=">"> ></mat-option>
+                      <mat-option value="<"> <</mat-option>
+                      <mat-option value="="> =</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+                  <mat-form-field>
+                    <mat-label> عملوند</mat-label>
+                    <input class="propery-input" formControlName="operand" matInput name="operand" required
+                           type="text"/>
+                  </mat-form-field>
+
+                  <button (click)="handleAddNode('condition')" [disabled]="!form.valid" color="primary"
+                          mat-raised-button>افزودن شرط
+                  </button>
+
+                </form>
+
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+
+          <mat-divider></mat-divider>
+
+
+        </mat-nav-list>
+      </mat-sidenav>
+
+    </mat-sidenav-container>
+  </mat-sidenav-content>
+
+  <mat-sidenav #editSidePane *ngIf="!!currentData" mode="side" opened style="width: 30rem">
+    <mat-nav-list>
+      <mat-form-field class="node-name-input">
+        <input #nodeNameInput="matInput" [(ngModel)]="currentData.name" matInput placeholder="نام گره"
+               style="font-size: 70%" type="text"/>
+      </mat-form-field>
+
+      <h3 *ngIf="currentData.type === 'child'">ویرایش گره ی شرطی</h3>
+
+      <mat-accordion *ngIf="currentData.type === 'child' ">
+        <mat-expansion-panel style="width: 90%">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <bdo dir="ltr">.Op</bdo>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <mat-form-field>
+            <mat-label>نام متغیر</mat-label>
+            <input [(ngModel)]="currentData.valueName" class="propery-input" matInput type="text"/>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>عملگر</mat-label>
+            <mat-select [(ngModel)]="currentData.operation">
+              <mat-option value=">"> ></mat-option>
+              <mat-option value="<"> <</mat-option>
+              <mat-option value="="> =</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label> عملوند</mat-label>
+            <input [(ngModel)]="currentData.operand" class="propery-input" matInput type="text"/>
+          </mat-form-field>
+
+        </mat-expansion-panel>
+      </mat-accordion>
+
+
+    </mat-nav-list>
+
+
+  </mat-sidenav>
+
+</mat-sidenav-container>
+
+
+</body>
+</html>
+
+
+
+
+
+

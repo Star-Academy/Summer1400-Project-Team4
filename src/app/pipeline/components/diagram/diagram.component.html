@@ -1,4 +1,5 @@
 <mat-sidenav-container hasBackdrop="false">
+
     <mat-sidenav-content>
         <div
             class="diagram-container"
@@ -165,6 +166,7 @@
             </div>
         </div>
     </mat-sidenav-content>
+
     <mat-sidenav #addSidePane position="end" mode="side">
         <div class="add-node-pane">
             <h3>
@@ -173,7 +175,6 @@
                     <mat-icon>chevron_left</mat-icon>
                 </button>
             </h3>
-
             <div class="add-node-list">
                 <div cdkDropList *ngFor="let node of nodeTypes">
                     <mat-card
@@ -239,4 +240,5 @@
             </div>
         </div>
     </mat-sidenav>
+
 </mat-sidenav-container>

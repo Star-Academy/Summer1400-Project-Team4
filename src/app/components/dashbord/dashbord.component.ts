@@ -1,11 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {TableVirtualScrollDataSource} from 'ng-table-virtual-scroll';
-
+import {LoginSignupAlertComponent} from "../messages/login-signup-alert/login-signup-alert.component";
+import {FilteringTreeComponent} from "../filtering-tree/filtering-tree.component";
+import {MatDialog} from "@angular/material/dialog";
 export interface PeriodicElement {
   name: string;
   position: number;
 }
-
 let ELEMENT_DATA: PeriodicElement[] = [
   {position: 1, name: 'هیدروزن'},
   {position: 2, name: 'هلیم'},
@@ -58,13 +59,17 @@ export class DashbordComponent implements OnInit {
   displayedColumns: string[] = ['position', 'name', 'like', 'deleteEmployee'];
   dataSource!: TableVirtualScrollDataSource<PeriodicElement>;
 
-  constructor() {
+  constructor(public dialog : MatDialog) {
     ELEMENT_DATA.map((data: any) => {
       data.show = false
     });
   }
 
   ngOnInit(): void {
+    this.dialog.open(FilteringTreeComponent, {
+      panelClass: 'filterDialog', disableClose: true,
+      closeOnNavigation: false
+    });
     this.dataSource = new TableVirtualScrollDataSource(ELEMENT_DATA);
   }
 

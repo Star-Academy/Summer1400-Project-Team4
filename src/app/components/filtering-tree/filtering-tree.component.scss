@@ -1,0 +1,64 @@
+@use 'src/theme.scss' as theme;
+@use '~@angular/material' as mat;
+
+.mat-drawer
+{
+  width: 100px;
+}
+.mat-drawer-container
+{
+  height: 100%;
+}
+#graph-container {
+  overflow: hidden;
+  display: block;
+  position: relative;
+  height: 42rem;
+  margin-top: 2rem;
+}
+#control {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 10px;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+#control label {
+  display: block;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.add-node-button-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: var(--density-large);
+
+  transition: opacity 200ms ease-in;
+  opacity: 1;
+
+  &.invisible {
+    visibility: hidden;
+    opacity: 0;
+  }
+}
+.mat-sidenav
+{
+  width: 30rem;
+  *
+  {
+    margin: 1rem;
+  }
+}
+.node-name-input {
+  font-size: mat.font-size(theme.$typography-config, 'title');
+
+   .mat-form-field-underline {
+    background-color: transparent;
+  }
+}
+//.propery-input {
+//  direction: ltr;
+//  text-align: left;
+//}

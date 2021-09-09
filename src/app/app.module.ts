@@ -21,6 +21,7 @@ import { LoginFailedComponent } from './components/messages/login-failed/login-f
 import { EditProfileComponent } from './components/user/edit-profile/edit-profile.component';
 import { UserService } from './services/user.service';
 import { AuthService } from './services/auth/auth.service';
+import { FilteringTreeComponent } from './components/filtering-tree/filtering-tree.component';
 
 @NgModule({
     declarations: [
@@ -37,8 +38,9 @@ import { AuthService } from './services/auth/auth.service';
         SignupComponent,
         LoginFailedComponent,
         EditProfileComponent,
+        FilteringTreeComponent,
     ],
-    entryComponents: [LoginSignupAlertComponent, LoginFailedComponent],
+    entryComponents: [LoginSignupAlertComponent, LoginFailedComponent , FilteringTreeComponent],
     imports: [
         BrowserModule,
         AppRoutingModule,
