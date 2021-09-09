@@ -1,13 +1,13 @@
 <div *ngIf="config !== undefined">
     <h3>اطلاعات دیتاست</h3>
     <mat-form-field class="wide-field">
-        <mat-label>نام دیتاست</mat-label>
-        <input
-            matInput
-            [(ngModel)]="config.datasetId"
-            type="text"
-            class="propery-input"
-            required
-        />
+        <mat-label>دیتاست</mat-label>
+        <mat-select [(ngModel)]="config.datasetId" required>
+            <mat-option [value]="null"></mat-option>
+            <mat-option [value]="1"> اطلاعات کاربری </mat-option>
+            <mat-option [value]="2"> اطلاعات بانکی </mat-option>
+            <mat-option [value]="3"> اطلاعات آبااجدادی </mat-option>
+        </mat-select>
+        <mat-error>لطفاً یک دیتاست انتخاب کنید</mat-error>
     </mat-form-field>
 </div>

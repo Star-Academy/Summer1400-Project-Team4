@@ -57,7 +57,11 @@
             <mat-icon>person</mat-icon>
         </button>
         <mat-menu #accountMenu="matMenu">
-            <button mat-menu-item>
+            <button mat-menu-item routerLink="/">
+                <mat-icon>dashboard</mat-icon>
+                داشبورد
+            </button>
+            <button mat-menu-item routerLink="/user/edit_profile">
                 <mat-icon>manage_accounts</mat-icon>
                 مدیریت حساب
             </button>
@@ -113,16 +117,21 @@
                     *ngSwitchCase="PipelineNodeType.datasetOutput"
                     [config]="$any(selectedNode.config)"
                 ></app-output-config>
-                <app-sort-config
-                    *ngSwitchCase="PipelineNodeType.sort"
-                    [config]="$any(selectedNode.config)"
-                ></app-sort-config>
                 <app-filter-config
                     *ngSwitchCase="PipelineNodeType.filter"
                     [config]="$any(selectedNode.config)"
                 ></app-filter-config>
+                <app-sort-config
+                    *ngSwitchCase="PipelineNodeType.sort"
+                    [config]="$any(selectedNode.config)"
+                ></app-sort-config>
+                <app-join-config
+                    *ngSwitchCase="PipelineNodeType.join"
+                    [config]="$any(selectedNode.config)"
+                ></app-join-config>
                 <app-aggregate-config
                     *ngSwitchCase="PipelineNodeType.aggregate"
+                    [config]="$any(selectedNode.config)"
                 ></app-aggregate-config>
             </div>
         </div>

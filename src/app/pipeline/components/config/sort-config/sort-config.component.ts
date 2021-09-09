@@ -17,29 +17,23 @@ import { SortConfig } from 'src/app/pipeline/models/config.model';
 })
 export class SortConfigComponent implements OnInit, AfterViewChecked {
     @Input() config?: SortConfig;
-    @ViewChild('firstExpansionPanel') firstExpansionPanel?: MatExpansionPanel;
+    @ViewChild('orderPanel') firstOrderPanel?: MatExpansionPanel;
     expandNewOrder = false;
 
     constructor(private cdref: ChangeDetectorRef) {}
 
-    ngOnInit(): void {
-        if (this.config !== undefined) {
-            if (this.config.orders === undefined) {
-                this.config.orders = [];
-            }
-        }
-    }
+    ngOnInit(): void {}
 
     ngAfterViewChecked(): void {
         if (this.expandNewOrder) {
             this.expandNewOrder = false;
-            this.firstExpansionPanel?.open();
+            this.firstOrderPanel?.open();
             this.cdref.detectChanges();
         }
     }
 
     addOrder() {
-        this.config?.orders?.unshift({ name: '', descending: false });
+        this.config?.orders?.unshift({ fieldName: '', descending: false });
         this.expandNewOrder = true;
     }
 
