@@ -67,7 +67,7 @@ export class DashbordComponent implements OnInit {
 
   ngOnInit(): void {
     this.dialog.open(FilteringTreeComponent, {
-      panelClass: 'filterDialog', disableClose: true,
+      panelClass: 'filterDialog', disableClose: false,
       closeOnNavigation: false
     });
     this.dataSource = new TableVirtualScrollDataSource(ELEMENT_DATA);

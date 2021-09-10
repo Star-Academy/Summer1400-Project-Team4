@@ -53,7 +53,7 @@ export class FilteringTreeComponent implements OnInit {
       shape: 'arrow'
     });
 
-    // this.ogma.addNode({ id: 1, data : {type : 'parent' , name : '1' } ,  attributes: { x: 0, y: 0, color: 'green' } });
+    this.ogma.addNode({ id: 1, data : {type : 'parent' , name : '1' } ,  attributes: { x: 0, y: 0, color: 'green' } });
     // this.ogma.addNodes([
     //   { id: 2 ,data  : {type : 'child' , name : '2'} , attributes: { x: 60, y: 20, color: 'magenta' } },
     //   { id: 3 ,data  : {type : 'child' , name : '3'} , attributes: { x: 30, y: -30, color: 'orange' } }
@@ -165,6 +165,16 @@ export class FilteringTreeComponent implements OnInit {
         });
         break;
       }
+    }
+  }
+
+  handleSavingGraph()
+  {
+    let inDegrees = this.ogma.getNodes().getDegree('in');
+    const rootNodesNumber = inDegrees.filter((elem: number) => elem === 0 ).length;
+    if(rootNodesNumber !== 1 )
+    {
+      alert('خطا در ذخیره سازی : گراف فقط یک ریشه باید داشته باشد');
     }
   }
 }
