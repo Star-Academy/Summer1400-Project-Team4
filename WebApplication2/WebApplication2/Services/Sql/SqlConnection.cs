@@ -27,7 +27,6 @@ namespace WebApplication2.Services.Sql
                 CommandText = query, CommandType = CommandType.Text, Connection = _sqlConnection
             };
             sqlCommand.ExecuteReader();
-
         }
 
         ~SqlConnection()

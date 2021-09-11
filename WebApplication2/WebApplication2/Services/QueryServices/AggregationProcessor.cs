@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text.Json;
+﻿using System.Text.Json;
 using WebApplication2.models;
 using WebApplication2.Services.Sql;
 
@@ -46,10 +45,7 @@ namespace WebApplication2.Services.QueryServices
         {
             var aggregation = JsonSerializer.Deserialize<AggregateConfig>(instruction);
 
-            if (aggregation == null)
-            {
-                return "";
-            }
+            if (aggregation == null) return "";
 
             return $"SELECT {aggregation.GetAggregateOperationSqlCommands()} INTO {destinationDatasetName}" +
                    $" FROM {startingDatasetName} GROUP BY {aggregation.GetGroupBySqlCommands()}";

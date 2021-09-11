@@ -1,9 +1,5 @@
-using System;
-using System.Text.Json;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-using WebApplication2.models;
-using WebApplication2.Services.QueryServices;
 
 namespace WebApplication2
 {

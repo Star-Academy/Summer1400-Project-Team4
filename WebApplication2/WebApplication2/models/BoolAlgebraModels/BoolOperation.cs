@@ -4,12 +4,11 @@ namespace WebApplication2.models.BoolAlgebraModels
 {
     public abstract class BoolOperation : IStatement
     {
-        [JsonProperty]
-        protected string Command;
-        [JsonProperty]
-        private readonly IStatement _leftStatement;
-        [JsonProperty]
-        private readonly IStatement _rightStatement;
+        [JsonProperty] private readonly IStatement _leftStatement;
+
+        [JsonProperty] private readonly IStatement _rightStatement;
+
+        [JsonProperty] protected string Command;
 
         protected BoolOperation(IStatement leftStatement, IStatement rightStatement)
         {

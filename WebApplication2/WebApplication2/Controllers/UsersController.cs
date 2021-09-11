@@ -14,7 +14,8 @@ namespace WebApplication2.Controllers
         [HttpGet]
         public List<User> GetUsers()
         {
-            return Startup.EtlContext.Users.Include(a => a.Pipelines).ThenInclude(p => p.Processes).Include(a => a.Datasets).ToList();
+            return Startup.EtlContext.Users.Include(a => a.Pipelines).ThenInclude(p => p.Processes)
+                .Include(a => a.Datasets).ToList();
         }
 
         [HttpGet]
@@ -92,11 +93,13 @@ namespace WebApplication2.Controllers
         [Route("/{userId:int}/datasets/{datasetId:int}/execute")]
         public IActionResult ExecutePipeline(int userId, int datasetId, int pipelineId, int destination)
         {
-            var pipeline = Startup.EtlContext.Pipelines.Include(a => a.Processes).FirstOrDefault(p => p.PipelineId == pipelineId);
+            var pipeline = Startup.EtlContext.Pipelines.Include(a => a.Processes)
+                .FirstOrDefault(p => p.PipelineId == pipelineId);
             if (pipeline == null) return BadRequest("no pipeline found with this id");
 
             var pipelineExecutor =
-                new PipelineExecutor(@"Data Source=localhost\SQLExpress,1433;Database=ETL;Integrated Security=sspi;MultipleActiveResultSets=True;",
+                new PipelineExecutor(
+                    @"Data Source=localhost\SQLExpress,1433;Database=ETL;Integrated Security=sspi;MultipleActiveResultSets=True;",
                     pipeline);
 
             // var startingDataset = Startup.EtlContext.Datasets.FirstOrDefault(p => p.DatasetId == datasetId);
