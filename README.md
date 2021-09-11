@@ -39,12 +39,7 @@ https://github.com/Star-Academy/Summer1400-Project-Team4/tree/MiddlewareProcess/
         }, 
         {
             "Name": "aggregation",
-            "Instruction": "{
-                \"Operation\": \"SUM\",
-                \"OperatingField\": \"ColumnName\",
-                \"OutputFieldName\": \"AllVaccinations\",
-                \"GroupBy\": \"ColumnName\",
-            }"
+            "Instruction": "{\"GroupBy\":[\"WordId\",\"WordInfos\"],\"Operations\":[{\"FieldName\":\"WordId\",\"Type\":\"COUNT\",\"OutputFieldName\":\"COUNT\"},{\"FieldName\":\"WordId2\",\"Type\":\"COUNT\",\"OutputFieldName\":\"COUNT2\"}]}"
         }       
     ]
 }
