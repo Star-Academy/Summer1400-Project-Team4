@@ -66,9 +66,15 @@ export class DashbordComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.dialog.open(FilteringTreeComponent, {
+    const ref = this.dialog.open(FilteringTreeComponent, {
       panelClass: 'filterDialog', disableClose: false,
       closeOnNavigation: false
+    });
+    const sub = ref.componentInstance.onSaveGraph.subscribe(() => {
+      ref.close();
+    });
+    ref.afterClosed().subscribe(()=> {
+    sub.unsubscribe();
     });
     this.dataSource = new TableVirtualScrollDataSource(ELEMENT_DATA);
   }

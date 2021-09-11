@@ -1,17 +1,18 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit} from '@angular/core';
 // @ts-ignore
 import * as Ogma from 'src/assets/ogma.min.js';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-
-export interface nodeData {
+export interface nodeData
+{
+  [key:string]: any,
   type: string,
   name: string,
-  valueName?: string,
-  operation?: string,
-  operand?: string
-
+  Command : string ,
+  _statements? : nodeData[] ,
+  _field? : string ,
+  _value? : string
 }
-
+type ProviderKey="_field" | "type" | "name";
 @Component({
   selector: 'app-filtering-tree',
   templateUrl: './filtering-tree.component.html',
@@ -23,15 +24,15 @@ export class FilteringTreeComponent implements OnInit {
   public form!: FormGroup;
   public nodeSize: number = 0;
   public currentData!: nodeData | null;
-
+  public onSaveGraph = new EventEmitter();
   constructor(private formBuilder: FormBuilder) {
   }
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
-      valueName: [null, Validators.required],
-      operation: [null, [Validators.required]],
-      operand: [null, Validators.required],
+      Command: [null, Validators.required],
+      _field: [null, [Validators.required]],
+      _value: [null, Validators.required],
     });
     this.ogma = new Ogma({
       container: 'graph-container',
@@ -53,7 +54,7 @@ export class FilteringTreeComponent implements OnInit {
       shape: 'arrow'
     });
 
-    this.ogma.addNode({ id: 1, data : {type : 'parent' , name : '1' } ,  attributes: { x: 0, y: 0, color: 'green' } });
+    this.ogma.addNode({ id: 1, data : {type : 'parent' , name : '1' , Command : 'AND' ,  _statements : [] } ,  attributes: { x: 0, y: 0, color: 'green' } });
     // this.ogma.addNodes([
     //   { id: 2 ,data  : {type : 'child' , name : '2'} , attributes: { x: 60, y: 20, color: 'magenta' } },
     //   { id: 3 ,data  : {type : 'child' , name : '3'} , attributes: { x: 30, y: -30, color: 'orange' } }
@@ -107,7 +108,7 @@ export class FilteringTreeComponent implements OnInit {
               if (edgeData.source == source.getId() && edgeData.target == target.getId())
                 return false;
             }
-            return source.getData().type != 'child';
+            return (source.getData().type != 'child') && (source.getId()!= target.getId());
 
           },
           // @ts-ignore
@@ -123,7 +124,8 @@ export class FilteringTreeComponent implements OnInit {
               console.log(this.ogma.getEdges().size);
             } else {
               edge.setData({source: source.getId(), target: target.getId()});
-              console.log(source.getId(), target.getId(), edge.getId());
+              source.getData('_statements').push(target.getData());
+              // console.log(source.getId(), target.getId(), edge.getId());
             }
           }
         });
@@ -140,7 +142,7 @@ export class FilteringTreeComponent implements OnInit {
       case 'AND': {
         this.ogma.addNode({
           id: ++this.nodeSize,
-          data: {type: 'parent', name: 'AND'},
+          data: {type: 'parent', name: 'AND', Command : 'AND' , _statements : [] },
           attributes: {x: 0, y: 0, color: 'green'}
         });
         break;
@@ -148,7 +150,7 @@ export class FilteringTreeComponent implements OnInit {
       case 'OR' : {
         this.ogma.addNode({
           id: ++this.nodeSize,
-          data: {type: 'parent', name: 'OR'},
+          data: {type: 'parent', name: 'OR' , Command : 'OR',  _statements : [] },
           attributes: {x: 0, y: 0, color: 'magenta'}
         });
         break;
@@ -157,11 +159,11 @@ export class FilteringTreeComponent implements OnInit {
         this.ogma.addNode({
           id: ++this.nodeSize,
           data: {...{type: 'child', name: 'condition'}, ...this.form.value},
-          attributes: {x: 100, y: 0, color: 'orange'}
+          attributes: {x: 0, y: 0, color: 'orange'}
         });
         this.ogma.getNodes().forEach((node: any) => {
           // do something with the node
-          console.log(node.getData());
+          // console.log(node.getData());
         });
         break;
       }
@@ -176,5 +178,41 @@ export class FilteringTreeComponent implements OnInit {
     {
       alert('خطا در ذخیره سازی : گراف فقط یک ریشه باید داشته باشد');
     }
+    else {
+      const nodeObjs  = this.ogma.getNode(1).getAdjacentNodes(); // just out nodes
+      alert(nodeObjs.size);
+      this.deleteSpecefickKey(this.ogma.getNode(1).getData()  , 'name');
+      var serialized = JSON.stringify(this.ogma.getNode(1).getData() , undefined , 1 );
+      console.log(serialized);
+      alert('فیلتر با موفقیت ذخیره شد');
+      this.onSaveGraph.emit();
+    }
+  }
+  deleteSpecefickKey(object : any , key : ProviderKey  ) : void
+  {
+    if (object.length!=undefined)
+    {
+      for(let child of object)
+      {
+        this.deleteSpecefickKey(child , key);
+      }
+    }
+    else
+    {
+      if (key in object)
+      {
+        delete object[key];
+        delete object.type; // delete type also
+        for (let v of Object.values(object))
+        {
+          // console.log(v)
+          if (v instanceof Object)
+            this.deleteSpecefickKey(v, key)
+        }
+      }
+    }
+    // console.log("inner obj")
+    //  console.log(object)
+
   }
 }
