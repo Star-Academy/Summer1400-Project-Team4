@@ -59,7 +59,7 @@ export class LoginComponent implements OnInit {
           horizontalPosition: "center", panelClass: 'green-snackbar'
         });
         setTimeout(() => {
-          this.router.navigateByUrl('', {skipLocationChange: true}).then();
+          this.router.navigate(['/']).then();
         }, 2000);
       });
   }

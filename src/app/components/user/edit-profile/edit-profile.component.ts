@@ -84,7 +84,7 @@ export class EditProfileComponent implements OnInit {
           duration: 2000, panelClass: 'green-snackbar'
         });
         setTimeout(() => {
-          this.router.navigateByUrl('', {skipLocationChange: true}).then();
+          this.router.navigateByUrl('', {skipLocationChange: false}).then();
         }, 2000);
         return true;
       });

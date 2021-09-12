@@ -1,6 +1,5 @@
 @use 'src/theme.scss' as theme;
 @use '~@angular/material' as mat;
-
 .mat-drawer
 {
   width: 100px;
@@ -45,7 +44,7 @@
 }
 .mat-sidenav
 {
-  width: 30rem;
+  width: 31rem;
   *
   {
     margin: 1rem;

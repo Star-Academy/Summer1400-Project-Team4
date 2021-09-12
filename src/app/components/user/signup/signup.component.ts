@@ -61,7 +61,7 @@ export class SignupComponent implements OnInit {
         this.snackBar.open(message , '' , {duration : 2000 , verticalPosition :"bottom" ,
           horizontalPosition : "center" , panelClass : 'green-snackbar' } );
         setTimeout( ()=> {
-          this.router.navigateByUrl('/user/login', {skipLocationChange: true}).then();
+          this.router.navigateByUrl('/user/login', {skipLocationChange: false}).then();
         } , 2000 );
       });
   }

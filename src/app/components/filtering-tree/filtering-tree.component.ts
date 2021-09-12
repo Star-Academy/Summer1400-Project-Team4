@@ -2,17 +2,24 @@ import {Component, EventEmitter, OnInit} from '@angular/core';
 // @ts-ignore
 import * as Ogma from 'src/assets/ogma.min.js';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-export interface nodeData
-{
-  [key:string]: any,
+
+export interface filterData {
+  Command: string,
+  _field?: string,
+  _value?: string,
+  _statement?: filterData[]
+}
+
+export interface nodeData extends filterData {
   type: string,
   name: string,
-  Command : string ,
-  _statements? : nodeData[] ,
-  _field? : string ,
-  _value? : string
+  _statement?: nodeData[]
+
+  [key: string]: any,
 }
-type ProviderKey="_field" | "type" | "name";
+
+type ProviderKey = "_field" | "type" | "name";
+
 @Component({
   selector: 'app-filtering-tree',
   templateUrl: './filtering-tree.component.html',
@@ -25,6 +32,8 @@ export class FilteringTreeComponent implements OnInit {
   public nodeSize: number = 0;
   public currentData!: nodeData | null;
   public onSaveGraph = new EventEmitter();
+  public panelOpenState = false;
+
   constructor(private formBuilder: FormBuilder) {
   }
 
@@ -53,22 +62,25 @@ export class FilteringTreeComponent implements OnInit {
     this.ogma.styles.addEdgeRule({
       shape: 'arrow'
     });
-
-    this.ogma.addNode({ id: 1, data : {type : 'parent' , name : '1' , Command : 'AND' ,  _statements : [] } ,  attributes: { x: 0, y: 0, color: 'green' } });
+    // this.ogma.addNode({ id: 1, data : {type : 'parent' , name : '1' , Command : 'AND' } ,  attributes: { x: 0, y: 0, color: 'green' } });
     // this.ogma.addNodes([
     //   { id: 2 ,data  : {type : 'child' , name : '2'} , attributes: { x: 60, y: 20, color: 'magenta' } },
     //   { id: 3 ,data  : {type : 'child' , name : '3'} , attributes: { x: 30, y: -30, color: 'orange' } }
     // ]);
     this.nodeSize = this.ogma.getNodes().size;
 
+    // this.ogma.events.on('removeEdges' , (evt: any) => {
+    //   console.log(evt.edges.getId());
+    // });
+
     this.ogma.events.onKeyPress(46, () => {
-      let selectedNodes = this.ogma.getSelectedNodes();
-      let selectedEdges = this.ogma.getSelectedEdges();
-      this.nodeSize -= selectedNodes.size;
+      const selectedNodes = this.ogma.getSelectedNodes();
+      const selectedEdges = this.ogma.getSelectedEdges();
       this.nodeSize -= selectedNodes.size;
       this.ogma.removeNodes(selectedNodes.getId())
       this.ogma.removeEdges(selectedEdges.getId())
       this.currentData = null;
+      // console.log(selectedEdges.getData('source'));
       // console.log('nodes : ', this.ogma.getSelectedNodes().getId());
     });
 
@@ -84,7 +96,7 @@ export class FilteringTreeComponent implements OnInit {
         target.setSelected(true);
         if (target.isNode) {
           this.currentData = this.ogma.getNode(target.getId()).getData();
-          console.log(this.currentData);
+          // console.log(this.currentData);
         }
       } else if (button === 'right') {
         target.setSelected(true);
@@ -94,7 +106,7 @@ export class FilteringTreeComponent implements OnInit {
     // ogma.addEdges([
     //   { id: 2, source: 1, target: 2 , data : {source : 1} },
     // ]);
-    // ogma.view.locateGraph();
+    this.ogma.view.locateGraph();
 
     this.ogma.events.onDragStart(() => {
       if (this.ogma.keyboard.isKeyPressed('ctrl')) {
@@ -108,11 +120,9 @@ export class FilteringTreeComponent implements OnInit {
               if (edgeData.source == source.getId() && edgeData.target == target.getId())
                 return false;
             }
-            return (source.getData().type != 'child') && (source.getId()!= target.getId());
-
+            return (source.getData().type != 'child') && (source.getId() != target.getId());
           },
-          // @ts-ignore
-          createNodes: Boolean = false,
+          createNodes: false,
 
           createEdge: (e: any) => {
             e.attributes = {...e.attributes, color: 'orange'};
@@ -121,10 +131,10 @@ export class FilteringTreeComponent implements OnInit {
           onComplete: (source: any, target: any, edge: any) => {
             if (!target || !edge) {
               this.ogma.tools.connectNodes.disable();
-              console.log(this.ogma.getEdges().size);
+              // console.log(this.ogma.getEdges().size);
             } else {
               edge.setData({source: source.getId(), target: target.getId()});
-              source.getData('_statements').push(target.getData());
+              // source.getData('_statements').push({...target.getData() , ...{id : target.getId()}  });
               // console.log(source.getId(), target.getId(), edge.getId());
             }
           }
@@ -142,7 +152,7 @@ export class FilteringTreeComponent implements OnInit {
       case 'AND': {
         this.ogma.addNode({
           id: ++this.nodeSize,
-          data: {type: 'parent', name: 'AND', Command : 'AND' , _statements : [] },
+          data: {type: 'parent', name: 'AND', Command: 'AND'},
           attributes: {x: 0, y: 0, color: 'green'}
         });
         break;
@@ -150,7 +160,7 @@ export class FilteringTreeComponent implements OnInit {
       case 'OR' : {
         this.ogma.addNode({
           id: ++this.nodeSize,
-          data: {type: 'parent', name: 'OR' , Command : 'OR',  _statements : [] },
+          data: {type: 'parent', name: 'OR', Command: 'OR'},
           attributes: {x: 0, y: 0, color: 'magenta'}
         });
         break;
@@ -170,49 +180,62 @@ export class FilteringTreeComponent implements OnInit {
     }
   }
 
-  handleSavingGraph()
-  {
-    let inDegrees = this.ogma.getNodes().getDegree('in');
-    const rootNodesNumber = inDegrees.filter((elem: number) => elem === 0 ).length;
-    if(rootNodesNumber !== 1 )
-    {
+  handleSavingGraph() {
+    const root = this.ogma.getNodes().filter((node: any) => {
+      return node.getDegree('in') === 0;
+    });
+    if (root.size !== 1) {
       alert('خطا در ذخیره سازی : گراف فقط یک ریشه باید داشته باشد');
-    }
-    else {
-      const nodeObjs  = this.ogma.getNode(1).getAdjacentNodes(); // just out nodes
-      alert(nodeObjs.size);
-      this.deleteSpecefickKey(this.ogma.getNode(1).getData()  , 'name');
-      var serialized = JSON.stringify(this.ogma.getNode(1).getData() , undefined , 1 );
+    } else {
+      // console.log(root.get(0).getData());
+      const finalData = this.applyingDFS(root.get(0));
+      const serialized = JSON.stringify(finalData, undefined, 1);
       console.log(serialized);
       alert('فیلتر با موفقیت ذخیره شد');
       this.onSaveGraph.emit();
     }
   }
-  deleteSpecefickKey(object : any , key : ProviderKey  ) : void
-  {
-    if (object.length!=undefined)
-    {
-      for(let child of object)
-      {
-        this.deleteSpecefickKey(child , key);
-      }
-    }
-    else
-    {
-      if (key in object)
-      {
-        delete object[key];
-        delete object.type; // delete type also
-        for (let v of Object.values(object))
-        {
-          // console.log(v)
-          if (v instanceof Object)
-            this.deleteSpecefickKey(v, key)
-        }
-      }
-    }
-    // console.log("inner obj")
-    //  console.log(object)
 
+  applyingDFS(node: nodeData): filterData {
+    let info = {Command: node.getData('Command')};
+    if (node.getData('type') == 'child') {
+      info = {...info, ...{_field: node.getData('_field'), _value: node.getData('_value')}};
+    } else {
+      const nodeObjs = node.getAdjacentNodes({direction: 'out'}); // type : nodeList
+      let _statement: filterData[] = [];
+      nodeObjs.forEach((n: any, i: number) => {
+        let childStatement = this.applyingDFS(n);
+        _statement.push(childStatement);
+      });
+      info = {...info, ...{_statement: _statement}}
+    }
+    return info;
   }
+
+  // deleteSpecefickKey(object : any , key : ProviderKey  ) : void
+  // {
+  //   if (object.length!=undefined)
+  //   {
+  //     for(let child of object)
+  //     {
+  //       this.deleteSpecefickKey(child , key);
+  //     }
+  //   }
+  //   else
+  //   {
+  //     if (key in object)
+  //     {
+  //       delete object[key];
+  //       delete object.type; // delete type also
+  //       for (let v of Object.values(object))
+  //       {
+  //         // console.log(v)
+  //         if (v instanceof Object)
+  //           this.deleteSpecefickKey(v, key)
+  //       }
+  //     }
+  //   }
+  //   // const ("inner obj")
+  //   //  console.log(object)
+  // }
 }

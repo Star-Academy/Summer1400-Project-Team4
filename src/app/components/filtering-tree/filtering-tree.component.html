@@ -45,13 +45,10 @@
           </h4>
 
           <mat-divider></mat-divider>
-          <div style="justify-content: center;align-items: center; display: flex;flex-direction: column">
-            <button (click)="handleAddNode('AND')" color="primary" mat-raised-button>افزودن AND</button>
-            <button (click)="handleAddNode('OR')" color="primary" mat-raised-button style="width: 10.3rem">افزودن OR
-            </button>
+          <div style="display: initial">
 
             <mat-accordion>
-              <mat-expansion-panel style="width: 95%">
+              <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false" >
                 <mat-expansion-panel-header>
                   <mat-panel-title>
                     <bdo dir="rtl">طراحی گره شرطی</bdo>
@@ -89,6 +86,10 @@
 
               </mat-expansion-panel>
             </mat-accordion>
+            <button *ngIf="!panelOpenState" (click)="handleAddNode('AND')" color="primary" mat-raised-button>افزودن AND</button>
+            <button *ngIf="!panelOpenState" (click)="handleAddNode('OR')" color="primary" mat-raised-button style="width: 10.3rem">افزودن OR
+            </button>
+
           </div>
 
           <mat-divider></mat-divider>
@@ -100,20 +101,18 @@
     </mat-sidenav-container>
   </mat-sidenav-content>
 
-  <mat-sidenav #editSidePane *ngIf="!!currentData" mode="side" opened style="width: 30rem">
+  <mat-sidenav #editSidePane *ngIf="!!currentData" mode="side" opened >
     <mat-nav-list>
-      <mat-form-field class="node-name-input">
+      <mat-form-field  class="node-name-input">
         <input #nodeNameInput="matInput" [(ngModel)]="currentData.name" matInput placeholder="نام گره"
                style="font-size: 70%" type="text"/>
       </mat-form-field>
 
-      <h3 *ngIf="currentData.type === 'child'">ویرایش گره ی شرطی</h3>
-
-      <mat-accordion *ngIf="currentData.type === 'child' ">
-        <mat-expansion-panel style="width: 90%">
+      <mat-accordion  *ngIf="currentData.type === 'child' ">
+        <mat-expansion-panel  [expanded]="true" style="width: 90%;margin-top: -1.5rem">
           <mat-expansion-panel-header>
             <mat-panel-title>
-              <bdo dir="ltr">.Op</bdo>
+              <bdo dir="rtl">ویرایش گره ی شرطی</bdo>
             </mat-panel-title>
           </mat-expansion-panel-header>
 
