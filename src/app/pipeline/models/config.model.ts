@@ -61,7 +61,7 @@ export const aggregateTypeInfo: {
 export interface AggregateOpertaion {
     fieldName: string;
     type: AggregateOperationType;
-    outputName: string;
+    outputFieldName: string;
 }
 
 export interface AggregateConfig {

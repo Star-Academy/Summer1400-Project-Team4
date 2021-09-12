@@ -145,8 +145,14 @@ export class Pipeline {
 
     constructor(public name: string) {}
 
+    getNode(id: number): { index: number; node: PipelineNode } | undefined {
+        const index = this.nodes.findIndex((node) => node.id === id);
+        if (index < 0) return;
+        return { index: index, node: this.nodes[index] };
+    }
+
     addNode(node: PipelineNode) {
-        if (this.nodes.some((existing) => existing.id === node.id))
+        if (this.getNode(node.id) !== undefined)
             throw new Error(
                 'a node with the same id already exists in the pipeline'
             );
@@ -182,15 +188,13 @@ export class Pipeline {
     }
 
     private get nextId() {
-        return Math.max(-1, ...this.nodes.map((node) => node.id)) + 1;
+        return Math.max(0, ...this.nodes.map((node) => node.id + 1));
     }
 
     editNode(edited: PipelineNode) {
-        const index = this.nodes.findIndex(
-            (existing) => existing.id === edited.id
-        );
+        const index = this.getNode(edited.id)?.index;
 
-        if (index < 0)
+        if (index === undefined)
             throw new Error(
                 'a node with the given id does not exist in the pipeline'
             );
@@ -200,7 +204,7 @@ export class Pipeline {
     }
 
     markNodeAsEdited(id: number) {
-        const node = this.nodes.find((existing) => existing.id === id);
+        const node = this.getNode(id)?.node;
 
         if (node === undefined)
             throw new Error(
@@ -235,6 +239,7 @@ export class Pipeline {
 
     reorder() {
         const validDeps: number[] = [];
+
         for (let i = 0; i < this.nodes.length; i++) {
             let success = false;
             let j = i;
@@ -251,7 +256,7 @@ export class Pipeline {
             if (!success) throw new Error('the pipeline is cyclic!');
 
             validDeps.push(this.nodes[j].id);
-            moveItemInArray(this.nodes, i, j);
+            moveItemInArray(this.nodes, j, i);
         }
     }
 

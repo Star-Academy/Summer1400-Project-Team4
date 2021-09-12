@@ -76,7 +76,7 @@ export class AggregateConfigComponent implements OnInit, AfterViewChecked {
         this.config?.operations?.unshift({
             fieldName: '',
             type: AggregateOperationType.count,
-            outputName: '',
+            outputFieldName: '',
         });
         this.expandNewOperation = true;
     }
