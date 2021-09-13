@@ -4,6 +4,9 @@ namespace WebApi.Services
 {
     public class DbConnector : ISqlConnector
     {
+        public static string DefaultConnectionString { get;  }=
+            "Server=localhost;Database=Etl;Trusted_Connection=true";
+
         public SqlConnection Connect(string host, string database)
         {
             var connectionString = $"Server={host};Database={database};Trusted_Connection=true";

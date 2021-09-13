@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using WebApi.models;
 
 namespace WebApi.Validations
@@ -12,10 +14,11 @@ namespace WebApi.Validations
             _database = database;
         }
 
-        public bool IsUserValid(string token, int userId)
+        public long IsUserValid(string token)
         {
-            var numberOfMatches = _database.Users.Count(u => u.Token == token);
-            return numberOfMatches == 1;
+            var user = _database.Users.FirstOrDefault(u => u.Token == token);
+            if (user == null) throw new Exception("invalid token");
+            return user.Id;
         }
     }
 }

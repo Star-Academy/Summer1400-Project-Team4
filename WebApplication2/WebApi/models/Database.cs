@@ -8,6 +8,7 @@ namespace WebApi.models
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Connection> Connections { get; set; }
+        public DbSet<Dataset> Datasets { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

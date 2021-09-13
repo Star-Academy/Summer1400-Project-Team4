@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebApi.Authentication;
 using WebApi.models;
+using WebApi.Validations;
 
 namespace WebApi.Controllers
 {
@@ -11,11 +13,15 @@ namespace WebApi.Controllers
     [Route("[controller]")]
     public class DatasetsController : ControllerBase
     {
-        private Database _database;
+        private readonly Database _database;
+        private readonly UserValidation _userValidator;
+        private readonly UserAuthorization _authorizationValidator;
 
-        public DatasetsController()
+        public DatasetsController(Database database, UserAuthorization authorizationValidator, UserValidation userValidator)
         {
-            _database = new Database();
+            _database = database;
+            _authorizationValidator = authorizationValidator;
+            _userValidator = userValidator;
         }
 
         [HttpPost]
@@ -24,7 +30,7 @@ namespace WebApi.Controllers
         {
             throw new NotImplementedException();
         }
-        
+
         [HttpPost]
         [Route("upload")]
         public IActionResult Upload(Dataset dataset)
@@ -33,7 +39,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPut]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public IActionResult ChangeName(int id, string newName)
         {
             var dataset = _database.Datasets.FirstOrDefault(x => x.DatasetId == id);
@@ -45,7 +51,7 @@ namespace WebApi.Controllers
         }
 
         [HttpDelete]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public IActionResult Delete(int id)
         {
             var dataset = _database.Datasets.FirstOrDefault(x => x.DatasetId == id);
@@ -57,7 +63,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("{id}/like")]
+        [Route("{id:int}/like")]
         public IActionResult Like(int id)
         {
             var dataset = _database.Datasets.FirstOrDefault(x => x.DatasetId == id);
@@ -67,9 +73,9 @@ namespace WebApi.Controllers
             _database.SaveChanges();
             return Ok("Liked");
         }
-        
+
         [HttpPost]
-        [Route("{id}/dislike")]
+        [Route("{id:int}/dislike")]
         public IActionResult DisLike(int id)
         {
             var dataset = _database.Datasets.FirstOrDefault(x => x.DatasetId == id);
@@ -81,18 +87,23 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("{token}")]
-        public IActionResult Get(string token)
+        public IActionResult Get([FromHeader] string token)
         {
-            var user = _database.Users.FirstOrDefault(x => x.Token == token);
-            if (user == null)
-                return Unauthorized("Invalid token.");
-            var datasets = _database.Datasets.Where(x => x.OwnerId == user.Id).ToList();
-            return Ok(datasets);
+            try
+            {
+                var userId = _userValidator.IsUserValid(token);
+                var datasets = _database.Users.Include(u => u.UserDatasets)
+                    .First(user => user.Id == userId).UserDatasets;
+                return Ok(datasets);
+            }
+            catch (Exception e)
+            {
+                return Unauthorized(e.Message);
+            }
         }
 
         [HttpGet]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public IActionResult GetDataset(int id)
         {
             var dataset = _database.Datasets.FirstOrDefault(x => x.DatasetId == id);
@@ -102,7 +113,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("{id}/preview")]
+        [Route("{id:int}/preview")]
         public IActionResult Preview(int id)
         {
             throw new NotImplementedException();

@@ -32,7 +32,7 @@ namespace WebApi.Controllers
             if (!_requestChecker.IsRegisterValid(user))
                 return BadRequest("User format Invalid!");
             user.IsLoggedIn = true;
-            user.Token = _tokenCreator.GetNewToken(50);
+            user.Token = TokenCreator.GetNewToken(50);
             _database.Users.Add(user);
             _database.SaveChanges();
             return Ok(user.Token);

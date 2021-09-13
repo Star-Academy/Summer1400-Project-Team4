@@ -18,5 +18,6 @@ namespace WebApi.models
         public string Token { get; set; }
         public string Avatar { get; set; }
         public HashSet<Connection> UserConnections { get; set; }
+        public HashSet<Dataset> UserDatasets { get; set; }
     }
 }
