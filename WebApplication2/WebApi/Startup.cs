@@ -24,7 +24,7 @@ namespace WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             var database = new Database();
-            TestMethod(database);
+            // TestMethod(database);
             services.AddControllers();
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo {Title = "WebApi", Version = "v1"}); });
             //default sever config
