@@ -82,13 +82,13 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("{pipelineId:int}")]
+        [Route("{pipelineId:int}/execute")]
         public IActionResult ExecutePipeline(int pipelineId, [FromHeader] string token)
         {
             var pipeline = _database.Pipelines.Include(a => a.Processes).FirstOrDefault(p => p.PipelineId == pipelineId);
             if (pipeline == null) return BadRequest("no pipeline found with this id");
 
-            var pipelineExecutor =
+            var pipelineExecutor =//todo handle getting connection string from app settings
                 new PipelineExecutor(@"Data Source=localhost\SQLExpress,1433;Database=ETL;Integrated Security=sspi;MultipleActiveResultSets=True;",
                     pipeline);
 
