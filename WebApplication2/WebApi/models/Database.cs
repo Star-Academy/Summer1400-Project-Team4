@@ -5,6 +5,7 @@ namespace WebApi.models
 {
     public class Database : DbContext
     {
+        public static string ConnectionString { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Connection> Connections { get; set; }
         public DbSet<Pipeline> Pipelines { get; set; }
@@ -12,7 +13,7 @@ namespace WebApi.models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=localhost; Database=Etl; Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer(ConnectionString);
         }
     }
 }

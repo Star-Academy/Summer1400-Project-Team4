@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using WebApi.models;
 using WebApi.Services;
@@ -17,7 +18,7 @@ namespace WebApi.Controllers
         private Database _database;
         private UserValidation _userValidation;
 
-        public PipelinesController(Database database, UserValidation userValidation)
+        public PipelinesController(Database database, UserValidation userValidation, SqlConnection sqlConnection)
         {
             _database = database;
             _userValidation = userValidation;
@@ -95,7 +96,7 @@ namespace WebApi.Controllers
             var pipelineExecutor =//todo handle getting connection string from app settings
                 new PipelineExecutor(@"Data Source=localhost\SQLExpress,1433;Database=ETL;Integrated Security=sspi;MultipleActiveResultSets=True;",
                     pipeline);
-
+//workstation id=team4DB.mssql.somee.com;packet size=4096;user id=team4_SQLLogin_1;pwd=ke7eltso65;data source=team4DB.mssql.somee.com;persist security info=False;initial catalog=team4DB
             pipelineExecutor.Execute("_" + pipeline.InputDatasetId, "_" + pipeline.OutputDatasetId);
 
             return Ok();
