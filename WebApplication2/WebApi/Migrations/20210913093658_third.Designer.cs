@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApi.Authentication;
 
 namespace WebApi.Migrations
 {
     [DbContext(typeof(Database))]
-    partial class DatabaseModelSnapshot : ModelSnapshot
+    [Migration("20210913093658_third")]
+    partial class third
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,12 +95,6 @@ namespace WebApi.Migrations
 
                     b.Property<bool>("DoesHaveHeader")
                         .HasColumnType("bit");
-
-                    b.Property<bool>("IsLiked")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("OwnerId")
-                        .HasColumnType("int");
 
                     b.Property<string>("TableName")
                         .HasColumnType("nvarchar(max)");

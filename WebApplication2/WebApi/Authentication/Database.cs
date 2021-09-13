@@ -1,18 +1,18 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
-using WebApi.Authentication;
+using WebApi.models;
 
-namespace WebApi.models
+namespace WebApi.Authentication
 {
     public class Database : DbContext
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Connection> Connections { get; set; }
-        public DbSet<Pipeline> Pipelines { get; set; }
+        public DbSet<Dataset> Datasets { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=localhost; Database=Etl; Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer(@"Server=localhost; Database=Auth; Trusted_Connection=True;");
         }
     }
 }

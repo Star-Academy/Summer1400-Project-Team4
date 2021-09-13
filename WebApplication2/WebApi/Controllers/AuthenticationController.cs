@@ -13,9 +13,11 @@ namespace WebApi.Controllers
         private Database _database;
         private UserDatabaseChecker _databaseChecker;
         private RequestChecker _requestChecker;
+        private TokenCreator _tokenCreator;
 
         public UsersController()
         {
+            _tokenCreator = new TokenCreator();
             _database = new Database();
             _databaseChecker = new UserDatabaseChecker(_database);
             _requestChecker = new RequestChecker();
@@ -30,7 +32,7 @@ namespace WebApi.Controllers
             if (!_requestChecker.IsRegisterValid(user))
                 return BadRequest("User format Invalid!");
             user.IsLoggedIn = true;
-            user.Token = TokenCreator.GetNewToken(50);
+            user.Token = _tokenCreator.GetNewToken(50);
             _database.Users.Add(user);
             _database.SaveChanges();
             return Ok(user.Token);

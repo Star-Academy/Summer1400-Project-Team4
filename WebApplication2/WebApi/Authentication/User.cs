@@ -1,15 +1,13 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace WebApi.models
+namespace WebApi.Authentication
 {
     public class User
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
-
         public string Username { get; set; }
         public string Password { get; set; }
         public string FullName { get; set; }
@@ -17,7 +15,5 @@ namespace WebApi.models
         public bool IsLoggedIn { get; set; }
         public string Token { get; set; }
         public string Avatar { get; set; }
-        public HashSet<Connection> UserConnections { get; set; }
-        public List<Pipeline> Pipelines { get; set; }
     }
 }

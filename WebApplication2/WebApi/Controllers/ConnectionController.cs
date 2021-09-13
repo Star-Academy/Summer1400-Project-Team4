@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
-using Newtonsoft.Json;
 using WebApi.models;
 using WebApi.Validations;
 
@@ -28,25 +27,36 @@ namespace WebApi.Controllers
         {
             if (!ModelState.IsValid) BadRequest();
             if (!connection.TestConnection()) return BadRequest("can't connect to sql server");
+            var user = _database.Users.Include(u => u.UserConnections).FirstOrDefault(u => u.Token == token);
+            try
+            {
+                user.UserConnections.Add(connection);
+            }
+            catch (NullReferenceException e)
+            {
+                return BadRequest();
+            }
 
-            connection.GenerateId();
-            await _database.Connections.AddAsync(connection);
+
+            await _database.SaveChangesAsync();
             return Ok("connection added successfully");
         }
 
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteConnection([FromRoute] string connectionId, [FromHeader] string token)
+        [Route("{connectionId:int}")]
+        public async Task<IActionResult> DeleteConnection([FromRoute] int connectionId, [FromHeader] string token)
         {
             var connection = _database.Connections.FirstOrDefaultAsync(ci => ci.ConnectionId == connectionId);
             if (connection == null) return BadRequest();
             _database.Connections.Remove(await connection);
+            await _database.SaveChangesAsync();
             return Ok();
         }
 
         [HttpGet]
         [Route("{connectionId}")]
-        public async Task<ActionResult<Connection>> GetConnection([FromRoute] string connectionId,
+        public async Task<ActionResult<Connection>> GetConnection([FromRoute] int connectionId,
             [FromHeader] string token)
         {
             var connection = await _database.Connections.FirstOrDefaultAsync(ci => ci.ConnectionId == connectionId);
@@ -57,9 +67,8 @@ namespace WebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Connection>>> GetAllConnections([FromHeader] string token)
         {
-            var user = await _database.Users.FirstAsync(u => u.Token == token);
-            var connections = _database.Connections.Where(c => c.UserId == user.Id).ToHashSet();
-            return connections;
+            var user = await _database.Users.Include(u => u.UserConnections).FirstAsync(u => u.Token == token);
+            return Ok(user.UserConnections);
         }
     }
 }
