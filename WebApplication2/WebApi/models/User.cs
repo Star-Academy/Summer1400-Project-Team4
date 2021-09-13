@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApi.models
@@ -15,5 +16,6 @@ namespace WebApi.models
         public bool IsLoggedIn { get; set; }
         public string Token { get; set; }
         public string Avatar { get; set; }
+        public List<Pipeline> Pipelines { get; set; }
     }
 }
