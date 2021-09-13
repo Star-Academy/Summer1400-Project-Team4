@@ -5,6 +5,7 @@ import {
     OnInit,
     ViewChild,
 } from '@angular/core';
+import { exportPipeline } from '../../models/pipeline-export.model';
 import {
     PipelineNodeType,
     Pipeline,
@@ -21,7 +22,7 @@ import { DiagramComponent } from '../diagram/diagram.component';
 export class DesignerComponent
     implements OnInit, AfterViewInit, AfterContentInit
 {
-    pipeline = new Pipeline('سناریو جدید');
+    pipeline = new Pipeline(-1, 'سناریو جدید');
     selectedNode?: PipelineNode;
     @ViewChild('diagram') diagram!: DiagramComponent;
 
@@ -60,6 +61,6 @@ export class DesignerComponent
 
     exportPipeline() {
         this.pipeline.reorder();
-        console.log(JSON.stringify(this.pipeline.export(), null, 4));
+        console.log(JSON.stringify(exportPipeline(this.pipeline), null, 4));
     }
 }
