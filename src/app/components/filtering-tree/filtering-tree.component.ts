@@ -33,6 +33,7 @@ export class FilteringTreeComponent implements OnInit {
   public currentData!: nodeData | null;
   public onSaveGraph = new EventEmitter();
   public panelOpenState = false;
+  public errorGraph = false;
 
   constructor(private formBuilder: FormBuilder) {
   }
@@ -189,24 +190,44 @@ export class FilteringTreeComponent implements OnInit {
     } else {
       // console.log(root.get(0).getData());
       const finalData = this.applyingDFS(root.get(0));
-      const serialized = JSON.stringify(finalData, undefined, 1);
-      console.log(serialized);
-      alert('فیلتر با موفقیت ذخیره شد');
-      this.onSaveGraph.emit();
+      if (!this.errorGraph)
+      {
+        const serialized = JSON.stringify(finalData, undefined, 1);
+        console.log(serialized);
+        alert('فیلتر با موفقیت ذخیره شد');
+        this.onSaveGraph.emit();
+      }
+      else
+      {
+       alert('خطا در ذخیره سازی : گره های غیر شرطی حداقل 2 فرزند باید داشته باشند');
+       this.errorGraph = false;
+      }
+
     }
   }
 
-  applyingDFS(node: nodeData): filterData {
+  applyingDFS(node: nodeData): filterData | void  {
     let info = {Command: node.getData('Command')};
     if (node.getData('type') == 'child') {
       info = {...info, ...{_field: node.getData('_field'), _value: node.getData('_value')}};
     } else {
       const nodeObjs = node.getAdjacentNodes({direction: 'out'}); // type : nodeList
       let _statement: filterData[] = [];
-      nodeObjs.forEach((n: any, i: number) => {
+      nodeObjs.forEach((n: any, i: number) : void =>  {
         let childStatement = this.applyingDFS(n);
+        if(childStatement)
         _statement.push(childStatement);
+        else
+        {
+          this.errorGraph = true;
+          return;
+        }
       });
+      if(_statement.length < 2 || this.errorGraph)
+      {
+        this.errorGraph = true;
+        return ;
+      }
       info = {...info, ...{_statement: _statement}}
     }
     return info;
