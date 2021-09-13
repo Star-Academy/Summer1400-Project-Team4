@@ -11,7 +11,7 @@ namespace WebApi.models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=localhost; Database=Auth; Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer(@"Server=localhost; Database=Etl; Trusted_Connection=True;");
         }
     }
 }
