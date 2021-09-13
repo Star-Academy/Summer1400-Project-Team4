@@ -24,6 +24,7 @@ import { AuthService } from './services/auth.service';
 import { FilteringTreeComponent } from './components/filtering-tree/filtering-tree.component';
 import { ApiService } from './services/api.service';
 import { ConnectionService } from './services/connection.service';
+import { DatasetService } from './services/dataset.service';
 
 @NgModule({
     declarations: [
@@ -57,7 +58,13 @@ import { ConnectionService } from './services/connection.service';
         FormsModule,
         ReactiveFormsModule,
     ],
-    providers: [ApiService, UserService, AuthService, ConnectionService],
+    providers: [
+        ApiService,
+        UserService,
+        AuthService,
+        ConnectionService,
+        DatasetService,
+    ],
     bootstrap: [AppComponent],
     exports: [],
 })
