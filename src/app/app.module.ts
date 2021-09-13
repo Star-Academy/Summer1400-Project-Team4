@@ -20,8 +20,10 @@ import { SignupComponent } from './components/user/signup/signup.component';
 import { LoginFailedComponent } from './components/messages/login-failed/login-failed.component';
 import { EditProfileComponent } from './components/user/edit-profile/edit-profile.component';
 import { UserService } from './services/user.service';
-import { AuthService } from './services/auth/auth.service';
+import { AuthService } from './services/auth.service';
 import { FilteringTreeComponent } from './components/filtering-tree/filtering-tree.component';
+import { ApiService } from './services/api.service';
+import { ConnectionService } from './services/connection.service';
 
 @NgModule({
     declarations: [
@@ -40,7 +42,11 @@ import { FilteringTreeComponent } from './components/filtering-tree/filtering-tr
         EditProfileComponent,
         FilteringTreeComponent,
     ],
-    entryComponents: [LoginSignupAlertComponent, LoginFailedComponent , FilteringTreeComponent],
+    entryComponents: [
+        LoginSignupAlertComponent,
+        LoginFailedComponent,
+        FilteringTreeComponent,
+    ],
     imports: [
         BrowserModule,
         AppRoutingModule,
@@ -51,7 +57,7 @@ import { FilteringTreeComponent } from './components/filtering-tree/filtering-tr
         FormsModule,
         ReactiveFormsModule,
     ],
-    providers: [UserService, AuthService],
+    providers: [ApiService, UserService, AuthService, ConnectionService],
     bootstrap: [AppComponent],
     exports: [],
 })

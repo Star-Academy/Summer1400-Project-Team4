@@ -3,7 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
 import {UserService} from "../../../services/user.service";
-import {AuthService} from "../../../services/auth/auth.service";
+import {AuthService} from "../../../services/auth.service";
 import {userSignUp} from "../../../interfaces/interface";
 
 const message = 'ویرایش موفقیت آمیز در حال انتقال به صفحه ی اصلی ...';

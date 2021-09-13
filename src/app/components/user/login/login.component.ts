@@ -5,7 +5,7 @@ import {Validators} from '@angular/forms';
 import {FormGroup, FormBuilder} from '@angular/forms';
 import {UserService} from "../../../services/user.service";
 import {Router} from "@angular/router";
-import {AuthService} from "../../../services/auth/auth.service";
+import {AuthService} from "../../../services/auth.service";
 const message = 'ورود موفقیت آمیز در حال انتقال به صفحه ی اصلی ...';
 
 @Component({
