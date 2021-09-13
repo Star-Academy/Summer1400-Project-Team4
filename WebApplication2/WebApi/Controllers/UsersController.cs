@@ -22,9 +22,10 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public List<User> GetUsers([FromRoute] string password)
+        [Route("{password}")]
+        public List<User> GetUsers(string password)
         {
-            if (password != "1234ETL")
+            if (!password.Equals("1234ETL"))
             {
                 throw new Exception("پسورد اشتباه است");
             }
