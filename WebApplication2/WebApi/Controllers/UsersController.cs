@@ -4,7 +4,7 @@ namespace WebApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class UsersController : ControllerBase
+    public class UsersPipelineController : ControllerBase
     {
         // [HttpGet]
         // public List<User> GetUsers()

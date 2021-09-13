@@ -3,7 +3,6 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Hosting;
 using WebApi.Services;
 using WebApi.Loader;
-using WebApi.Model;
 using Microsoft.Extensions.Hosting;
 
 namespace WebApi
@@ -12,9 +11,9 @@ namespace WebApi
     {
         public static void Main(string[] args)
         {
-            //CreateHostBuilder(args).Build().Run();
+            CreateHostBuilder(args).Build().Run();
             //CsvLoadExample();
-            SqlCopyExample();
+            //SqlCopyExample();
         }
 
         private static void SqlCopyExample()
