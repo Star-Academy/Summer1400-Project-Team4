@@ -1,7 +1,8 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
+using WebApi.Authentication;
 
-namespace WebApi.Authentication
+namespace WebApi.models
 {
     public class Database : DbContext
     {

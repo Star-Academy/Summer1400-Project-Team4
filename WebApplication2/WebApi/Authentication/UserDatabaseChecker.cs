@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using WebApi.models;
 
 namespace WebApi.Authentication
 {
