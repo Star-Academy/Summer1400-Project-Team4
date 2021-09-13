@@ -1,6 +1,8 @@
+using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Hosting;
+using WebApi.models;
 using WebApi.Services;
 using WebApi.Loader;
 using Microsoft.Extensions.Hosting;
@@ -11,6 +13,19 @@ namespace WebApi
     {
         public static void Main(string[] args)
         {
+            /*var testSt =
+                "Data Source=tcp:127.0.0.1,1433;Initial Catalog=ETL;User ID=TALEBAN;Password=1234;"; 
+            using(SqlConnection con = new SqlConnection(testSt)) {  
+                con.Open();  
+                using(SqlCommand cmd = new SqlCommand("SELECT name from sys.databases", con)) {  
+                    using(SqlDataReader dr = cmd.ExecuteReader()) {  
+                        while (dr.Read()) {  
+                            Console.WriteLine(dr[0].ToString());  
+                        }  
+                    }  
+                }  
+            }*/
+
             CreateHostBuilder(args).Build().Run();
             //CsvLoadExample();
             //SqlCopyExample();

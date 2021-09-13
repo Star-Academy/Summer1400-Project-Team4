@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Authentication;
+using WebApi.models;
 
 namespace WebApi.Controllers
 {
