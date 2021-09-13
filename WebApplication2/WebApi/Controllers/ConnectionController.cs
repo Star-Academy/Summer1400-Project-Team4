@@ -24,7 +24,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddNewConnection([FromBody] Connection connection, [FromBody] string token)
+        public async Task<IActionResult> AddNewConnection([FromBody] Connection connection, [FromHeader] string token)
         {
             if (!ModelState.IsValid) BadRequest();
             if (!connection.TestConnection()) return BadRequest("can't connect to sql server");
@@ -45,6 +45,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
+        [Route("{connectionId}")]
         public async Task<ActionResult<Connection>> GetConnection([FromRoute] string connectionId,
             [FromHeader] string token)
         {
