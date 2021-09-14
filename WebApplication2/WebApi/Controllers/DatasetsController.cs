@@ -26,35 +26,23 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [Route("create")]
-        public IActionResult Create([FromBody] CsvProp data, [FromHeader] string token)
+        public IActionResult Create(Dataset dataset)
         {
-            try
-            {
-                var userId = _userValidator.IsUserValid(token);
-                _database.Users.Find(userId).UserDatasets.Add(new Dataset()
-                {
-                    DatasetName = data.TableName, IsLiked = false
-                });
-            }
-            catch (Exception)
-            {
-                return Unauthorized();
-            }
-
-            var loader = new CsvLoader(data, _database.Datasets.Max(d => d.DatasetId) + 1);
-            if (loader.TransportCsvToSql())
-            {
-                return Ok();
-            }
-
-            return BadRequest();
+            string token = dataset.token;
+            var user = _database.Users.FirstOrDefault(x => x.Token == token);
+            if (user == null)
+                return Unauthorized("Wrong token");
+            user.UserDatasets.Add(dataset);
+            return Ok("created");
         }
 
         [HttpPost]
         [Route("upload")]
-        public IActionResult Upload(Dataset dataset)
+        public IActionResult Upload([FromBody]CsvProp data)
         {
-            throw new NotImplementedException();
+            var loader = new CsvLoader(data);
+            if (loader.TransportCsvToSql()) return Ok();
+            return BadRequest(); 
         }
 
         [HttpPut]
@@ -133,11 +121,9 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [Route("{id:int}/preview")]
-        public IActionResult Preview(int id, int lowerBond, int upperBond)
+        public IActionResult Preview(int id)
         {
-            var test = new SqlTableTransformer(_database);
-            var preview = test.TransferData(id, lowerBond, upperBond);
-            return Ok(preview); 
+            throw new NotImplementedException();
         }
     }
 }
