@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WebApi.Authentication;
 using WebApi.models;
+using WebApi.Services;
 using WebApi.Validations;
 
 namespace WebApi.Controllers
@@ -17,7 +16,8 @@ namespace WebApi.Controllers
         private readonly UserValidation _userValidator;
         private readonly UserAuthorization _authorizationValidator;
 
-        public DatasetsController(Database database, UserAuthorization authorizationValidator, UserValidation userValidator)
+        public DatasetsController(Database database, UserAuthorization authorizationValidator,
+            UserValidation userValidator)
         {
             _database = database;
             _authorizationValidator = authorizationValidator;
@@ -26,9 +26,11 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [Route("create")]
-        public IActionResult Create(Dataset dataset)
+        public IActionResult Create([FromBody]CsvProp data)
         {
-            throw new NotImplementedException();
+            var loader = new CsvLoader(data);
+            if (loader.TransportCsvToSql()) return Ok();
+            return BadRequest(); 
         }
 
         [HttpPost]
