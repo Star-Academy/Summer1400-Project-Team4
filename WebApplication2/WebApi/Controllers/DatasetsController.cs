@@ -133,8 +133,12 @@ namespace WebApi.Controllers
 
         [HttpGet]
         [Route("{id:int}/csvFile")]
-        public IActionResult DownloadDataset(int id, [FromHeader] string token)
+        public IActionResult DownloadDataset(int id, [FromHeader] string token, char rowSeparator = ',', string columnSeparator = "ENTER", bool saveColumnTitle = true)
         {
+            if (columnSeparator.Equals("ENTER"))
+            {
+                columnSeparator = "\n";
+            }
             var sqlCon = new SqlConnection(Database.ConnectionString);
             sqlCon.Open();
 
@@ -144,34 +148,30 @@ namespace WebApi.Controllers
 
             // var fileName = _database.Users.FirstOrDefault(u => u.Token == token)
                 // ?.UserDatasets.FirstOrDefault(db => db.DatasetId == id)?.DatasetName + ".csv";
-                var fileName = "_" + id + ".csv";
+            // var fileName = _database.Datasets.FirstOrDefault(db => db.DatasetId == id)?.DatasetName + ".csv";
+            const string fileName = "Output.csv";
 
-            var sw = new StringBuilder();
+            var stringBuilder = new StringBuilder();
             var output = new object[reader.FieldCount];
 
             for (var i = 0; i < reader.FieldCount; i++)
+            {
+                if (!saveColumnTitle)
+                {
+                    continue;
+                }
                 output[i] = reader.GetName(i);
+            }
 
-            sw.Append(string.Join(",", output)).Append('\n');
+            stringBuilder.Append(string.Join(rowSeparator, output)).Append(columnSeparator);
 
             while (reader.Read())
             {
                 reader.GetValues(output);
-                sw.Append(string.Join(",", output)).Append('\n');
+                stringBuilder.Append(string.Join(rowSeparator, output)).Append(columnSeparator);
             }
 
-            // const string fileName = "coordinate.csv";
-            // var file = System.IO.File.ReadAllBytes(fileName);
-
-            // sw.Close();
-            // reader.Close();
-            // sqlCon.Close();
-
-            // return new FileContentResult(file, "application/csv");
-
-
-            // return new FileContentResult(Encoding.ASCII.GetBytes(sw.ToString()), "application/csv");
-            return File(Encoding.ASCII.GetBytes(sw.ToString()), "application/csv", fileName);
+            return File(Encoding.ASCII.GetBytes(stringBuilder.ToString()), "application/csv", fileName);
         }
 
         //
