@@ -1,7 +1,10 @@
 ﻿
 using System;
+using System.IO;
 using System.Linq;
+using System.Text;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using WebApi.models;
 using WebApi.Services;
@@ -132,9 +135,43 @@ namespace WebApi.Controllers
         [Route("{id:int}/csvFile")]
         public IActionResult DownloadDataset(int id, [FromHeader] string token)
         {
-            const string fileName = "coordinate.csv";
-            var file = System.IO.File.ReadAllBytes(fileName);
-            return new FileContentResult(file, "application/csv");
+            var sqlCon = new SqlConnection(Database.ConnectionString);
+            sqlCon.Open();
+
+            var sqlCmd = new SqlCommand("Select * from _" + id, sqlCon);
+
+            var reader = sqlCmd.ExecuteReader();
+
+            // var fileName = _database.Users.FirstOrDefault(u => u.Token == token)
+                // ?.UserDatasets.FirstOrDefault(db => db.DatasetId == id)?.DatasetName + ".csv";
+                var fileName = "_" + id + ".csv";
+
+            var sw = new StringBuilder();
+            var output = new object[reader.FieldCount];
+
+            for (var i = 0; i < reader.FieldCount; i++)
+                output[i] = reader.GetName(i);
+
+            sw.Append(string.Join(",", output)).Append('\n');
+
+            while (reader.Read())
+            {
+                reader.GetValues(output);
+                sw.Append(string.Join(",", output)).Append('\n');
+            }
+
+            // const string fileName = "coordinate.csv";
+            // var file = System.IO.File.ReadAllBytes(fileName);
+
+            // sw.Close();
+            // reader.Close();
+            // sqlCon.Close();
+
+            // return new FileContentResult(file, "application/csv");
+
+
+            // return new FileContentResult(Encoding.ASCII.GetBytes(sw.ToString()), "application/csv");
+            return File(Encoding.ASCII.GetBytes(sw.ToString()), "application/csv", fileName);
         }
 
         //
