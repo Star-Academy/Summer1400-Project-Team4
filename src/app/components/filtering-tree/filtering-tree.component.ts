@@ -61,7 +61,8 @@ export class FilteringTreeComponent implements OnInit {
       }
     });
     this.ogma.styles.addEdgeRule({
-      shape: 'arrow'
+      shape: 'arrow' ,
+      width : 7
     });
     // this.ogma.addNode({ id: 1, data : {type : 'parent' , name : '1' , Command : 'AND' } ,  attributes: { x: 0, y: 0, color: 'green' } });
     // this.ogma.addNodes([
@@ -154,7 +155,7 @@ export class FilteringTreeComponent implements OnInit {
         this.ogma.addNode({
           id: ++this.nodeSize,
           data: {type: 'parent', name: 'AND', Command: 'AND'},
-          attributes: {x: 0, y: 0, color: 'green'}
+          attributes: {x: 70, y: 0, color: 'green' , radius: 25}
         });
         break;
       }
@@ -162,7 +163,7 @@ export class FilteringTreeComponent implements OnInit {
         this.ogma.addNode({
           id: ++this.nodeSize,
           data: {type: 'parent', name: 'OR', Command: 'OR'},
-          attributes: {x: 0, y: 0, color: 'magenta'}
+          attributes: {x: -70, y: 0, color: 'magenta' , radius : 25}
         });
         break;
       }
@@ -170,7 +171,7 @@ export class FilteringTreeComponent implements OnInit {
         this.ogma.addNode({
           id: ++this.nodeSize,
           data: {...{type: 'child', name: 'condition'}, ...this.form.value},
-          attributes: {x: 0, y: 0, color: 'orange'}
+          attributes: {x: 0, y: 0, color: 'orange' , radius : 25}
         });
         this.ogma.getNodes().forEach((node: any) => {
           // do something with the node
