@@ -17,7 +17,7 @@ export class LandingComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (!this.auth.isLogged()) {
+    if (!this.auth.isLoggedIn) {
       this.router.navigate(['user', 'login']).then();
     }
   }
@@ -34,7 +34,7 @@ export class LandingComponent implements OnInit {
   }
 
   logOutUser() {
-    this.auth.removeUserLocal();
+    this.auth.authToken = null;
     this.alertLoginSignUp();
   }
 }

@@ -1,32 +1,20 @@
 import { Injectable } from '@angular/core';
-@Injectable({
-    providedIn: 'root',
-})
+
+@Injectable()
 export class AuthService {
     constructor() {}
 
-    setUserLocal(username: string, id: string, token: string): void {
-        localStorage.setItem('username', username);
-        localStorage.setItem('id', id);
-        localStorage.setItem('token', token);
-    }
-    removeUserLocal(): void {
-        localStorage.removeItem('username');
-        localStorage.removeItem('id');
-        localStorage.removeItem('token');
+    set authToken(value: string | null) {
+        if (value === null) {
+            localStorage.removeItem('authToken');
+        } else localStorage.setItem('authToken', value);
     }
 
-    getUser(): string | null {
-        return localStorage.getItem('username') || null;
-    }
-    getToken(): string | null {
-        return localStorage.getItem('token') || null;
-    }
-    getUserId(): string | null {
-        return localStorage.getItem('id') || null;
+    get authToken(): string | null {
+        return localStorage.getItem('authToken');
     }
 
-    isLogged(): boolean {
-        return !!this.getToken();
+    get isLoggedIn(): boolean {
+        return this.authToken !== null;
     }
 }

@@ -29,7 +29,7 @@ export class EditProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const userId: string | null = this.auth.getUserId();
+    const userId: string | null = this.auth.getUserId(); /* fix me! */
     if (!userId) {
       this.router.navigateByUrl('/').then();
     }
@@ -61,13 +61,13 @@ export class EditProfileComponent implements OnInit {
 
   handleEditing() {
     this.disableBtn = true;
-    const tokenData = {token: this.auth.getToken()};
+    const tokenData = {token: this.auth.authToken};
     let userdata: Object;
     if (this.form.value.password) {
       userdata = {...tokenData, ...this.form.value , ...{avatar: this.imageSrc} };
     } else {
       userdata = {
-        token: this.auth.getToken(), username: this.userName, email: this.email,
+        token: this.auth.authToken, username: this.userName, email: this.email,
         firstName: this.firstName, avatar: this.imageSrc
       };
     }
