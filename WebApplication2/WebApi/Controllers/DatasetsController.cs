@@ -174,42 +174,6 @@ namespace WebApi.Controllers
             return File(Encoding.ASCII.GetBytes(stringBuilder.ToString()), "application/csv", fileName);
         }
 
-        //
-        // [HttpPost]
-        // [Route("{id:int}/download")]
-        // public HttpResponseMessage DownloadDataset(int id, [FromHeader] string token)
-        // {
-        //
-        //         // var userId = _userValidator.IsUserValid(token);
-        //         // var dataset = _database.Users.Include(u => u.UserDatasets)
-        //             // .First(user => user.Id == userId).UserDatasets.FirstOrDefault(d => d.DatasetId == id);
-        //
-        //
-        //
-        //         // if (dataset == null)
-        //         // {
-        //             // return BadRequest("چنین دیتاستی پیدا نشد");
-        //         // }
-        //         // return Ok(dataset);
-        //
-        //
-        //         const string fileName = "coordinate.csv";
-        //
-        //         var file = System.IO.File.ReadAllBytes(fileName);
-        //
-        //         var response = new HttpResponseMessage(HttpStatusCode.OK)
-        //         {
-        //             // Content = new StreamContent(new FileStream(file, FileMode.Open, FileAccess.Read))
-        //             Content = new ByteArrayContent(file)
-        //         };
-        //
-        //         response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
-        //         response.Content.Headers.ContentDisposition.FileName = fileName;
-        //         response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/csv");
-        //
-        //         return response;
-        // }
-
         [HttpGet]
         [Route("{id:int}")]
         public IActionResult GetDataset(int id)
