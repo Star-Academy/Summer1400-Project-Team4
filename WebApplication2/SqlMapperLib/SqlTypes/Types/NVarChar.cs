@@ -1,4 +1,6 @@
-﻿namespace SqlMapper.SqlTypes.Types
+﻿using SqlMapperLib.SqlTypes;
+
+namespace SqlMapper.SqlTypes.Types
 {
     public class NVarChar : ISqlType
     {
