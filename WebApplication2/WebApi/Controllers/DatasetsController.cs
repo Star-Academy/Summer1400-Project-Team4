@@ -1,10 +1,6 @@
 ﻿
 using System;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApi.models;
@@ -42,11 +38,28 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("upload")]
-        public IActionResult Upload([FromBody]CsvProp data)
+        [Route("create")]
+        public IActionResult Upload([FromBody] CsvProp data, [FromHeader] string token)
         {
-            var loader = new CsvLoader(data);
-            if (loader.TransportCsvToSql()) return Ok();
+            try
+            {
+                var userId = _userValidator.IsUserValid(token);
+                _database.Users.Find(userId).UserDatasets.Add(new Dataset()
+                {
+                    DatasetName = data.TableName, IsLiked = false
+                });
+            }
+            catch (Exception)
+            {
+                return Unauthorized();
+            }
+
+            var loader = new CsvLoader(data, _database.Datasets.Max(d => d.DatasetId) + 1);
+            if (loader.TransportCsvToSql())
+            {
+                return Ok();
+            }
+
             return BadRequest();
         }
 
