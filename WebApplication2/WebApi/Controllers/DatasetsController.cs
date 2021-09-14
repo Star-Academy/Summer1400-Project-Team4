@@ -33,6 +33,7 @@ namespace WebApi.Controllers
             if (user == null)
                 return Unauthorized("Wrong token");
             user.UserDatasets.Add(dataset);
+            new SqlTableCreator().CopySql("localhost", dataset.DatabaseName, dataset.TableName, dataset.DatasetName);
             return Ok("created");
         }
 

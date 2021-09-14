@@ -12,5 +12,7 @@ namespace WebApi.models
         public bool IsLiked { get; set; }
         
         [NotMapped] public string token { get; set; }
+        [NotMapped] public string DatabaseName { get; set; }
+        [NotMapped] public string TableName { get; set; }
     }
 }
