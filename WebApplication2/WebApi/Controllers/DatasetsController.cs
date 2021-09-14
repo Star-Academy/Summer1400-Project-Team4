@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -39,11 +40,28 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [Route("upload")]
-        public IActionResult Upload([FromBody]CsvProp data)
+        public IActionResult Upload([FromBody] CsvProp data, [FromHeader] string token)
         {
-            var loader = new CsvLoader(data);
-            if (loader.TransportCsvToSql()) return Ok();
-            return BadRequest(); 
+            try
+            {
+                var userId = _userValidator.IsUserValid(token);
+                _database.Users.Find(userId).UserDatasets.Add(new Dataset()
+                {
+                    DatasetName = data.TableName, IsLiked = false
+                });
+            }
+            catch (Exception)
+            {
+                return Unauthorized();
+            }
+
+            var loader = new CsvLoader(data, _database.Datasets.Max(d => d.DatasetId) + 1);
+            if (loader.TransportCsvToSql())
+            {
+                return Ok();
+            }
+
+            return BadRequest();
         }
 
         [HttpPut]
@@ -109,6 +127,51 @@ namespace WebApi.Controllers
                 return Unauthorized(e.Message);
             }
         }
+
+        [HttpGet]
+        [Route("{id:int}/csvFile")]
+        public IActionResult DownloadDataset(int id, [FromHeader] string token)
+        {
+            const string fileName = "coordinate.csv";
+            var file = System.IO.File.ReadAllBytes(fileName);
+            return new FileContentResult(file, "application/csv");
+        }
+
+        //
+        // [HttpPost]
+        // [Route("{id:int}/download")]
+        // public HttpResponseMessage DownloadDataset(int id, [FromHeader] string token)
+        // {
+        //
+        //         // var userId = _userValidator.IsUserValid(token);
+        //         // var dataset = _database.Users.Include(u => u.UserDatasets)
+        //             // .First(user => user.Id == userId).UserDatasets.FirstOrDefault(d => d.DatasetId == id);
+        //
+        //
+        //
+        //         // if (dataset == null)
+        //         // {
+        //             // return BadRequest("چنین دیتاستی پیدا نشد");
+        //         // }
+        //         // return Ok(dataset);
+        //
+        //
+        //         const string fileName = "coordinate.csv";
+        //
+        //         var file = System.IO.File.ReadAllBytes(fileName);
+        //
+        //         var response = new HttpResponseMessage(HttpStatusCode.OK)
+        //         {
+        //             // Content = new StreamContent(new FileStream(file, FileMode.Open, FileAccess.Read))
+        //             Content = new ByteArrayContent(file)
+        //         };
+        //
+        //         response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
+        //         response.Content.Headers.ContentDisposition.FileName = fileName;
+        //         response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/csv");
+        //
+        //         return response;
+        // }
 
         [HttpGet]
         [Route("{id:int}")]

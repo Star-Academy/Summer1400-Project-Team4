@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using Microsoft.Data.SqlClient;
@@ -11,10 +12,12 @@ namespace WebApi.Services
         private readonly CsvProp _csvProp;
         private string _filePath;
         private const int FirstRow = 2;
+        private readonly int _dataSetId; 
 
-        public CsvLoader(CsvProp csvProp)
+        public CsvLoader(CsvProp csvProp, int dataSetId)
         {
             _csvProp = csvProp;
+            _dataSetId = dataSetId;
         }
 
         public bool TransportCsvToSql()
@@ -36,7 +39,7 @@ namespace WebApi.Services
         private string GenerateBulkQuery()
         {
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append($"BULK INSERT {_csvProp.TableName}\n");
+            stringBuilder.Append($"BULK INSERT {_dataSetId}\n");
             stringBuilder.Append($"FROM '{_filePath}'\n");
             stringBuilder.Append("WITH (\n" +
                                  $"FIRSTROW = {FirstRow},\n" +
@@ -51,7 +54,7 @@ namespace WebApi.Services
         {
             var stringBuilder = new StringBuilder();
             var streamReader = new StreamReader(_filePath);
-            stringBuilder.Append("CREATE TABLE " + _csvProp.TableName + " (\n");
+            stringBuilder.Append("CREATE TABLE " + _dataSetId + " (\n");
             var fields = streamReader.ReadLine()?.Split(_csvProp.FieldTerminator);
             Debug.Assert(fields != null, nameof(fields) + " != null");
             if (_csvProp.DoesHaveHeader)
@@ -92,22 +95,22 @@ namespace WebApi.Services
                 rows[i] = rows[i].Replace(_csvProp.FieldTerminator, ",");
             }
 
-            _filePath = $"G:\\codeStrar\\project\\ConnectionB\\WebApplication2\\WebApi\\{_csvProp.TableName}.csv";
+            _filePath = $"G:\\codeStrar\\project\\ConnectionB\\WebApplication2\\WebApi\\{_dataSetId}.csv";
             File.WriteAllLines(_filePath, rows);
         }
         
-        /*public string[] GetColumn(int columnNumber)
+        public string[] GetColumn(int columnNumber)
         {
             var column = new List<string>();
-            _streamReader = new StreamReader(_filePath);
-            while (!_streamReader.EndOfStream)
+            var streamReader = new StreamReader(_filePath);
+            while (!streamReader.EndOfStream)
             {
-                var row = _streamReader.ReadLine()?.Split(_csvProp.FieldTerminator);
+                var row = streamReader.ReadLine()?.Split(_csvProp.FieldTerminator);
                 if (row != null) column.Add(row[columnNumber]);
             }
 
             return column.ToArray();
-        }*/
+        }
         
     }
 }
