@@ -1,4 +1,4 @@
-<p style="padding-right: 10px">داشبورد </p>
+<p style="padding-right: 10px">دیتاست </p>
 <cdk-virtual-scroll-viewport (scrolledIndexChange)="getNextBatch($event)" class="wrapper mat-elevation-z2" tvsItemSize>
   <table *ngIf="dataSource" [dataSource]="dataSource" class="mat-elevation-z8" mat-table style="margin-right: 6rem">
     <!-- Position Column -->
@@ -9,9 +9,9 @@
 
     <!-- Name Column -->
     <ng-container matColumnDef="name">
-      <th *matHeaderCellDef mat-header-cell> نام</th>
+      <th  *matHeaderCellDef mat-header-cell> نام</th>
       <td (click)="clickName(element)" *matCellDef="let element" mat-cell>
-        <button mat-button> {{element.name}} </button>
+        <button mat-button style="margin-right: -2rem"> {{element.name}} </button>
       </td>
     </ng-container>
 

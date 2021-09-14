@@ -1,11 +1,11 @@
 <app-header (toggleForSideBar)="toggleButton()"  (toggleForLogOut)="logOutUser()"  ></app-header>
-  <mat-drawer-container *ngIf="auth.isLogged()"  dir="rtl">
+  <mat-drawer-container  dir="rtl">
     <mat-drawer mode="side" [opened]="toggleOpen"> <app-sidebar></app-sidebar> </mat-drawer>
 
-    <mat-drawer-content>
+    <mat-drawer-content style="overflow: hidden">
       <router-outlet></router-outlet>
     </mat-drawer-content>
 
   </mat-drawer-container>
 
-<app-footer></app-footer>
+<app-footer style="background-color: #59C173"></app-footer>

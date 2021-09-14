@@ -39,7 +39,7 @@ export class PostsComponent implements OnInit {
           this.dataSource.data = this.dataSource.data.concat(ELEM);
           this.snackBar.open(message, '', {
             duration: 1000, verticalPosition: "bottom",
-            horizontalPosition: "center", panelClass: 'purple-snackbar'
+            horizontalPosition: "left", panelClass: 'purple-snackbar'
           });
           console.log('scroll height : ' + e.target.scrollHeight)
           console.log(res);

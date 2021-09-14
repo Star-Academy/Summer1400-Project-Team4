@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../../services/auth.service";
 import {MatDialog} from "@angular/material/dialog";
 import {LoginSignupAlertComponent} from "../messages/login-signup-alert/login-signup-alert.component";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-landing',
@@ -12,12 +13,12 @@ export class LandingComponent implements OnInit {
 
   public toggleOpen = true;
 
-  constructor(public auth: AuthService, public dialog: MatDialog) {
+  constructor(public auth: AuthService, public dialog: MatDialog , public router : Router) {
   }
 
   ngOnInit(): void {
     if (!this.auth.isLogged()) {
-      this.alertLoginSignUp();
+      this.router.navigate(['user', 'login']).then();
     }
   }
 
