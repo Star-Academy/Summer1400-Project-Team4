@@ -133,11 +133,11 @@ namespace WebApi.Controllers
 
         [HttpGet]
         [Route("{id:int}/csvFile")]
-        public IActionResult DownloadDataset(int id, [FromHeader] string token, char rowSeparator = ',', string columnSeparator = "ENTER", bool saveColumnTitle = true)
+        public IActionResult DownloadDataset(int id, [FromHeader] string token, char columnSeparator = ',', string rowSeparator = "ENTER", bool saveColumnTitle = true)
         {
-            if (columnSeparator.Equals("ENTER"))
+            if (rowSeparator.Equals("ENTER"))
             {
-                columnSeparator = "\n";
+                rowSeparator = "\n";
             }
             var sqlCon = new SqlConnection(Database.ConnectionString);
             sqlCon.Open();
@@ -163,12 +163,12 @@ namespace WebApi.Controllers
                 output[i] = reader.GetName(i);
             }
 
-            stringBuilder.Append(string.Join(rowSeparator, output)).Append(columnSeparator);
+            stringBuilder.Append(string.Join(columnSeparator, output)).Append(rowSeparator);
 
             while (reader.Read())
             {
                 reader.GetValues(output);
-                stringBuilder.Append(string.Join(rowSeparator, output)).Append(columnSeparator);
+                stringBuilder.Append(string.Join(columnSeparator, output)).Append(rowSeparator);
             }
 
             return File(Encoding.ASCII.GetBytes(stringBuilder.ToString()), "application/csv", fileName);
