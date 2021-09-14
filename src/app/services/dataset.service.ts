@@ -6,51 +6,91 @@ import {
     NewLocalDataset,
 } from '../models/dataset.model';
 import { ApiService } from './api.service';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class DatasetService {
-    constructor(private api: ApiService) {}
+    constructor(private api: ApiService, private auth: AuthService) {}
 
     getAll() {
-        return this.api.get<Dataset[]>('datasets');
+        if (this.auth.authToken === null) throw Error('User is not logged in');
+
+        return this.api.get<Dataset[]>('datasets', this.auth.authToken);
     }
 
     get(id: number) {
-        return this.api.get<DatasetDetails>(`datasets/${id}`);
+        if (this.auth.authToken === null) throw Error('User is not logged in');
+
+        return this.api.get<DatasetDetails>(
+            `datasets/${id}`,
+            this.auth.authToken
+        );
     }
 
     createLocal(dataset: NewLocalDataset) {
-        return this.api.post('datasets/upload', dataset);
+        if (this.auth.authToken === null) throw Error('User is not logged in');
+
+        return this.api.post('datasets/upload', dataset, this.auth.authToken);
     }
 
     createExternal(dataset: NewExternalDataset) {
-        return this.api.post('datasets/create', dataset);
+        if (this.auth.authToken === null) throw Error('User is not logged in');
+
+        return this.api.post('datasets/create', dataset, this.auth.authToken);
     }
 
     editName(id: number, newName: string) {
-        return this.api.put(`datasets/${id}`, { newName: newName });
+        if (this.auth.authToken === null) throw Error('User is not logged in');
+
+        return this.api.put(
+            `datasets/${id}`,
+            { newName: newName },
+            this.auth.authToken
+        );
     }
 
     delete(id: number) {
-        return this.api.delete(`datasets/${id}`);
+        if (this.auth.authToken === null) throw Error('User is not logged in');
+
+        return this.api.delete(`datasets/${id}`, this.auth.authToken);
     }
 
     like(id: number) {
-        return this.api.post(`datasets/${id}/like`);
+        if (this.auth.authToken === null) throw Error('User is not logged in');
+
+        return this.api.post(
+            `datasets/${id}/like`,
+            undefined,
+            this.auth.authToken
+        );
     }
 
     dislike(id: number) {
-        return this.api.post(`datasets/${id}/dislike`);
+        if (this.auth.authToken === null) throw Error('User is not logged in');
+
+        return this.api.post(
+            `datasets/${id}/dislike`,
+            undefined,
+            this.auth.authToken
+        );
     }
 
     preview(id: number, startingIndex: number, size: number) {
-        return this.api.post(`datasets/${id}/preview`, {
-            startingIndex: startingIndex,
-            size: size,
-        });
+        if (this.auth.authToken === null) throw Error('User is not logged in');
+
+        return this.api.post(
+            `datasets/${id}/preview`,
+            {
+                startingIndex: startingIndex,
+                size: size,
+            },
+            this.auth.authToken
+        );
     }
 
     getDownloadLink(id: number) {
+        if (this.auth.authToken === null) throw Error('User is not logged in');
+
         throw new Error('Method not implemented.'); // TODO
     }
 }
