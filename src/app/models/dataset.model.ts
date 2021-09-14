@@ -4,8 +4,18 @@ export interface Dataset {
     liked: boolean;
 }
 
+export enum DatasetFieldType {
+    number = 'number',
+    string = 'string',
+}
+
+export interface DatasetField {
+    name: string;
+    type: DatasetFieldType;
+}
+
 export interface DatasetDetails extends Dataset {
-    columns: { name: string; type: string };
+    fields: DatasetField[];
 }
 
 export interface NewLocalDataset {
