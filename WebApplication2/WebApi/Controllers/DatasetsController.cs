@@ -38,7 +38,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("create")]
+        [Route("upload")]
         public IActionResult Upload([FromBody] CsvProp data, [FromHeader] string token)
         {
             try
