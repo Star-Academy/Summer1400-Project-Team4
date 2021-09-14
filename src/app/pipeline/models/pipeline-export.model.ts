@@ -1,4 +1,3 @@
-import { InputConfig, OutputConfig } from './config.model';
 import {
     DatasetInputNode,
     DatasetOutputNode,
@@ -16,8 +15,10 @@ export interface PipelineExport {
     processes: {
         id: number;
         name: string;
+        type: PipelineNodeType;
         inputs: (number | null)[];
         position: { x: number; y: number };
+        instruction: any;
     }[];
 }
 

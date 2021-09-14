@@ -1,8 +1,7 @@
 import { moveItemInArray } from '@angular/cdk/drag-drop';
-import { defer, from, Observable, ReplaySubject, Subject } from 'rxjs';
+import { defer, Observable, ReplaySubject, Subject } from 'rxjs';
 import { DatasetStore } from '../services/dataset-store';
 import {
-    DatasetInputNode,
     nodeConstructors,
     PipelineNode,
     pipelineNodeInfo,

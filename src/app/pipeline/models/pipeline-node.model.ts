@@ -22,7 +22,6 @@ import { ValidationErrorList } from './validation.model';
 export enum PipelineNodeType {
     datasetInput = 'dataset_input',
     datasetOutput = 'dataset_output',
-    // select = 'select',
     filter = 'filter',
     sort = 'sort',
     join = 'join',
@@ -60,15 +59,6 @@ export const pipelineNodeInfo: {
         iconName: 'publish',
         iconMirrored: false,
     },
-    // [PipelineNodeType.select]: {
-    //     type: PipelineNodeType.select,
-    //     title: 'انتخاب',
-    //     altTitle: 'Select',
-    //     numInputs: 1,
-    //     hasOutput: true,
-    //     iconName: 'edit',
-    //     iconMirrored: false,
-    // },
     [PipelineNodeType.sort]: {
         type: PipelineNodeType.sort,
         title: 'مرتب‌سازی',
