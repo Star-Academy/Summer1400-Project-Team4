@@ -1,8 +1,8 @@
-<div *ngIf="config !== undefined">
+<div *ngIf="node !== undefined">
     <h3>اطلاعات الحاق</h3>
     <mat-form-field class="wide-field">
         <mat-label>نوع</mat-label>
-        <mat-select [(ngModel)]="config.type">
+        <mat-select [(ngModel)]="node.config.type">
             <mat-option *ngFor="let type of joinType" [value]="type">
                 {{ joinTypeInfo[type].title }}
             </mat-option>
@@ -10,7 +10,7 @@
     </mat-form-field>
     <mat-form-field class="wide-field">
         <mat-label>دیتاست راست</mat-label>
-        <mat-select [(ngModel)]="config.joinWith" required>
+        <mat-select [(ngModel)]="node.config.joinWith" required>
             <mat-option></mat-option>
             <mat-option [value]="1"> اطلاعات کاربری </mat-option>
             <mat-option [value]="2"> اطلاعات بانکی </mat-option>
@@ -23,7 +23,7 @@
         <input
             matInput
             type="text"
-            [(ngModel)]="config.leftTableKey"
+            [(ngModel)]="node.config.leftTableKey"
             class="propery-input"
             required
         />
@@ -33,7 +33,7 @@
         <input
             matInput
             type="text"
-            [(ngModel)]="config.rightTableKey"
+            [(ngModel)]="node.config.rightTableKey"
             class="propery-input"
             required
         />

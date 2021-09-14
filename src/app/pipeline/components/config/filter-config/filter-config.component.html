@@ -1,10 +1,10 @@
-<div *ngIf="config !== undefined">
+<div *ngIf="node !== undefined">
     <h3>اطلاعات فیلتر</h3>
     <mat-form-field class="wide-field">
         <mat-label>شرط خام</mat-label>
         <input
             matInput
-            [(ngModel)]="config.condition"
+            [(ngModel)]="node.config.condition"
             type="text"
             class="propery-input"
             required

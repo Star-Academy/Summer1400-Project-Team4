@@ -20,11 +20,11 @@ import {
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import {
-    Pipeline,
     PipelineNode,
     PipelineNodeInfo,
     pipelineNodeInfo,
-} from '../../models/pipeline.model';
+} from '../../models/pipeline-node.model';
+import { Pipeline } from '../../models/pipeline.model';
 import { LineService } from '../../services/line.service';
 
 const REM_IN_PIXLES = parseFloat(
@@ -140,8 +140,8 @@ export class DiagramComponent
 
     ngAfterViewChecked(): void {
         //if (this.shouldReposition) {
-            this.reposition.next();
-            this.shouldReposition = false;
+        this.reposition.next();
+        this.shouldReposition = false;
         //}
     }
 

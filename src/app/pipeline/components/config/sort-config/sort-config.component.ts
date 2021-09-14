@@ -8,7 +8,7 @@ import {
     ViewChild,
 } from '@angular/core';
 import { MatExpansionPanel } from '@angular/material/expansion';
-import { SortConfig } from 'src/app/pipeline/models/config.model';
+import { SortNode } from 'src/app/pipeline/models/pipeline-node.model';
 
 @Component({
     selector: 'app-sort-config',
@@ -16,7 +16,7 @@ import { SortConfig } from 'src/app/pipeline/models/config.model';
     styleUrls: ['./sort-config.component.scss'],
 })
 export class SortConfigComponent implements OnInit, AfterViewChecked {
-    @Input() config?: SortConfig;
+    @Input() node?: SortNode;
     @ViewChild('orderPanel') firstOrderPanel?: MatExpansionPanel;
     expandNewOrder = false;
 
@@ -33,17 +33,17 @@ export class SortConfigComponent implements OnInit, AfterViewChecked {
     }
 
     addOrder() {
-        this.config?.orders?.unshift({ fieldName: '', descending: false });
+        this.node?.config.orders.unshift({ fieldName: '', descending: false });
         this.expandNewOrder = true;
     }
 
     removeOrder(index: number) {
-        this.config?.orders?.splice(index, 1);
+        this.node?.config.orders.splice(index, 1);
     }
 
     dropOrder(event: CdkDragDrop<void>) {
         moveItemInArray(
-            this.config!.orders!,
+            this.node!.config.orders,
             event.previousIndex,
             event.currentIndex
         );

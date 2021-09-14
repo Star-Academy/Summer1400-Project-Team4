@@ -1,17 +1,13 @@
-<div *ngIf="config !== undefined">
+<div *ngIf="node !== undefined">
     <div class="config-title-add">
         <h3>مرتب‌سازی براساس</h3>
         <button mat-icon-button color="primary" (click)="addOrder()">
             <mat-icon>add</mat-icon>
         </button>
     </div>
-    <mat-accordion
-        *ngIf="config.orders !== undefined"
-        cdkDropList
-        (cdkDropListDropped)="dropOrder($event)"
-    >
+    <mat-accordion cdkDropList (cdkDropListDropped)="dropOrder($event)">
         <mat-expansion-panel
-            *ngFor="let order of config.orders; let index = index"
+            *ngFor="let order of node.config.orders; let index = index"
             #orderPanel
             cdkDrag
         >

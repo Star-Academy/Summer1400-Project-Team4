@@ -31,3 +31,11 @@ export interface NewExternalDataset {
     databaseName: string;
     tableName: string;
 }
+
+export function hasField(fields: DatasetField[], name: string) {
+    return fields.some((field) => field.name === name);
+}
+
+export function findField(fields: DatasetField[], name: string) {
+    return fields.find((field) => field.name === name);
+}

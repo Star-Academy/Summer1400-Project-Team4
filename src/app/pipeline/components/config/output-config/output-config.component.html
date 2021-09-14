@@ -1,8 +1,8 @@
-<div *ngIf="config !== undefined">
+<div *ngIf="node !== undefined">
     <h3>اطلاعات دیتاست</h3>
     <mat-form-field class="wide-field">
         <mat-label>دیتاست</mat-label>
-        <mat-select [(ngModel)]="config.datasetId" required>
+        <mat-select [(ngModel)]="node.config.datasetId" required>
             <mat-option [value]="null"></mat-option>
             <mat-option [value]="1"> اطلاعات کاربری </mat-option>
             <mat-option [value]="2"> اطلاعات بانکی </mat-option>

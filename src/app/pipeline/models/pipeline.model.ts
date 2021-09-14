@@ -1,138 +1,14 @@
-import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { ReplaySubject, Subject } from 'rxjs';
-import { InputConfig, JoinType, OutputConfig } from './config.model';
-
-export enum PipelineNodeType {
-    datasetInput = 'dataset_input',
-    datasetOutput = 'dataset_output',
-    select = 'select',
-    filter = 'filter',
-    sort = 'sort',
-    join = 'join',
-    aggregate = 'aggregate',
-}
-
-export interface PipelineNodeInfo {
-    type: PipelineNodeType;
-    title: string;
-    altTitle: string;
-    numInputs: number;
-    hasOutput: boolean;
-    iconName: string;
-    iconMirrored: boolean;
-}
-
-export const pipelineNodeInfo: {
-    [type in PipelineNodeType]: PipelineNodeInfo;
-} = {
-    [PipelineNodeType.datasetInput]: {
-        type: PipelineNodeType.datasetInput,
-        title: 'دیتاست ورودی',
-        altTitle: '',
-        numInputs: 0,
-        hasOutput: true,
-        iconName: 'file_download',
-        iconMirrored: false,
-    },
-    [PipelineNodeType.datasetOutput]: {
-        type: PipelineNodeType.datasetOutput,
-        title: 'دیتاست خروجی',
-        altTitle: '',
-        numInputs: 1,
-        hasOutput: false,
-        iconName: 'publish',
-        iconMirrored: false,
-    },
-    [PipelineNodeType.select]: {
-        type: PipelineNodeType.select,
-        title: 'انتخاب',
-        altTitle: 'Select',
-        numInputs: 1,
-        hasOutput: true,
-        iconName: 'edit',
-        iconMirrored: false,
-    },
-    [PipelineNodeType.sort]: {
-        type: PipelineNodeType.sort,
-        title: 'مرتب‌سازی',
-        altTitle: 'Sort',
-        numInputs: 1,
-        hasOutput: true,
-        iconName: 'sort_by_alpha',
-        iconMirrored: false,
-    },
-    [PipelineNodeType.filter]: {
-        type: PipelineNodeType.filter,
-        title: 'فیلتر',
-        altTitle: 'Filter',
-        numInputs: 1,
-        hasOutput: true,
-        iconName: 'filter_alt',
-        iconMirrored: false,
-    },
-    [PipelineNodeType.join]: {
-        type: PipelineNodeType.join,
-        title: 'الحاق',
-        altTitle: 'Join',
-        numInputs: 1,
-        hasOutput: true,
-        iconName: 'merge_type',
-        iconMirrored: false,
-    },
-    [PipelineNodeType.aggregate]: {
-        type: PipelineNodeType.aggregate,
-        title: 'تجمیع',
-        altTitle: 'Aggregate',
-        numInputs: 1,
-        hasOutput: true,
-        iconName: 'stacked_bar_chart',
-        iconMirrored: true,
-    },
-};
-
-export interface PipelineNode {
-    id: number;
-    name: string;
-    type: PipelineNodeType;
-    inputs: (number | null)[];
-    position: { x: number; y: number };
-    config: object;
-}
-
-export function initializePipelineNodeConfig(type: PipelineNodeType): object {
-    switch (type) {
-        case PipelineNodeType.datasetInput:
-            return {
-                datasetId: undefined,
-            };
-        case PipelineNodeType.datasetOutput:
-            return {
-                datasetId: undefined,
-            };
-        case PipelineNodeType.select:
-            return {};
-        case PipelineNodeType.filter:
-            return {
-                condition: '',
-            };
-        case PipelineNodeType.sort:
-            return {
-                orders: [],
-            };
-        case PipelineNodeType.join:
-            return {
-                type: JoinType.inner,
-                joinWith: undefined,
-                leftTableKey: '',
-                rightTableKey: '',
-            };
-        case PipelineNodeType.aggregate:
-            return {
-                groupBy: [],
-                operations: [],
-            };
-    }
-}
+import { moveItemInArray } from '@angular/cdk/drag-drop';
+import { defer, from, Observable, ReplaySubject, Subject } from 'rxjs';
+import { DatasetStore } from '../services/dataset-store';
+import {
+    DatasetInputNode,
+    nodeConstructors,
+    PipelineNode,
+    pipelineNodeInfo,
+    PipelineNodeType,
+} from './pipeline-node.model';
+import { ValidationErrorList } from './validation.model';
 
 export class Pipeline {
     nodes: PipelineNode[] = [];
@@ -141,6 +17,8 @@ export class Pipeline {
     nodeEdited = new Subject<PipelineNode>();
     nodeRemoved = new Subject<PipelineNode>();
     loaded = new ReplaySubject<void>(1);
+
+    validations = new ReplaySubject<ValidationErrorList>(1);
 
     constructor(public id: number, public name: string) {}
 
@@ -173,14 +51,12 @@ export class Pipeline {
             inputs = new Array(pipelineNodeInfo[type].numInputs).fill(null);
         }
 
-        const node: PipelineNode = {
-            id: this.nextId,
-            name: name,
-            type: type,
-            inputs: inputs,
-            position: position,
-            config: initializePipelineNodeConfig(type),
-        };
+        const node = new nodeConstructors[type](
+            this.nextId,
+            name,
+            position,
+            inputs
+        );
 
         this.addNode(node);
         return node.id;
@@ -236,7 +112,42 @@ export class Pipeline {
         this.nodeRemoved.next(node);
     }
 
-    reorder() {
+    validate(store: DatasetStore): Observable<ValidationErrorList> {
+        return defer(async (): Promise<ValidationErrorList> => {
+            let errors = this.reorder();
+            if (Object.keys(errors).length > 0) {
+                this.validations.next(errors);
+                return errors;
+            }
+
+            if (
+                this.nodes.filter(
+                    (node) => node.type === PipelineNodeType.datasetInput
+                ).length !== 1
+            )
+                errors.inputs = 'تنها یک گره دیتاست ورودی باید وجود داشته باشد';
+
+            if (
+                this.nodes.filter(
+                    (node) => node.type === PipelineNodeType.datasetOutput
+                ).length > 1
+            )
+                errors.outputs =
+                    'حداکثر یک گره دیتاست خروجی باید وجود داشته باشد';
+
+            for (const node of this.nodes) {
+                await node.updateOutputFields(this, store);
+            }
+
+            for (const node of this.nodes) {
+                await node.validate(this, store);
+            }
+
+            return errors;
+        });
+    }
+
+    reorder(): ValidationErrorList {
         const validDeps: number[] = [];
 
         for (let i = 0; i < this.nodes.length; i++) {
@@ -252,10 +163,12 @@ export class Pipeline {
                     break;
                 }
             }
-            if (!success) throw new Error('the pipeline is cyclic!');
+            if (!success) return { circular: 'گراف شامل دور است' };
 
             validDeps.push(this.nodes[j].id);
             moveItemInArray(this.nodes, j, i);
         }
+
+        return {};
     }
 }

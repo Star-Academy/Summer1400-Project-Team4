@@ -1,14 +1,14 @@
-<div *ngIf="config !== undefined">
+<div *ngIf="node !== undefined">
     <div class="config-title-add">
         <h3>گروه‌بندی بر اساس</h3>
         <button mat-icon-button color="primary" (click)="addGroupBy()">
             <mat-icon>add</mat-icon>
         </button>
     </div>
-    <mat-accordion *ngIf="config.groupBy !== undefined">
+    <mat-accordion *ngIf="node.config.groupBy !== undefined">
         <mat-expansion-panel
             *ngFor="
-                let groupBy of config.groupBy;
+                let groupBy of node.config.groupBy;
                 let index = index;
                 trackBy: trackByIndex
             "
@@ -26,7 +26,7 @@
                 <input
                     matInput
                     type="text"
-                    [(ngModel)]="config.groupBy[index]"
+                    [(ngModel)]="node.config.groupBy[index]"
                     class="propery-input"
                     required
                 />
@@ -52,9 +52,9 @@
             <mat-icon>add</mat-icon>
         </button>
     </div>
-    <mat-accordion *ngIf="config.operations !== undefined">
+    <mat-accordion *ngIf="node.config.operations !== undefined">
         <mat-expansion-panel
-            *ngFor="let operation of config.operations; let index = index"
+            *ngFor="let operation of node.config.operations; let index = index"
             #operationPanel
         >
             <mat-expansion-panel-header>

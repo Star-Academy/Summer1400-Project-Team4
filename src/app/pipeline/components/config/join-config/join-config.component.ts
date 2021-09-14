@@ -1,9 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import {
-    JoinConfig,
-    JoinType,
-    joinTypeInfo,
-} from 'src/app/pipeline/models/config.model';
+import { JoinType, joinTypeInfo } from 'src/app/pipeline/models/config.model';
+import { JoinNode } from 'src/app/pipeline/models/pipeline-node.model';
 
 @Component({
     selector: 'app-join-config',
@@ -11,7 +8,7 @@ import {
     styleUrls: ['./join-config.component.scss'],
 })
 export class JoinConfigComponent implements OnInit {
-    @Input() config?: JoinConfig;
+    @Input() node?: JoinNode;
 
     joinTypeInfo = joinTypeInfo;
     joinType = Object.values(JoinType);

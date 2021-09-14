@@ -1,24 +1,24 @@
 import { InputConfig, OutputConfig } from './config.model';
-import { Pipeline, PipelineNodeType } from './pipeline.model';
+import {
+    DatasetInputNode,
+    DatasetOutputNode,
+    PipelineNodeType,
+} from './pipeline-node.model';
+import { Pipeline } from './pipeline.model';
 
 export interface PipelineExport {
     id: number;
     name: string;
     inputDatasetId: number;
-    inputDataset: {
-        id: number;
-        name: string;
-        inputs: (number | null)[];
-        position: { x: number; y: number };
-    };
+    inputDataset: string;
     outputDatasetId: number | null;
-    outputDataset: {
+    outputDataset: string | null;
+    processes: {
         id: number;
         name: string;
         inputs: (number | null)[];
         position: { x: number; y: number };
-    } | null;
-    processes: object[];
+    }[];
 }
 
 export function exportPipeline(pipeline: Pipeline): PipelineExport {
@@ -34,44 +34,27 @@ export function exportPipeline(pipeline: Pipeline): PipelineExport {
     if (inputDatasetNodes.length > 1)
         throw new Error('at most one output node is currently supported');
 
+    const inputDataset = inputDatasetNodes[0] as DatasetInputNode;
+    const outputDataset = outputDatasetNodes[0] as
+        | DatasetOutputNode
+        | undefined;
+
     return {
         id: pipeline.id,
         name: pipeline.name,
-        inputDatasetId: (inputDatasetNodes[0].config as InputConfig).datasetId!,
-        inputDataset: {
-            id: inputDatasetNodes[0].id,
-            name: inputDatasetNodes[0].name,
-            inputs: inputDatasetNodes[0].inputs,
-            position: inputDatasetNodes[0].position,
-        },
-        outputDatasetId:
-            outputDatasetNodes.length > 0
-                ? (outputDatasetNodes[0].config as OutputConfig).datasetId ||
-                  null
-                : null,
-        outputDataset:
-            outputDatasetNodes.length > 0
-                ? {
-                      id: outputDatasetNodes[0].id,
-                      name: outputDatasetNodes[0].name,
-                      inputs: outputDatasetNodes[0].inputs,
-                      position: outputDatasetNodes[0].position,
-                  }
-                : null,
+        inputDatasetId: inputDataset.config.datasetId!,
+        inputDataset: JSON.stringify(inputDataset.export()),
+        outputDatasetId: outputDataset?.config.datasetId || null,
+        outputDataset: outputDataset
+            ? JSON.stringify(outputDataset.export())
+            : null,
         processes: pipeline.nodes
             .filter(
                 (node) =>
                     node.type !== PipelineNodeType.datasetInput &&
                     node.type !== PipelineNodeType.datasetOutput
             )
-            .map((node) => ({
-                id: node.id,
-                name: node.name,
-                type: node.type,
-                inputs: node.inputs,
-                position: node.position,
-                instruction: JSON.stringify(node.config),
-            })),
+            .map((node) => node.export()),
     };
 }
 

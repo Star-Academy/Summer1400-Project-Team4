@@ -6,17 +6,17 @@ export interface OutputConfig {
     datasetId?: number;
 }
 
-export interface FilterConfig {
-    condition: string;
-}
-
 export interface SortOrder {
     fieldName: string;
     descending: boolean;
 }
 
 export interface SortConfig {
-    orders?: SortOrder[];
+    orders: SortOrder[];
+}
+
+export interface FilterConfig {
+    condition: string;
 }
 
 export enum JoinType {

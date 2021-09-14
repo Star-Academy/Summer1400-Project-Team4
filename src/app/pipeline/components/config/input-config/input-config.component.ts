@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { InputConfig } from 'src/app/pipeline/models/config.model';
+import { DatasetInputNode } from 'src/app/pipeline/models/pipeline-node.model';
 
 @Component({
     selector: 'app-input-config',
@@ -7,7 +7,7 @@ import { InputConfig } from 'src/app/pipeline/models/config.model';
     styleUrls: ['./input-config.component.scss'],
 })
 export class InputConfigComponent implements OnInit {
-    @Input() config?: InputConfig;
+    @Input() node?: DatasetInputNode;
 
     constructor() {}
 

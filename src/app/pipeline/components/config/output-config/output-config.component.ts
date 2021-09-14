@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { OutputConfig } from 'src/app/pipeline/models/config.model';
+import { DatasetOutputNode } from 'src/app/pipeline/models/pipeline-node.model';
 
 @Component({
     selector: 'app-output-config',
@@ -7,7 +7,7 @@ import { OutputConfig } from 'src/app/pipeline/models/config.model';
     styleUrls: ['./output-config.component.scss'],
 })
 export class OutputConfigComponent implements OnInit {
-    @Input() config?: OutputConfig;
+    @Input() node?: DatasetOutputNode;
 
     constructor() {}
 

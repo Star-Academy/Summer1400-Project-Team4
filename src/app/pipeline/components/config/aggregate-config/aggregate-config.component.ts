@@ -9,10 +9,10 @@ import {
 } from '@angular/core';
 import { MatExpansionPanel } from '@angular/material/expansion';
 import {
-    AggregateConfig,
     AggregateOperationType,
     aggregateTypeInfo as aggregateOperationTypeInfo,
 } from 'src/app/pipeline/models/config.model';
+import { AggregateNode } from 'src/app/pipeline/models/pipeline-node.model';
 
 @Component({
     selector: 'app-aggregate-config',
@@ -20,7 +20,7 @@ import {
     styleUrls: ['./aggregate-config.component.scss'],
 })
 export class AggregateConfigComponent implements OnInit, AfterViewChecked {
-    @Input() config?: AggregateConfig;
+    @Input() node?: AggregateNode;
     @ViewChild('groupByPanel') firstGroupByPanel?: MatExpansionPanel;
     @ViewChild('operationPanel') firstOperationPanel?: MatExpansionPanel;
     expandNewGroupBy = false;
@@ -56,12 +56,12 @@ export class AggregateConfigComponent implements OnInit, AfterViewChecked {
     }
 
     addGroupBy() {
-        this.config?.groupBy?.unshift('');
+        this.node?.config.groupBy?.unshift('');
         this.expandNewGroupBy = true;
     }
 
     removeGroupBy(index: number) {
-        this.config?.groupBy?.splice(index, 1);
+        this.node?.config.groupBy?.splice(index, 1);
     }
 
     // dropGroupBy(event: CdkDragDrop<void>) {
@@ -73,7 +73,7 @@ export class AggregateConfigComponent implements OnInit, AfterViewChecked {
     // }
 
     addOperation() {
-        this.config?.operations?.unshift({
+        this.node?.config.operations?.unshift({
             fieldName: '',
             type: AggregateOperationType.count,
             outputFieldName: '',
@@ -82,7 +82,7 @@ export class AggregateConfigComponent implements OnInit, AfterViewChecked {
     }
 
     removeOperation(index: number) {
-        this.config?.operations?.splice(index, 1);
+        this.node?.config.operations?.splice(index, 1);
     }
 
     // dropOperation(event: CdkDragDrop<void>) {

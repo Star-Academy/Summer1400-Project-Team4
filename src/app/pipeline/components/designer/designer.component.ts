@@ -6,11 +6,9 @@ import {
     ViewChild,
 } from '@angular/core';
 import { exportPipeline } from '../../models/pipeline-export.model';
+import { PipelineNode, pipelineNodeInfo, PipelineNodeType } from '../../models/pipeline-node.model';
 import {
-    PipelineNodeType,
     Pipeline,
-    PipelineNode,
-    pipelineNodeInfo,
 } from '../../models/pipeline.model';
 import { DiagramComponent } from '../diagram/diagram.component';
 
