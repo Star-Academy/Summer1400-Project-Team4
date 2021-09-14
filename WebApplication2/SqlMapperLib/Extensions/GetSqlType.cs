@@ -3,8 +3,9 @@ using SqlMapper.Checkers.DateTypeCheckers;
 using SqlMapper.Checkers.ExactNumericCheckers;
 using SqlMapper.SqlTypes;
 using SqlMapper.SqlTypes.Types;
+using SqlMapperLib.SqlTypes;
 
-namespace SqlMapper.Extensions
+namespace SqlMapperLib.Extensions
 {
     public static class GetSqlType
     {

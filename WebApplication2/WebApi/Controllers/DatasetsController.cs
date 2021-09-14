@@ -26,11 +26,28 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [Route("create")]
-        public IActionResult Create([FromBody]CsvProp data)
+        public IActionResult Create([FromBody] CsvProp data, [FromHeader] string token)
         {
-            var loader = new CsvLoader(data);
-            if (loader.TransportCsvToSql()) return Ok();
-            return BadRequest(); 
+            try
+            {
+                var userId = _userValidator.IsUserValid(token);
+                _database.Users.Find(userId).UserDatasets.Add(new Dataset()
+                {
+                    DatasetName = data.TableName, IsLiked = false
+                });
+            }
+            catch (Exception)
+            {
+                return Unauthorized();
+            }
+
+            var loader = new CsvLoader(data, _database.Datasets.Max(d => d.DatasetId) + 1);
+            if (loader.TransportCsvToSql())
+            {
+                return Ok();
+            }
+
+            return BadRequest();
         }
 
         [HttpPost]
@@ -116,9 +133,11 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [Route("{id:int}/preview")]
-        public IActionResult Preview(int id)
+        public IActionResult Preview(int id, int lowerBond, int upperBond)
         {
-            throw new NotImplementedException();
+            var test = new SqlTableTransformer(_database);
+            var preview = test.TransferData(id, lowerBond, upperBond);
+            return Ok(preview); 
         }
     }
 }

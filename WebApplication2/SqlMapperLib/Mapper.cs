@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using SqlMapper.Extensions;
-using SqlMapper.SqlTypes;
 using SqlMapper.SqlTypes.Types;
 using SqlMapper.SqlTypes.TypesSubset;
+using SqlMapperLib.Extensions;
+using SqlMapperLib.SqlTypes;
 
-namespace SqlMapper
+namespace SqlMapperLib
 {
     public class Mapper
     {
