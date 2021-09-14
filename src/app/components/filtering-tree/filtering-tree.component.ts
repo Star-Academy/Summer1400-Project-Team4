@@ -155,7 +155,7 @@ export class FilteringTreeComponent implements OnInit {
         this.ogma.addNode({
           id: ++this.nodeSize,
           data: {type: 'parent', name: 'AND', Command: 'AND'},
-          attributes: {x: 70, y: 0, color: 'green' , radius: 25}
+          attributes: {x: -(Math.random()*200), y:  Math.random() * 200, color: 'green' , radius: 25}
         });
         break;
       }
@@ -163,7 +163,7 @@ export class FilteringTreeComponent implements OnInit {
         this.ogma.addNode({
           id: ++this.nodeSize,
           data: {type: 'parent', name: 'OR', Command: 'OR'},
-          attributes: {x: -70, y: 0, color: 'magenta' , radius : 25}
+          attributes: {x: Math.random() * 200, y:  -Math.random() * 100, color: 'magenta' , radius : 25}
         });
         break;
       }
@@ -171,7 +171,7 @@ export class FilteringTreeComponent implements OnInit {
         this.ogma.addNode({
           id: ++this.nodeSize,
           data: {...{type: 'child', name: 'condition'}, ...this.form.value},
-          attributes: {x: 0, y: 0, color: 'orange' , radius : 25}
+          attributes: {x:  -Math.random() * 100, y:  -Math.random() * 200, color: 'orange' , radius : 25}
         });
         this.ogma.getNodes().forEach((node: any) => {
           // do something with the node

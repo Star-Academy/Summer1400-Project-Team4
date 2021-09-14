@@ -39,7 +39,7 @@
         <mat-form-field appearance="fill">
           <mat-label>رمز عبور جدید</mat-label>
           <input #password [type]="hide ? 'password' : 'text'" formControlName="password" matInput pattern=".{0}|.{4,}"
-                 title="خالی یا حداقل 4 کاراکتز">
+                 title="خالی یا حداقل 4 کاراکتر">
           <button (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" mat-icon-button
                   matSuffix
                   type="button">
@@ -60,7 +60,7 @@
 
     <!-- home linking -->
     <div class="formFooter">
-      <a href=''> انصراف </a>
+      <a routerlink="/"> انصراف </a>
     </div>
 
   </div>
