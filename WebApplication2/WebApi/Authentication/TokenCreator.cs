@@ -6,7 +6,7 @@ namespace WebApi.Authentication
     {
         private const string AllChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_=-";
 
-        public string GetNewToken(int length)
+        public static string GetNewToken(int length)
         {
             var token = string.Empty;
             for (var i = 0; i < length; i++)

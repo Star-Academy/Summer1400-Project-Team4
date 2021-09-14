@@ -34,6 +34,7 @@ namespace WebApi
             services.AddSingleton(new SqlConnection(Database.ConnectionString));
             services.AddSingleton(database);
             services.AddSingleton(new UserValidation(database));
+            services.AddSingleton(new UserAuthorization(database));
         }
 
         private static void TestMethod(Database database)

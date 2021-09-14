@@ -1,17 +1,19 @@
-﻿namespace WebApi.models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace WebApi.models
 {
     public class CsvProp
     {
-        public string FilePath { get; }
-        public string TableName { get; }
-        public bool DoesHaveHeader { get; }
-        public string FieldTerminator { get; }
-        public string RowTerminator { get; }
+      [Required]  public string CsvContent { set;  get; }
+      [Required]  public string TableName { set;  get; }
+      [Required]  public bool DoesHaveHeader { set;  get; }
+      [Required]  public string FieldTerminator { set; get; }
+      [Required]  public string RowTerminator { set;  get; }
 
-        public CsvProp(string filePath, string tableName, bool doesHaveHeader, string rowTerminator,
+        public CsvProp(string csvContent, string tableName, bool doesHaveHeader, string rowTerminator,
             string fieldTerminator)
         {
-            FilePath = filePath;
+            CsvContent = csvContent;
             TableName = tableName;
             DoesHaveHeader = doesHaveHeader;
             RowTerminator = rowTerminator;

@@ -1,5 +1,6 @@
 ﻿using System;
 using SqlMapper.SqlTypes.TypesSubset;
+using SqlMapperLib.SqlTypes;
 
 namespace SqlMapper.SqlTypes.Types
 {

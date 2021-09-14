@@ -1,9 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
+using System;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Authentication;
+using Microsoft.EntityFrameworkCore;
 using WebApi.models;
+using WebApi.Services;
+using WebApi.Validations;
 
 namespace WebApi.Controllers
 {
@@ -11,29 +13,59 @@ namespace WebApi.Controllers
     [Route("[controller]")]
     public class DatasetsController : ControllerBase
     {
-        private Database _database;
+        private readonly Database _database;
+        private readonly UserValidation _userValidator;
+        private readonly UserAuthorization _authorizationValidator;
 
-        public DatasetsController()
+        public DatasetsController(Database database, UserAuthorization authorizationValidator,
+            UserValidation userValidator)
         {
-            _database = new Database();
+            _database = database;
+            _authorizationValidator = authorizationValidator;
+            _userValidator = userValidator;
         }
 
         [HttpPost]
         [Route("create")]
         public IActionResult Create(Dataset dataset)
         {
-            throw new NotImplementedException();
+            string token = dataset.token;
+            var user = _database.Users.FirstOrDefault(x => x.Token == token);
+            if (user == null)
+                return Unauthorized("Wrong token");
+            user.UserDatasets.Add(dataset);
+            new SqlTableCreator().CopySql("localhost", dataset.DatabaseName, dataset.TableName, dataset.DatasetName);
+            return Ok("created");
         }
-        
+
         [HttpPost]
         [Route("upload")]
-        public IActionResult Upload(Dataset dataset)
+        public IActionResult Upload([FromBody] CsvProp data, [FromHeader] string token)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var userId = _userValidator.IsUserValid(token);
+                _database.Users.Find(userId).UserDatasets.Add(new Dataset()
+                {
+                    DatasetName = data.TableName, IsLiked = false
+                });
+            }
+            catch (Exception)
+            {
+                return Unauthorized();
+            }
+
+            var loader = new CsvLoader(data, _database.Datasets.Max(d => d.DatasetId) + 1);
+            if (loader.TransportCsvToSql())
+            {
+                return Ok();
+            }
+
+            return BadRequest();
         }
 
         [HttpPut]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public IActionResult ChangeName(int id, string newName)
         {
             var dataset = _database.Datasets.FirstOrDefault(x => x.DatasetId == id);
@@ -45,7 +77,7 @@ namespace WebApi.Controllers
         }
 
         [HttpDelete]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public IActionResult Delete(int id)
         {
             var dataset = _database.Datasets.FirstOrDefault(x => x.DatasetId == id);
@@ -57,7 +89,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("{id}/like")]
+        [Route("{id:int}/like")]
         public IActionResult Like(int id)
         {
             var dataset = _database.Datasets.FirstOrDefault(x => x.DatasetId == id);
@@ -67,9 +99,9 @@ namespace WebApi.Controllers
             _database.SaveChanges();
             return Ok("Liked");
         }
-        
+
         [HttpPost]
-        [Route("{id}/dislike")]
+        [Route("{id:int}/dislike")]
         public IActionResult DisLike(int id)
         {
             var dataset = _database.Datasets.FirstOrDefault(x => x.DatasetId == id);
@@ -81,18 +113,68 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("{token}")]
-        public IActionResult Get(string token)
+        public IActionResult Get([FromHeader] string token)
         {
-            var user = _database.Users.FirstOrDefault(x => x.Token == token);
-            if (user == null)
-                return Unauthorized("Invalid token.");
-            var datasets = _database.Datasets.Where(x => x.OwnerId == user.Id).ToList();
-            return Ok(datasets);
+            try
+            {
+                var userId = _userValidator.IsUserValid(token);
+                var datasets = _database.Users.Include(u => u.UserDatasets)
+                    .First(user => user.Id == userId).UserDatasets;
+                return Ok(datasets);
+            }
+            catch (Exception e)
+            {
+                return Unauthorized(e.Message);
+            }
         }
 
         [HttpGet]
-        [Route("{id}")]
+        [Route("{id:int}/csvFile")]
+        public IActionResult DownloadDataset(int id, [FromHeader] string token)
+        {
+            const string fileName = "coordinate.csv";
+            var file = System.IO.File.ReadAllBytes(fileName);
+            return new FileContentResult(file, "application/csv");
+        }
+
+        //
+        // [HttpPost]
+        // [Route("{id:int}/download")]
+        // public HttpResponseMessage DownloadDataset(int id, [FromHeader] string token)
+        // {
+        //
+        //         // var userId = _userValidator.IsUserValid(token);
+        //         // var dataset = _database.Users.Include(u => u.UserDatasets)
+        //             // .First(user => user.Id == userId).UserDatasets.FirstOrDefault(d => d.DatasetId == id);
+        //
+        //
+        //
+        //         // if (dataset == null)
+        //         // {
+        //             // return BadRequest("چنین دیتاستی پیدا نشد");
+        //         // }
+        //         // return Ok(dataset);
+        //
+        //
+        //         const string fileName = "coordinate.csv";
+        //
+        //         var file = System.IO.File.ReadAllBytes(fileName);
+        //
+        //         var response = new HttpResponseMessage(HttpStatusCode.OK)
+        //         {
+        //             // Content = new StreamContent(new FileStream(file, FileMode.Open, FileAccess.Read))
+        //             Content = new ByteArrayContent(file)
+        //         };
+        //
+        //         response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
+        //         response.Content.Headers.ContentDisposition.FileName = fileName;
+        //         response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/csv");
+        //
+        //         return response;
+        // }
+
+        [HttpGet]
+        [Route("{id:int}")]
         public IActionResult GetDataset(int id)
         {
             var dataset = _database.Datasets.FirstOrDefault(x => x.DatasetId == id);
@@ -102,7 +184,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("{id}/preview")]
+        [Route("{id:int}/preview")]
         public IActionResult Preview(int id)
         {
             throw new NotImplementedException();
