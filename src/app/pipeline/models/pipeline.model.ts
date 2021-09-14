@@ -2,7 +2,7 @@ import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { defer, Observable, ReplaySubject, Subject } from 'rxjs';
 import { DatasetStore } from '../services/dataset-store';
 import {
-    nodeConstructors,
+    nodeClasses,
     PipelineNode,
     pipelineNodeInfo,
     PipelineNodeType,
@@ -50,7 +50,7 @@ export class Pipeline {
             inputs = new Array(pipelineNodeInfo[type].numInputs).fill(null);
         }
 
-        const node = new nodeConstructors[type](
+        const node = new nodeClasses[type](
             this.nextId,
             name,
             position,

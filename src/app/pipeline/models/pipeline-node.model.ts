@@ -176,9 +176,7 @@ export abstract class PipelineNode {
         };
     }
 
-    exportConfig(): any {
-        return undefined;
-    }
+    exportConfig(): any {}
 }
 
 export class DatasetInputNode extends PipelineNode {
@@ -212,6 +210,12 @@ export class DatasetInputNode extends PipelineNode {
             errors.datasetId = 'دیتاست ورودی انتخاب نشده است';
         return errors;
     }
+
+    static importConfig(exported: any): InputConfig {
+        return {
+            datasetId: exported.datasetId,
+        };
+    }
 }
 
 export class DatasetOutputNode extends PipelineNode {
@@ -236,6 +240,12 @@ export class DatasetOutputNode extends PipelineNode {
         if (this.config.datasetId === undefined)
             errors.datasetId = 'دیتاست خروجی انتخاب نشده است';
         return errors;
+    }
+
+    static importConfig(exported: any): InputConfig {
+        return {
+            datasetId: exported.datasetId,
+        };
     }
 }
 
@@ -273,6 +283,12 @@ export class SortNode extends PipelineNode {
 
         return errors;
     }
+
+    static importConfig(exported: any): SortConfig {
+        return {
+            orders: exported.orders,
+        };
+    }
 }
 
 export class FilterNode extends PipelineNode {
@@ -298,6 +314,12 @@ export class FilterNode extends PipelineNode {
         let errors: ValidationErrorList = {};
         // TODO!
         return errors;
+    }
+
+    static importConfig(exported: any): FilterConfig {
+        return {
+            condition: exported.condition,
+        };
     }
 }
 
@@ -348,6 +370,15 @@ export class JoinNode extends PipelineNode {
             errors.rightTableKey = 'این فیلد وجود ندارد';
 
         return errors;
+    }
+
+    static importConfig(exported: any): JoinConfig {
+        return {
+            type: exported.type,
+            joinWith: exported.joinWith,
+            leftTableKey: exported.leftTableKey,
+            rightTableKey: exported.rightTableKey,
+        };
     }
 }
 
@@ -422,9 +453,16 @@ export class AggregateNode extends PipelineNode {
 
         return errors;
     }
+
+    static importConfig(exported: any): AggregateConfig {
+        return {
+            groupBy: exported.groupBy,
+            operations: exported.operations,
+        };
+    }
 }
 
-export const nodeConstructors = {
+export const nodeClasses = {
     [PipelineNodeType.datasetInput]: DatasetInputNode,
     [PipelineNodeType.datasetOutput]: DatasetOutputNode,
     [PipelineNodeType.sort]: SortNode,
@@ -432,3 +470,23 @@ export const nodeConstructors = {
     [PipelineNodeType.join]: JoinNode,
     [PipelineNodeType.aggregate]: AggregateNode,
 };
+
+export function importPipelineNode(exported: {
+    id: number;
+    name: string;
+    type: PipelineNodeType;
+    inputs: (number | null)[];
+    position: { x: number; y: number };
+    instruction: any;
+}): PipelineNode {
+    const type = nodeClasses[exported.type as PipelineNodeType];
+    const config = type.importConfig(exported.instruction);
+    const node = new type(
+        exported.id,
+        exported.name,
+        exported.position,
+        exported.inputs,
+        config as any
+    );
+    return node;
+}

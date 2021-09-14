@@ -1,6 +1,7 @@
 import {
     DatasetInputNode,
     DatasetOutputNode,
+    importPipelineNode,
     PipelineNodeType,
 } from './pipeline-node.model';
 import { Pipeline } from './pipeline.model';
@@ -60,5 +61,16 @@ export function exportPipeline(pipeline: Pipeline): PipelineExport {
 }
 
 export function importPipeline(exported: PipelineExport) {
-    throw new Error('Method not implemented!');
+    const pipeline = new Pipeline(exported.id, exported.name);
+
+    const inputDatasetExport = JSON.parse(exported.inputDataset);
+    pipeline.addNode(importPipelineNode(inputDatasetExport));
+
+    for (const node of exported.processes)
+        pipeline.addNode(importPipelineNode(node));
+
+    if (exported.outputDataset !== null) {
+        const outputDatasetExport = JSON.parse(exported.outputDataset);
+        pipeline.addNode(importPipelineNode(outputDatasetExport));
+    }
 }
