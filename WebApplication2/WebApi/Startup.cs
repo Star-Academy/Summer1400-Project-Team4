@@ -20,10 +20,25 @@ namespace WebApi
 
         public IConfiguration Configuration { get; }
 
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             Database.ConnectionString = Configuration.GetConnectionString("DefaultConnection");
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins,
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:53135",
+                                "http://localhost:4200","http://localhost:5000","https://localhost:5001"
+                            )
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+            });
 
             var database = new Database();
             // TestMethod(database);
@@ -69,7 +84,7 @@ namespace WebApi
         {
             // if (env.IsDevelopment() || env.IsEnvironment())
             // {
-                app.UseDeveloperExceptionPage();
+            app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
                 {
@@ -78,6 +93,7 @@ namespace WebApi
                     // c.RoutePrefix = string.Empty;
                 });
             // }
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseHttpsRedirection();
 
