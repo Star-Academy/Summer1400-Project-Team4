@@ -31,18 +31,23 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [Route("create")]
-        public IActionResult Create([FromBody]CsvProp data)
+        public IActionResult Create(Dataset dataset)
         {
-            var loader = new CsvLoader(data);
-            if (loader.TransportCsvToSql()) return Ok();
-            return BadRequest();
+            string token = dataset.token;
+            var user = _database.Users.FirstOrDefault(x => x.Token == token);
+            if (user == null)
+                return Unauthorized("Wrong token");
+            user.UserDatasets.Add(dataset);
+            return Ok("created");
         }
 
         [HttpPost]
         [Route("upload")]
-        public IActionResult Upload(Dataset dataset)
+        public IActionResult Upload([FromBody]CsvProp data)
         {
-            throw new NotImplementedException();
+            var loader = new CsvLoader(data);
+            if (loader.TransportCsvToSql()) return Ok();
+            return BadRequest();
         }
 
         [HttpPut]
