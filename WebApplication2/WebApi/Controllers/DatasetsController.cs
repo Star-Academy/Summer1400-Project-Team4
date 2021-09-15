@@ -1,6 +1,9 @@
-﻿using System;
+using System;
+using System.IO;
 using System.Linq;
+using System.Text;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using WebApi.models;
 using WebApi.Services;
@@ -131,48 +134,46 @@ namespace WebApi.Controllers
 
         [HttpGet]
         [Route("{id:int}/csvFile")]
-        public IActionResult DownloadDataset(int id, [FromHeader] string token)
+        public IActionResult DownloadDataset(int id, [FromHeader] string token, char columnSeparator = ',', string rowSeparator = "ENTER", bool saveColumnTitle = true)
         {
-            const string fileName = "coordinate.csv";
-            var file = System.IO.File.ReadAllBytes(fileName);
-            return new FileContentResult(file, "application/csv");
-        }
+            if (rowSeparator.Equals("ENTER"))
+            {
+                rowSeparator = "\n";
+            }
+            var sqlCon = new SqlConnection(Database.ConnectionString);
+            sqlCon.Open();
 
-        //
-        // [HttpPost]
-        // [Route("{id:int}/download")]
-        // public HttpResponseMessage DownloadDataset(int id, [FromHeader] string token)
-        // {
-        //
-        //         // var userId = _userValidator.IsUserValid(token);
-        //         // var dataset = _database.Users.Include(u => u.UserDatasets)
-        //             // .First(user => user.Id == userId).UserDatasets.FirstOrDefault(d => d.DatasetId == id);
-        //
-        //
-        //
-        //         // if (dataset == null)
-        //         // {
-        //             // return BadRequest("چنین دیتاستی پیدا نشد");
-        //         // }
-        //         // return Ok(dataset);
-        //
-        //
-        //         const string fileName = "coordinate.csv";
-        //
-        //         var file = System.IO.File.ReadAllBytes(fileName);
-        //
-        //         var response = new HttpResponseMessage(HttpStatusCode.OK)
-        //         {
-        //             // Content = new StreamContent(new FileStream(file, FileMode.Open, FileAccess.Read))
-        //             Content = new ByteArrayContent(file)
-        //         };
-        //
-        //         response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
-        //         response.Content.Headers.ContentDisposition.FileName = fileName;
-        //         response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/csv");
-        //
-        //         return response;
-        // }
+            var sqlCmd = new SqlCommand("Select * from _" + id, sqlCon);
+
+            var reader = sqlCmd.ExecuteReader();
+
+            // var fileName = _database.Users.FirstOrDefault(u => u.Token == token)
+                // ?.UserDatasets.FirstOrDefault(db => db.DatasetId == id)?.DatasetName + ".csv";
+            // var fileName = _database.Datasets.FirstOrDefault(db => db.DatasetId == id)?.DatasetName + ".csv";
+            const string fileName = "Output.csv";
+
+            var stringBuilder = new StringBuilder();
+            var output = new object[reader.FieldCount];
+
+            for (var i = 0; i < reader.FieldCount; i++)
+            {
+                if (!saveColumnTitle)
+                {
+                    continue;
+                }
+                output[i] = reader.GetName(i);
+            }
+
+            stringBuilder.Append(string.Join(columnSeparator, output)).Append(rowSeparator);
+
+            while (reader.Read())
+            {
+                reader.GetValues(output);
+                stringBuilder.Append(string.Join(columnSeparator, output)).Append(rowSeparator);
+            }
+
+            return File(Encoding.ASCII.GetBytes(stringBuilder.ToString()), "application/csv", fileName);
+        }
 
         [HttpGet]
         [Route("{id:int}")]
