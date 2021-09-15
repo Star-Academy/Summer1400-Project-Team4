@@ -53,7 +53,8 @@ namespace WebApi
             services.AddSingleton(new UserValidation(database));
             services.AddSingleton(new UserAuthorization(database));
             services.AddSingleton(new SqlTableTransformer(database));
-            services.AddSingleton(new UserDatabaseChecker(database)); 
+            services.AddSingleton(new UserDatabaseChecker(database));
+            services.AddSingleton(new UserAuthorization(database)); 
         }
 
         private static void TestMethod(Database database)

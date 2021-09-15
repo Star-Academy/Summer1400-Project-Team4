@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using WebApi.models;
 using WebApi.Validations;
 
@@ -15,28 +11,29 @@ namespace WebApi.Controllers
     public class ConnectionController : ControllerBase
     {
         private readonly Database _database;
-        private UserValidation _userValidation;
+        private readonly UserValidation _userValidation;
+        private readonly UserAuthorization _authorizationChecker;
 
-        public ConnectionController(Database database, UserValidation userValidation)
+        public ConnectionController(Database database, UserValidation userValidation,
+            UserAuthorization authorizationChecker)
         {
             _database = database;
             _userValidation = userValidation;
+            _authorizationChecker = authorizationChecker;
         }
 
         [HttpPost]
         public async Task<IActionResult> AddNewConnection([FromBody] Connection connection, [FromHeader] string token)
         {
-            if (!ModelState.IsValid) BadRequest();
-            if (!connection.TestConnection()) return BadRequest("can't connect to sql server");
-            var user = _database.Users.Include(u => u.UserConnections).FirstOrDefault(u => u.Token == token);
             try
             {
-                Debug.Assert(user != null, nameof(user) + " != null");
+                var user = _userValidation.IsUserValid(token);
+               // if (!connection.TestConnection())   return BadRequest("can't connect to sql server");
                 user.UserConnections.Add(connection);
             }
-            catch (NullReferenceException e)
+            catch (Exception e)
             {
-                return BadRequest();
+                return Unauthorized(e.Message);
             }
 
 
@@ -49,28 +46,59 @@ namespace WebApi.Controllers
         [Route("{connectionId:int}")]
         public async Task<IActionResult> DeleteConnection([FromRoute] int connectionId, [FromHeader] string token)
         {
-            var connection = _database.Connections.FirstOrDefaultAsync(ci => ci.ConnectionId == connectionId);
-            if (connection == null) return BadRequest();
-            _database.Connections.Remove(await connection);
+            try
+            {
+                var user = _userValidation.IsUserValid(token);
+                if (!_authorizationChecker.DoesBelongToUser(user.Id, connectionId, UserProp.Connection))
+                {
+                    return Unauthorized();
+                }
+            }
+            catch (Exception e)
+            {
+                return Unauthorized(e.Message);
+            }
+
+            var connection = _database.Connections.FindAsync(connectionId);
+            _database.RemoveRange(connection);
             await _database.SaveChangesAsync();
             return Ok();
         }
 
         [HttpGet]
-        [Route("{connectionId}")]
+        [Route("{connectionId:int}")]
         public async Task<ActionResult<Connection>> GetConnection([FromRoute] int connectionId,
             [FromHeader] string token)
         {
-            var connection = await _database.Connections.FirstOrDefaultAsync(ci => ci.ConnectionId == connectionId);
-            if (connection == null) return BadRequest();
+            try
+            {
+                var user = _userValidation.IsUserValid(token);
+                if (!_authorizationChecker.DoesBelongToUser(user.Id, connectionId, UserProp.Connection))
+                {
+                    return Unauthorized();
+                }
+            }
+            catch (Exception e)
+            {
+                return Unauthorized(e.Message);
+            }
+
+            var connection = await _database.Connections.FindAsync(connectionId);
             return Ok(connection);
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Connection>>> GetAllConnections([FromHeader] string token)
+        public  IActionResult GetAllConnections([FromHeader] string token)
         {
-            var user = await _database.Users.Include(u => u.UserConnections).FirstAsync(u => u.Token == token);
-            return Ok(user.UserConnections);
+            try
+            {
+                var user = _userValidation.IsUserValid(token);
+                return Ok(user.UserConnections);
+            }
+            catch (Exception e)
+            {
+                return Unauthorized(e.Message);
+            }
         }
     }
 }
