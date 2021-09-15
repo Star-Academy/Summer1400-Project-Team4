@@ -26,6 +26,10 @@ namespace WebApi.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("DbName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("DbPassword")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -55,34 +59,18 @@ namespace WebApi.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<bool>("AutoMap")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("ConnectionId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CsvFile")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DatabaseName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("DatasetName")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("DoesHaveHeader")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("IsLiked")
                         .HasColumnType("bit");
 
-                    b.Property<int>("OwnerId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TableName")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<long?>("UserId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("DatasetId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Datasets");
                 });
@@ -174,12 +162,14 @@ namespace WebApi.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Password")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Token")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -191,6 +181,13 @@ namespace WebApi.Migrations
                 {
                     b.HasOne("WebApi.models.User", null)
                         .WithMany("UserConnections")
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("WebApi.models.Dataset", b =>
+                {
+                    b.HasOne("WebApi.models.User", null)
+                        .WithMany("UserDatasets")
                         .HasForeignKey("UserId");
                 });
 
@@ -218,6 +215,8 @@ namespace WebApi.Migrations
                     b.Navigation("Pipelines");
 
                     b.Navigation("UserConnections");
+
+                    b.Navigation("UserDatasets");
                 });
 #pragma warning restore 612, 618
         }

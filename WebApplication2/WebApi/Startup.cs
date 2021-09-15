@@ -28,6 +28,7 @@ namespace WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             Database.ConnectionString = Configuration.GetConnectionString("DefaultConnection");
+            // Database.ConnectionString = Configuration.GetConnectionString("Somee");
 
             services.AddCors(options =>
             {
