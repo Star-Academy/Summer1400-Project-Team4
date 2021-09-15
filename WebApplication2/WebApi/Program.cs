@@ -5,6 +5,9 @@ using Microsoft.Extensions.Hosting;
 using WebApi.models;
 using WebApi.Services;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
+using WebApi.models.BoolAlgebraModels;
+using WebApi.models.BoolAlgebraModels.BoolOperations;
 
 namespace WebApi
 {
@@ -13,16 +16,16 @@ namespace WebApi
         public static void Main(string[] args)
         {
             /*var testSt =
-                "Data Source=tcp:127.0.0.1,1433;Initial Catalog=ETL;User ID=TALEBAN;Password=1234;"; 
-            using(SqlConnection con = new SqlConnection(testSt)) {  
-                con.Open();  
-                using(SqlCommand cmd = new SqlCommand("SELECT name from sys.databases", con)) {  
-                    using(SqlDataReader dr = cmd.ExecuteReader()) {  
-                        while (dr.Read()) {  
-                            Console.WriteLine(dr[0].ToString());  
-                        }  
-                    }  
-                }  
+                "Data Source=tcp:127.0.0.1,1433;Initial Catalog=ETL;User ID=TALEBAN;Password=1234;";
+            using(SqlConnection con = new SqlConnection(testSt)) {
+                con.Open();
+                using(SqlCommand cmd = new SqlCommand("SELECT name from sys.databases", con)) {
+                    using(SqlDataReader dr = cmd.ExecuteReader()) {
+                        while (dr.Read()) {
+                            Console.WriteLine(dr[0].ToString());
+                        }
+                    }
+                }
             }*/
 
             CreateHostBuilder(args).Build().Run();
@@ -46,8 +49,21 @@ namespace WebApi
         // {
         // var x = JsonConvert.DeserializeObject<dynamic>(
         //     "{\"Command\":\"AND\",\"_leftStatement\":{\"Command\":\"OR\",\"_leftStatement\":{\"Command\":\"=\",\"_field\":\"name\",\"_value\":\"\\\"arash\\\"\"},\"_rightStatement\":{\"Command\":\"<\",\"_field\":\"age\",\"_value\":\"19\"}\r\n},\"_rightStatement\":{\"Command\":\"<\",\"_field\":\"fatherName\",\"_value\":\"\\\"saeed\\\"\"}}");
-        // Console.WriteLine(x.Command);
+        // dynamic y;
+        // if (x.Command == "AND")
+        //     y = JsonConvert.DeserializeObject<AndOperation>(x.ToString());
+        // else
+        //     y = JsonConvert.DeserializeObject<OrOperation>(x.ToString());
+        //
+        // Console.WriteLine(y);
+        //
+        //
+        // // var x = JsonConvert.DeserializeObject<BoolOperation>(
+        // //     "{\"Command\":\"AND\",\"_leftStatement\":{\"Command\":\"OR\",\"_leftStatement\":{\"Command\":\"=\",\"_field\":\"name\",\"_value\":\"\\\"arash\\\"\"},\"_rightStatement\":{\"Command\":\"<\",\"_field\":\"age\",\"_value\":\"19\"}\r\n},\"_rightStatement\":{\"Command\":\"<\",\"_field\":\"fatherName\",\"_value\":\"\\\"saeed\\\"\"}}");
+        // //
+        // // Console.WriteLine(x.ToString());
         // }
+
         //
         // public static void Main()
         // {
