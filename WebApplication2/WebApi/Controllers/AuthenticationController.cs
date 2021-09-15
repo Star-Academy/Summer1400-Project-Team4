@@ -27,10 +27,9 @@ namespace WebApi.Controllers
         [Route("register")]
         public IActionResult Register(User user)
         {
+            user.IsLoggedIn = false; 
             if (!_databaseChecker.IsRegisterValid(user))
                 return BadRequest("User already exists!");
-            if (!_requestChecker.IsRegisterValid(user))
-                return BadRequest("User format Invalid!");
             user.IsLoggedIn = true;
             user.Token = TokenCreator.GetNewToken(50);
             _database.Users.Add(user);
@@ -44,8 +43,6 @@ namespace WebApi.Controllers
         {
             if (!_databaseChecker.IsLoginValid(user))
                 return BadRequest("Unable to login!");
-            if (!_requestChecker.IsLoginValid(user))
-                return BadRequest("User format Invalid!");
             var userObject = _database.Users.FirstOrDefault(x => x.Username == user.Username);
             userObject.IsLoggedIn = true;
             userObject.Token = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
@@ -59,8 +56,6 @@ namespace WebApi.Controllers
         {
             if (!_databaseChecker.IsAlterValid(user))
                 return BadRequest("User not logged in or doesn't exist!");
-            if (!_requestChecker.IsAlterValid(user))
-                return BadRequest("User format Invalid!");
             var userObject = _database.Users.FirstOrDefault(x => x.Username == user.Username);
             CopyInto(userObject, user);
             _database.SaveChanges();

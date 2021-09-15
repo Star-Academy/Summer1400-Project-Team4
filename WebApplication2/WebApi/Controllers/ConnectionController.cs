@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +14,7 @@ namespace WebApi.Controllers
     [Route("[controller]")]
     public class ConnectionController : ControllerBase
     {
-        private Database _database;
+        private readonly Database _database;
         private UserValidation _userValidation;
 
         public ConnectionController(Database database, UserValidation userValidation)
@@ -30,6 +31,7 @@ namespace WebApi.Controllers
             var user = _database.Users.Include(u => u.UserConnections).FirstOrDefault(u => u.Token == token);
             try
             {
+                Debug.Assert(user != null, nameof(user) + " != null");
                 user.UserConnections.Add(connection);
             }
             catch (NullReferenceException e)
@@ -61,7 +63,7 @@ namespace WebApi.Controllers
         {
             var connection = await _database.Connections.FirstOrDefaultAsync(ci => ci.ConnectionId == connectionId);
             if (connection == null) return BadRequest();
-            return Ok(connectionId);
+            return Ok(connection);
         }
 
         [HttpGet]

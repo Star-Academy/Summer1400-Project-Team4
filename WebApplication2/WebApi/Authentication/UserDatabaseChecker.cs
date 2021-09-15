@@ -23,8 +23,6 @@ namespace WebApi.Authentication
             var userObj = _database.Users.FirstOrDefault(x => x.Username == user.Username);
             if (userObj == null)
                 return false;
-            if (userObj.IsLoggedIn)
-                return false;
             return userObj.Password == user.Password;
         }
 

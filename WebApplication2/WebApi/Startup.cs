@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using WebApi.models;
+using WebApi.Services;
 using WebApi.Validations;
 
 namespace WebApi
@@ -24,7 +25,7 @@ namespace WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             var database = new Database();
-            TestMethod(database);
+            //TestMethod(database);
             services.AddControllers();
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo {Title = "WebApi", Version = "v1"}); });
             //default sever config
@@ -33,6 +34,7 @@ namespace WebApi
             services.AddSingleton(database);
             services.AddSingleton(new UserValidation(database));
             services.AddSingleton(new UserAuthorization(database));
+            services.AddSingleton(new SqlTableTransformer(database));
         }
 
         private static void TestMethod(Database database)
@@ -55,7 +57,7 @@ namespace WebApi
                 Avatar = "utest1", Email = "utest1", Password = "utest1", Token = "dfds", Username = "arash",
                 FullName = "happy", IsLoggedIn = true, UserConnections = new HashSet<Connection>()
                 {
-                    ts1 , ts2 , ts3 
+                    ts1, ts2, ts3
                 }
             };
             database.Users.Add(nt1);
