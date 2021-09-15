@@ -10,9 +10,7 @@ namespace WebApi.models
         public int DatasetId { get; set; }
         public string DatasetName { get; set; }
         public bool IsLiked { get; set; }
-        
-        [NotMapped] public string token { get; set; }
-        [NotMapped] public string DatabaseName { get; set; }
+        [NotMapped] public int connectionId { get; set; }
         [NotMapped] public string TableName { get; set; }
     }
 }

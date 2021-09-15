@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using WebApi.models;
 
 namespace WebApi.Validations
@@ -18,9 +19,9 @@ namespace WebApi.Validations
             return type switch
             {
                 UserProp.Connection =>
-                    _database.Users.Find(userId).UserConnections.Any(c => c.ConnectionId == propId),
-                UserProp.Dataset =>
-                    _database.Users.Find(userId).UserDatasets.Any(c => c.DatasetId == propId),
+                    _database.Users.Include(u => u.UserConnections).First(u => userId == u.Id).UserConnections.Any(c => c.ConnectionId == propId),
+                UserProp.Dataset => 
+                    _database.Users.Include(u => u.UserConnections).First(u => userId == u.Id).UserDatasets.Any(c => c.DatasetId == propId),
                 _
                     => throw new ArgumentOutOfRangeException(nameof(type), type, null)
             };

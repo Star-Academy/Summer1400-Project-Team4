@@ -101,17 +101,17 @@ namespace WebApi.Controllers
             }
             catch (Exception e)
             {
-                return Unauthorized(e.Message); 
+                return Unauthorized(e.Message);
             }
         }
-        
-        
+
+
         private void CopyInto(User to, User from)
         {
-            to.Password = from.Password;
-            to.FullName = from.FullName;
-            to.Email = from.Email;
+            if (!string.IsNullOrEmpty(from.Password)) to.Password = from.Password;
+            if (!string.IsNullOrEmpty(from.FullName)) to.FullName = from.FullName;
+            if (!string.IsNullOrEmpty(from.Email)) to.Email = from.Email;
+            if (!string.IsNullOrEmpty(from.Avatar)) to.Email = from.Avatar;
         }
-
     }
 }
