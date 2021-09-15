@@ -69,8 +69,43 @@ export class DesignerComponent
 
     ngAfterViewInit(): void {}
 
+    private basicValidateAndExportPipeline() {
+        let errors = this.pipeline!.reorder();
+        if (hasError(errors)) {
+            console.error(errors);
+            const message = listErrors(errors)[0].value;
+            this.snackBar.open(message, '', {
+                duration: 3000,
+                verticalPosition: 'bottom',
+                horizontalPosition: 'center',
+                panelClass: 'red-snackbar',
+            });
+            return;
+        }
+
+        let exported: PipelineExport;
+        try {
+            exported = exportPipeline(this.pipeline!);
+        } catch (error) {
+            console.error(error);
+            const message = error.message;
+            this.snackBar.open(message, '', {
+                duration: 3000,
+                verticalPosition: 'bottom',
+                horizontalPosition: 'center',
+                panelClass: 'red-snackbar',
+            });
+            return;
+        }
+
+        return exported;
+    }
+
     savePipeline() {
-        this.pipelineService.update(exportPipeline(this.pipeline)).subscribe({
+        const exported = this.basicValidateAndExportPipeline();
+        if (!exported) return;
+
+        this.pipelineService.update(exported).subscribe({
             next: () => {
                 const message = 'سناریو با موفقیت ذخیره شد';
                 this.snackBar.open(message, '', {
@@ -92,35 +127,10 @@ export class DesignerComponent
         });
     }
 
-    exportPipeline() {
-        let errors = this.pipeline!.reorder();
-        if (hasError(errors)) {
-            console.error(errors);
-            const message = listErrors(errors)[0].value;
-            this.snackBar.open(message, '', {
-                duration: 3000,
-                verticalPosition: 'bottom',
-                horizontalPosition: 'center',
-                panelClass: 'red-snackbar',
-            });
-            return;
-        }
-
-        let exported: PipelineExport;
-        try {
-            exported = exportPipeline(this.pipeline!);
-            exported.pipelineId = undefined;
-        } catch (error) {
-            console.error(error);
-            const message = error.message;
-            this.snackBar.open(message, '', {
-                duration: 3000,
-                verticalPosition: 'bottom',
-                horizontalPosition: 'center',
-                panelClass: 'red-snackbar',
-            });
-            return;
-        }
+    downloadPipeline() {
+        const exported = this.basicValidateAndExportPipeline();
+        if (!exported) return;
+        exported.pipelineId = undefined;
 
         const json = JSON.stringify(exported, null, 4);
         console.log(json);

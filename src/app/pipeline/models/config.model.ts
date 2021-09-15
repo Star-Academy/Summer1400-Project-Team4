@@ -6,6 +6,7 @@ export interface InputConfig {
 
 export interface OutputConfig {
     datasetId?: number;
+    overwrite: boolean;
 }
 
 export interface SortOrder {

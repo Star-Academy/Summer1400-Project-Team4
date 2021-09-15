@@ -13,6 +13,7 @@ export interface PipelineExport {
     inputDataset: string | null;
     outputDatasetId: number | null;
     outputDataset: string | null;
+    overwrite: boolean;
     processes: {
         id: number;
         name: string;
@@ -52,6 +53,7 @@ export function exportPipeline(pipeline: Pipeline): PipelineExport {
         outputDataset: outputDataset
             ? JSON.stringify(outputDataset.export())
             : null,
+        overwrite: outputDataset?.config.overwrite || false,
         processes: pipeline.nodes
             .filter(
                 (node) =>

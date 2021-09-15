@@ -236,7 +236,9 @@ export class DatasetOutputNode extends PipelineNode {
     ) {
         super(id, name, PipelineNodeType.datasetOutput, position, inputs);
 
-        this.config = config || {};
+        this.config = config || {
+            overwrite: false,
+        };
     }
 
     async updateOutputFields(pipeline: Pipeline, store: DatasetStore) {}
@@ -251,12 +253,14 @@ export class DatasetOutputNode extends PipelineNode {
     exportConfig() {
         return {
             datasetId: this.config.datasetId,
+            overwrite: this.config.overwrite,
         };
     }
 
-    static importConfig(exported: any): InputConfig {
+    static importConfig(exported: any): OutputConfig {
         return {
             datasetId: exported.datasetId,
+            overwrite: exported.overwrite,
         };
     }
 }
