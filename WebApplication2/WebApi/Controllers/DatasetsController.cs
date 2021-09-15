@@ -44,9 +44,8 @@ namespace WebApi.Controllers
         {
             try
             {
-                var userId = _userValidator.IsUserValid(token);
-                var user = _database.Users.Include(u => u.UserDatasets).FirstOrDefault(u => u.Id == userId);
-                user?.UserDatasets.Add(new Dataset()
+                var user = _userValidator.IsUserValid(token);
+                user.UserDatasets.Add(new Dataset()
                 {
                     DatasetName = data.TableName, IsLiked = false
                 });
@@ -120,10 +119,8 @@ namespace WebApi.Controllers
         {
             try
             {
-                var userId = _userValidator.IsUserValid(token);
-                var datasets = _database.Users.Include(u => u.UserDatasets)
-                    .First(user => user.Id == userId).UserDatasets;
-                return Ok(datasets);
+                var user = _userValidator.IsUserValid(token);
+                return Ok(user.UserDatasets);
             }
             catch (Exception e)
             {
@@ -192,13 +189,13 @@ namespace WebApi.Controllers
         {
             try
             {
-                var userId = _userValidator.IsUserValid(token);
-                if (!_authorizationValidator.DoesBelongToUser(userId, data.DbId, UserProp.Dataset))
+                var user = _userValidator.IsUserValid(token);
+                if (!_authorizationValidator.DoesBelongToUser(user.Id, data.DbId, UserProp.Dataset))
                 {
                     return BadRequest("You have No database with this id");
                 }
 
-                var simpleTable = _sqlTableTransformer.TransferData(data.DbId, data.LowerBond, data.UpperBond);
+                var simpleTable = _sqlTableTransformer.TransferData(data.DbId, data.startingIndex, data.size);
                 return Ok(simpleTable);
             }
             catch (Exception e)
