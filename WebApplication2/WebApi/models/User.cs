@@ -20,5 +20,6 @@ namespace WebApi.models
         [JsonIgnore]public string Avatar { get; set; }
         [JsonIgnore]public HashSet<Connection> UserConnections { get; set; }
         [JsonIgnore]public HashSet<Dataset> UserDatasets { get; set; }
+        [JsonIgnore]public List<Pipeline> Pipelines { get; set; }
     }
 }

@@ -24,13 +24,15 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            Database.ConnectionString = Configuration.GetConnectionString("DefaultConnection");
+
             var database = new Database();
             //TestMethod(database);
             services.AddControllers();
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo {Title = "WebApi", Version = "v1"}); });
             //default sever config
-            const string connectionString = "Server= localhost ; Database= ETLproject; Integrated Security=SSPI;";
-            services.AddSingleton(new SqlConnection(connectionString));
+            // const string connectionString = "Server= localhost ; Database= ETLproject; Integrated Security=SSPI;";
+            services.AddSingleton(new SqlConnection(Database.ConnectionString));
             services.AddSingleton(database);
             services.AddSingleton(new UserValidation(database));
             services.AddSingleton(new UserAuthorization(database));

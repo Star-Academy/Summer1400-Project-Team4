@@ -13,7 +13,7 @@ namespace WebApi.Services
             if (pipeline?.Processes == null) throw new Exception("There are no processes to handle");
 
             foreach (var process in pipeline.Processes)
-                switch (process.Name)
+                switch (process.Type)
                 {
                     case "filter":
                         queriesList.Add(new FilterProcessor(process.Instruction));
