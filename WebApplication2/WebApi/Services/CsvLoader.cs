@@ -26,9 +26,11 @@ namespace WebApi.Services
             CreatePath();
             var newTableQuery = GenerateCreateTableQuery();
             var bulkQuery = GenerateBulkQuery();
+            Console.WriteLine(newTableQuery);
+            Console.WriteLine(bulkQuery);
             ExecuteCommands(newTableQuery);
             ExecuteCommands(bulkQuery);
-            DeletePath(); 
+            //DeletePath(); 
             return true;
         }
 
@@ -41,11 +43,11 @@ namespace WebApi.Services
         {
             var stringBuilder = new StringBuilder();
             stringBuilder.Append($"BULK INSERT _{_dataSetId}\n");
-            stringBuilder.Append($"FROM '_{_filePath}'\n");
+            stringBuilder.Append($"FROM '{_filePath}'\n");
             stringBuilder.Append("WITH (\n" +
                                  $"FIRSTROW = {FirstRow},\n" +
-                                 $"FIELDTERMINATOR = '{_csvProp.FieldTerminator}',\n" +
-                                 $"ROWTERMINATOR = '{_csvProp.RowTerminator}',\n" +
+                                 $"FIELDTERMINATOR = ',',\n" +
+                                 $"ROWTERMINATOR = '\\n',\n" +
                                  "TABLOCK\n" +
                                  ");");
             return stringBuilder.ToString();
@@ -97,7 +99,7 @@ namespace WebApi.Services
                 rows[i] = rows[i].Replace(_csvProp.FieldTerminator, ",");
             }
 
-            _filePath = $"_{_dataSetId}.csv";
+            _filePath = $"F:\\_{_dataSetId}.csv";
             File.WriteAllLines(_filePath, rows);
         }
         
