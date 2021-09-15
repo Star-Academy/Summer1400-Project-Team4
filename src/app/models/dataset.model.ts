@@ -23,6 +23,8 @@ export interface NewLocalDataset {
     csvFile: string;
     autoMap: boolean;
     doesHaveHeader: boolean;
+    fieldSeparator: string;
+    rowSeparator: string;
 }
 
 export interface NewExternalDataset {
