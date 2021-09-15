@@ -5,7 +5,7 @@ using WebApi.Services.QueryServices;
 
 namespace WebApi.Services
 {
-    public static class JsonPipelineInterpreter
+    public static class PipelineInterpreter
     {
         public static IEnumerable<QueryProcessor> GetQueriesList(Pipeline pipeline)
         {
@@ -23,6 +23,9 @@ namespace WebApi.Services
                         break;
                     case "aggregation":
                         queriesList.Add(new AggregationProcessor(process.Instruction));
+                        break;
+                    case "sort":
+                        queriesList.Add(new SortProcessor(process.Instruction));
                         break;
                 }
 
