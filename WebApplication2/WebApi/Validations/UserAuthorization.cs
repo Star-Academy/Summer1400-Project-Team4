@@ -13,7 +13,7 @@ namespace WebApi.Validations
             _database = database;
         }
 
-        public bool DoesBelongToUser(int userId, int propId, UserProp type)
+        public bool DoesBelongToUser(long userId, int propId, UserProp type)
         {
             return type switch
             {

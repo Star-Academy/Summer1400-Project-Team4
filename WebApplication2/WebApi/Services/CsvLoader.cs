@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -39,7 +40,7 @@ namespace WebApi.Services
         private string GenerateBulkQuery()
         {
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append($"BULK INSERT {_dataSetId}\n");
+            stringBuilder.Append($"BULK INSERT _{_dataSetId}\n");
             stringBuilder.Append($"FROM '{_filePath}'\n");
             stringBuilder.Append("WITH (\n" +
                                  $"FIRSTROW = {FirstRow},\n" +
@@ -54,7 +55,7 @@ namespace WebApi.Services
         {
             var stringBuilder = new StringBuilder();
             var streamReader = new StreamReader(_filePath);
-            stringBuilder.Append("CREATE TABLE " + _dataSetId + " (\n");
+            stringBuilder.Append("CREATE TABLE _" + _dataSetId + " (\n");
             var fields = streamReader.ReadLine()?.Split(_csvProp.FieldTerminator);
             Debug.Assert(fields != null, nameof(fields) + " != null");
             if (_csvProp.DoesHaveHeader)
@@ -74,6 +75,7 @@ namespace WebApi.Services
 
 
             stringBuilder.Append(");");
+            streamReader.Close();
             return stringBuilder.ToString();
         }
         
@@ -95,7 +97,7 @@ namespace WebApi.Services
                 rows[i] = rows[i].Replace(_csvProp.FieldTerminator, ",");
             }
 
-            _filePath = $"G:\\codeStrar\\project\\ConnectionB\\WebApplication2\\WebApi\\{_dataSetId}.csv";
+            _filePath = $"G:\\{_dataSetId}.csv";
             File.WriteAllLines(_filePath, rows);
         }
         

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Authentication;
 using WebApi.models;
+using WebApi.Validations;
 
 namespace WebApi.Controllers
 {
@@ -10,27 +12,29 @@ namespace WebApi.Controllers
     [Route("[controller]")]
     public class UsersController : ControllerBase
     {
-        private Database _database;
-        private UserDatabaseChecker _databaseChecker;
-        private RequestChecker _requestChecker;
-        private TokenCreator _tokenCreator;
+        private readonly Database _database;
+        private readonly UserDatabaseChecker _databaseChecker;
+        private readonly RequestChecker _requestChecker;
+        private readonly UserValidation _userValidation;
 
-        public UsersController()
+        public UsersController(UserValidation userValidation,
+            Database database,
+            UserDatabaseChecker databaseChecker,
+            RequestChecker requestChecker)
         {
-            _tokenCreator = new TokenCreator();
-            _database = new Database();
-            _databaseChecker = new UserDatabaseChecker(_database);
-            _requestChecker = new RequestChecker();
+            _userValidation = userValidation;
+            _database = database;
+            _databaseChecker = databaseChecker;
+            _requestChecker = requestChecker;
         }
 
         [HttpPost]
         [Route("register")]
         public IActionResult Register(User user)
         {
+            user.IsLoggedIn = false;
             if (!_databaseChecker.IsRegisterValid(user))
                 return BadRequest("User already exists!");
-            if (!_requestChecker.IsRegisterValid(user))
-                return BadRequest("User format Invalid!");
             user.IsLoggedIn = true;
             user.Token = TokenCreator.GetNewToken(50);
             _database.Users.Add(user);
@@ -44,64 +48,73 @@ namespace WebApi.Controllers
         {
             if (!_databaseChecker.IsLoginValid(user))
                 return BadRequest("Unable to login!");
-            if (!_requestChecker.IsLoginValid(user))
-                return BadRequest("User format Invalid!");
             var userObject = _database.Users.FirstOrDefault(x => x.Username == user.Username);
+            Debug.Assert(userObject != null, nameof(userObject) + " != null");
             userObject.IsLoggedIn = true;
-            userObject.Token = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
+            userObject.Token = TokenCreator.GetNewToken(50);
             _database.SaveChanges();
             return Ok(userObject.Token);
         }
 
         [HttpPost]
         [Route("alter")]
-        public IActionResult Alter(User user)
+        public IActionResult Alter([FromHeader] string token, User user)
         {
-            if (!_databaseChecker.IsAlterValid(user))
-                return BadRequest("User not logged in or doesn't exist!");
-            if (!_requestChecker.IsAlterValid(user))
-                return BadRequest("User format Invalid!");
-            var userObject = _database.Users.FirstOrDefault(x => x.Username == user.Username);
-            CopyInto(userObject, user);
+            try
+            {
+                var userObject = _database.Users.Find(_databaseChecker.IsAlterValid(user, token));
+                CopyInto(userObject, user);
+            }
+            catch (Exception e)
+            {
+                Unauthorized(e.Message);
+            }
+
             _database.SaveChanges();
             return Ok("Alter successful!");
         }
 
-        private void CopyInto(User to, User from)
-        {
-            to.Username = from.Username;
-            to.Password = from.Password;
-            to.FullName = from.FullName;
-            to.Email = from.Email;
-            to.Token = from.Token;
-        }
-
         [HttpPost]
-        [Route("logout/token/{token}")]
-        public IActionResult Logout(string token)
+        [Route("logout")]
+        public IActionResult Logout([FromHeader] string token)
         {
-            if (!_databaseChecker.IsLogoutValid(token))
-                return BadRequest("User not logged in or doesn't exist!");
-            if (!_requestChecker.IsLogoutValid(token))
-                return BadRequest("Token Invalid!");
-            var user = _database.Users.FirstOrDefault(x => x.Token == token);
-            user.IsLoggedIn = false;
-            user.Token = null;
-            _database.SaveChanges();
-            return Ok("Logout successful!");
+            try
+            {
+                var user = _userValidation.IsUserValid(token);
+                user.IsLoggedIn = false;
+                user.Token = null;
+                _database.SaveChanges();
+                return Ok("Logout successful!");
+            }
+            catch (Exception e)
+            {
+                return Unauthorized(e.Message);
+            }
         }
 
         [HttpGet]
-        [Route("auth/token/{token}")]
-        public IActionResult Get(string token)
+        [Route("UserData")]
+        public IActionResult Get([FromHeader] string token)
         {
-            if (!_databaseChecker.IsGetValid(token))
-                return BadRequest("User not logged in or doesn't exist!");
-            if (!_requestChecker.IsGetValid(token))
-                return BadRequest("Token Invalid!");
-            var user = _database.Users.FirstOrDefault(x => x.Token == token);
-            var mini = new MiniUser(user);
-            return Ok(Newtonsoft.Json.JsonConvert.SerializeObject(mini));
+            try
+            {
+                var user = _userValidation.IsUserValid(token);
+                var mini = new MiniUser(user);
+                return Ok(mini);
+            }
+            catch (Exception e)
+            {
+                return Unauthorized(e.Message); 
+            }
         }
+        
+        
+        private void CopyInto(User to, User from)
+        {
+            to.Password = from.Password;
+            to.FullName = from.FullName;
+            to.Email = from.Email;
+        }
+
     }
 }

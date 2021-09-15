@@ -2,9 +2,9 @@
 
 namespace WebApi.models.Table
 {
-    public class Table
+    public class SimpleTable
     {
-        public Table(List<Row> tableRows)
+        public SimpleTable(List<Row> tableRows)
         {
             TableRows = tableRows;
         }

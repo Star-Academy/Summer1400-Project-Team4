@@ -14,11 +14,13 @@ namespace WebApi.Validations
             _database = database;
         }
 
-        public long IsUserValid(string token)
+        public User IsUserValid(string token)
         {
-            var user = _database.Users.FirstOrDefault(u => u.Token == token);
-            if (user == null) throw new Exception("invalid token");
-            return user.Id;
+            var user = _database.Users.Include(u => u.UserDatasets).
+                Include(u => u.UserConnections).
+                FirstOrDefault(u => u.Token == token);
+            if (user == null) throw new Exception("invalid info");
+            return user;
         }
     }
 }

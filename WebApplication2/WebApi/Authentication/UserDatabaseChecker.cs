@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using WebApi.models;
 
 namespace WebApi.Authentication
@@ -23,28 +24,17 @@ namespace WebApi.Authentication
             var userObj = _database.Users.FirstOrDefault(x => x.Username == user.Username);
             if (userObj == null)
                 return false;
-            if (userObj.IsLoggedIn)
-                return false;
             return userObj.Password == user.Password;
         }
 
-        public bool IsAlterValid(User user)
+        public long IsAlterValid(User user, string token)
         {
-            var userObj = _database.Users.FirstOrDefault(x => x.Username == user.Username);
-            if (userObj == null)
-                return false;
-            if (!userObj.IsLoggedIn)
-                return false;
-            string token = _database.Users.FirstOrDefault(x => x.Username == user.Username)?.Token;
-            return userObj.Token == token;
+            var userObj = _database.Users.FirstOrDefault(x => x.Username == user.Username && x.Token == token);
+            if (userObj == null) throw new Exception("invalid data");
+            return userObj.Id; 
         }
         
-        public bool IsLogoutValid(string token)
-        {
-            var userObj = _database.Users.FirstOrDefault(x => x.Token == token);
-            return userObj != null && userObj.IsLoggedIn;
-        }
-        
+
         public bool IsGetValid(string token)
         {
             var userObj = _database.Users.FirstOrDefault(x => x.Token == token);

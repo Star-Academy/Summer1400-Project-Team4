@@ -1,4 +1,3 @@
-﻿
 using System;
 using System.IO;
 using System.Linq;
@@ -19,13 +18,15 @@ namespace WebApi.Controllers
         private readonly Database _database;
         private readonly UserValidation _userValidator;
         private readonly UserAuthorization _authorizationValidator;
+        private readonly SqlTableTransformer _sqlTableTransformer;
 
         public DatasetsController(Database database, UserAuthorization authorizationValidator,
-            UserValidation userValidator)
+            UserValidation userValidator, SqlTableTransformer sqlTableTransformer)
         {
             _database = database;
             _authorizationValidator = authorizationValidator;
             _userValidator = userValidator;
+            _sqlTableTransformer = sqlTableTransformer;
         }
 
         [HttpPost]
@@ -47,18 +48,20 @@ namespace WebApi.Controllers
         {
             try
             {
-                var userId = _userValidator.IsUserValid(token);
-                _database.Users.Find(userId).UserDatasets.Add(new Dataset()
+                var user = _userValidator.IsUserValid(token);
+                user.UserDatasets.Add(new Dataset()
                 {
                     DatasetName = data.TableName, IsLiked = false
                 });
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return Unauthorized();
+                return Unauthorized(e.Message);
             }
 
-            var loader = new CsvLoader(data, _database.Datasets.Max(d => d.DatasetId) + 1);
+            var max = Enumerable.Prepend(_database.Datasets.Select(databaseDataset => databaseDataset.DatasetId), 0)
+                .Max();
+            var loader = new CsvLoader(data, max + 1);
             if (loader.TransportCsvToSql())
             {
                 return Ok();
@@ -120,10 +123,8 @@ namespace WebApi.Controllers
         {
             try
             {
-                var userId = _userValidator.IsUserValid(token);
-                var datasets = _database.Users.Include(u => u.UserDatasets)
-                    .First(user => user.Id == userId).UserDatasets;
-                return Ok(datasets);
+                var user = _userValidator.IsUserValid(token);
+                return Ok(user.UserDatasets);
             }
             catch (Exception e)
             {
@@ -185,10 +186,24 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("{id:int}/preview")]
-        public IActionResult Preview(int id)
+        [Route("preview")]
+        public IActionResult Preview([FromHeader] PreviewData data, [FromHeader] string token)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var user = _userValidator.IsUserValid(token);
+                if (!_authorizationValidator.DoesBelongToUser(user.Id, data.DbId, UserProp.Dataset))
+                {
+                    return BadRequest("You have No database with this id");
+                }
+
+                var simpleTable = _sqlTableTransformer.TransferData(data.DbId, data.startingIndex, data.size);
+                return Ok(simpleTable);
+            }
+            catch (Exception e)
+            {
+                return Unauthorized(e.Message);
+            }
         }
     }
 }
