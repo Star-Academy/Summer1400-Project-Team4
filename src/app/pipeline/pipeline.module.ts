@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { InitialCreatorComponent } from './components/designer/initial-creator.component';
 import { DesignerComponent } from './components/designer/designer.component';
 import { RouterModule, Routes } from '@angular/router';
 import { MaterialModule } from '../material/material.module';
@@ -24,6 +25,11 @@ const routes: Routes = [
         component: DesignerComponent,
     },
     {
+        path: '',
+        canActivate: [AuthGuard],
+        component: InitialCreatorComponent,
+    },
+    {
         path: '**',
         redirectTo: '/',
     },
@@ -31,6 +37,7 @@ const routes: Routes = [
 
 @NgModule({
     declarations: [
+        InitialCreatorComponent,
         DesignerComponent,
         DiagramComponent,
         AnchorComponent,

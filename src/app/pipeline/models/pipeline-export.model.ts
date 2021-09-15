@@ -9,8 +9,8 @@ import { Pipeline } from './pipeline.model';
 export interface PipelineExport {
     pipelineId?: number;
     pipelineName: string;
-    inputDatasetId: number;
-    inputDataset: string;
+    inputDatasetId: number | null;
+    inputDataset: string | null;
     outputDatasetId: number | null;
     outputDataset: string | null;
     processes: {
@@ -27,8 +27,8 @@ export function exportPipeline(pipeline: Pipeline): PipelineExport {
     const inputDatasetNodes = pipeline.nodes.filter(
         (node) => node.type === PipelineNodeType.datasetInput
     );
-    if (inputDatasetNodes.length !== 1)
-        throw new Error('only one input node is currently supported');
+    if (inputDatasetNodes.length > 1)
+        throw new Error('at most one input node is currently supported');
 
     const outputDatasetNodes = pipeline.nodes.filter(
         (node) => node.type === PipelineNodeType.datasetOutput
@@ -36,7 +36,7 @@ export function exportPipeline(pipeline: Pipeline): PipelineExport {
     if (inputDatasetNodes.length > 1)
         throw new Error('at most one output node is currently supported');
 
-    const inputDataset = inputDatasetNodes[0] as DatasetInputNode;
+    const inputDataset = inputDatasetNodes[0] as DatasetInputNode | undefined;
     const outputDataset = outputDatasetNodes[0] as
         | DatasetOutputNode
         | undefined;
@@ -44,8 +44,10 @@ export function exportPipeline(pipeline: Pipeline): PipelineExport {
     return {
         pipelineId: pipeline.id,
         pipelineName: pipeline.name,
-        inputDatasetId: inputDataset.config.datasetId!,
-        inputDataset: JSON.stringify(inputDataset.export()),
+        inputDatasetId: inputDataset?.config.datasetId || null,
+        inputDataset: inputDataset
+            ? JSON.stringify(inputDataset.export())
+            : null,
         outputDatasetId: outputDataset?.config.datasetId || null,
         outputDataset: outputDataset
             ? JSON.stringify(outputDataset.export())
@@ -63,8 +65,10 @@ export function exportPipeline(pipeline: Pipeline): PipelineExport {
 export function importPipeline(exported: PipelineExport) {
     const pipeline = new Pipeline(exported.pipelineId, exported.pipelineName);
 
-    const inputDatasetExport = JSON.parse(exported.inputDataset);
-    pipeline.addNode(importPipelineNode(inputDatasetExport));
+    if (exported.inputDataset !== null) {
+        const inputDatasetExport = JSON.parse(exported.inputDataset);
+        pipeline.addNode(importPipelineNode(inputDatasetExport));
+    }
 
     for (const node of exported.processes)
         pipeline.addNode(importPipelineNode(node));

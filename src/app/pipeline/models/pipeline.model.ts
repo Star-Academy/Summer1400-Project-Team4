@@ -30,7 +30,7 @@ export class Pipeline {
     addNode(node: PipelineNode) {
         if (this.getNode(node.id) !== undefined)
             throw new Error(
-                'a node with the same id already exists in the pipeline'
+                'A node with the same id already exists in the pipeline'
             );
 
         this.nodes.push(node);
@@ -45,7 +45,7 @@ export class Pipeline {
     ) {
         if (inputs !== undefined) {
             if (inputs.length !== pipelineNodeInfo[type].numInputs)
-                throw new Error('invalid number of inputs');
+                throw new Error('Invalid number of inputs');
         } else {
             inputs = new Array(pipelineNodeInfo[type].numInputs).fill(null);
         }
@@ -65,7 +65,7 @@ export class Pipeline {
 
         if (index === undefined)
             throw new Error(
-                'a node with the given id does not exist in the pipeline'
+                'A node with the given id does not exist in the pipeline'
             );
 
         this.nodes[index] = edited;
@@ -77,7 +77,7 @@ export class Pipeline {
 
         if (node === undefined)
             throw new Error(
-                'a node with the given id does not exist in the pipeline'
+                'A node with the given id does not exist in the pipeline'
             );
 
         this.nodeEdited.next(node);
@@ -88,7 +88,7 @@ export class Pipeline {
 
         if (index < 0)
             throw new Error(
-                'a node with the given id does not exist in the pipeline'
+                'A node with the given id does not exist in the pipeline'
             );
 
         this.nodes.forEach((node) => {
@@ -167,12 +167,18 @@ export class Pipeline {
     }
 }
 
-export let newPipeline = new Pipeline(undefined, 'سناریو جدید');
-newPipeline.createNode('دیتاست ورودی', PipelineNodeType.datasetInput, {
-    x: 3,
-    y: 5,
-});
-newPipeline.createNode('دیتاست خروجی', PipelineNodeType.datasetOutput, {
-    x: 11,
-    y: 5,
-});
+export const newPipeline = (() => {
+    const pipeline = new Pipeline(undefined, 'سناریو جدید');
+    const inputId = pipeline.createNode(
+        'دیتاست ورودی',
+        PipelineNodeType.datasetInput,
+        { x: 3, y: 5 }
+    );
+    pipeline.createNode(
+        'دیتاست خروجی',
+        PipelineNodeType.datasetOutput,
+        { x: 11, y: 5 },
+        [inputId]
+    );
+    return pipeline;
+})();
