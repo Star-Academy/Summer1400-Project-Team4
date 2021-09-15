@@ -31,14 +31,15 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [Route("create")]
-        public IActionResult Create(Dataset dataset)
+        public IActionResult Create([FromBody] Dataset dataset, [FromHeader] string token)
         {
-            string token = dataset.token;
             var user = _database.Users.FirstOrDefault(x => x.Token == token);
             if (user == null)
                 return Unauthorized("Wrong token");
             user.UserDatasets.Add(dataset);
-            new SqlTableCreator().CopySql("localhost", dataset.DatabaseName, dataset.TableName, dataset.DatasetName);
+            /*new SqlTableCreator().CopySql("localhost", dataset.DatabaseName,
+                dataset.TableName, dataset.DatasetName);*/
+            _database.SaveChangesAsync();
             return Ok("created");
         }
 
@@ -51,7 +52,7 @@ namespace WebApi.Controllers
                 var user = _userValidator.IsUserValid(token);
                 user.UserDatasets.Add(new Dataset()
                 {
-                    DatasetName = data.TableName, IsLiked = false
+                    DatasetName = data.DatasetName, IsLiked = false
                 });
             }
             catch (Exception e)
@@ -62,12 +63,13 @@ namespace WebApi.Controllers
             var max = Enumerable.Prepend(_database.Datasets.Select(databaseDataset => databaseDataset.DatasetId), 0)
                 .Max();
             var loader = new CsvLoader(data, max + 1);
-            if (loader.TransportCsvToSql())
+            if (!loader.TransportCsvToSql())
             {
-                return Ok();
+                return BadRequest();
             }
 
-            return BadRequest();
+            _database.SaveChanges();
+            return Ok();
         }
 
         [HttpPut]
@@ -134,12 +136,14 @@ namespace WebApi.Controllers
 
         [HttpGet]
         [Route("{id:int}/csvFile")]
-        public IActionResult DownloadDataset(int id, [FromHeader] string token, char columnSeparator = ',', string rowSeparator = "ENTER", bool saveColumnTitle = true)
+        public IActionResult DownloadDataset(int id, [FromHeader] string token, char columnSeparator = ',',
+            string rowSeparator = "ENTER", bool saveColumnTitle = true)
         {
             if (rowSeparator.Equals("ENTER"))
             {
                 rowSeparator = "\n";
             }
+
             var sqlCon = new SqlConnection(Database.ConnectionString);
             sqlCon.Open();
 
@@ -148,7 +152,7 @@ namespace WebApi.Controllers
             var reader = sqlCmd.ExecuteReader();
 
             // var fileName = _database.Users.FirstOrDefault(u => u.Token == token)
-                // ?.UserDatasets.FirstOrDefault(db => db.DatasetId == id)?.DatasetName + ".csv";
+            // ?.UserDatasets.FirstOrDefault(db => db.DatasetId == id)?.DatasetName + ".csv";
             // var fileName = _database.Datasets.FirstOrDefault(db => db.DatasetId == id)?.DatasetName + ".csv";
             const string fileName = "Output.csv";
 
@@ -161,6 +165,7 @@ namespace WebApi.Controllers
                 {
                     continue;
                 }
+
                 output[i] = reader.GetName(i);
             }
 

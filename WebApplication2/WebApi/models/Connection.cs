@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.Data.SqlClient;
+using Newtonsoft.Json;
 using WebApi.Authentication;
 
 namespace WebApi.models
@@ -10,8 +11,10 @@ namespace WebApi.models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+
         public int ConnectionId { get; set; }
 
+        [Required] public string ConnectionName { get; set; }
         [Required] public string ServerIp { get; set; }
 
         [Required] public string DbName { get; set; }
@@ -20,7 +23,8 @@ namespace WebApi.models
 
         public bool TestConnection()
         {
-            var connectionString = $"Data Source=tcp:{ServerIp}1433;Initial Catalog={DbName};User ID={DbUserName};Password={DbPassword};";
+            var connectionString =
+                $"Data Source=tcp:{ServerIp}1433;Initial Catalog={DbName};User ID={DbUserName};Password={DbPassword};";
             using var con = new SqlConnection(connectionString);
             try
             {

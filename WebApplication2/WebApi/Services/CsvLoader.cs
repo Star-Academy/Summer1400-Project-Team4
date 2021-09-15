@@ -41,7 +41,7 @@ namespace WebApi.Services
         {
             var stringBuilder = new StringBuilder();
             stringBuilder.Append($"BULK INSERT _{_dataSetId}\n");
-            stringBuilder.Append($"FROM '{_filePath}'\n");
+            stringBuilder.Append($"FROM '_{_filePath}'\n");
             stringBuilder.Append("WITH (\n" +
                                  $"FIRSTROW = {FirstRow},\n" +
                                  $"FIELDTERMINATOR = '{_csvProp.FieldTerminator}',\n" +
@@ -97,7 +97,7 @@ namespace WebApi.Services
                 rows[i] = rows[i].Replace(_csvProp.FieldTerminator, ",");
             }
 
-            _filePath = $"G:\\{_dataSetId}.csv";
+            _filePath = $"_{_dataSetId}.csv";
             File.WriteAllLines(_filePath, rows);
         }
         

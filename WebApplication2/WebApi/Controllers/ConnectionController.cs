@@ -59,8 +59,8 @@ namespace WebApi.Controllers
                 return Unauthorized(e.Message);
             }
 
-            var connection = _database.Connections.FindAsync(connectionId);
-            _database.RemoveRange(connection);
+            var connection = await _database.Connections.FindAsync(connectionId);
+            _database.Remove(connection);
             await _database.SaveChangesAsync();
             return Ok();
         }

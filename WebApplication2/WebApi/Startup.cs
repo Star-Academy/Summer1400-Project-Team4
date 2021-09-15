@@ -27,8 +27,8 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            Database.ConnectionString = Configuration.GetConnectionString("DefaultConnection");
-            // Database.ConnectionString = Configuration.GetConnectionString("Somee");
+            //Database.ConnectionString = Configuration.GetConnectionString("DefaultConnection");
+            Database.ConnectionString = Configuration.GetConnectionString("Somee");
 
             services.AddCors(options =>
             {
@@ -36,7 +36,7 @@ namespace WebApi
                     builder =>
                     {
                         builder.WithOrigins("http://localhost:53135",
-                                "http://localhost:4200","http://localhost:5000","https://localhost:5001"
+                                "http://localhost:4200", "http://localhost:5000", "https://localhost:5001"
                             )
                             .AllowAnyHeader()
                             .AllowAnyMethod();
@@ -55,7 +55,7 @@ namespace WebApi
             services.AddSingleton(new UserAuthorization(database));
             services.AddSingleton(new SqlTableTransformer(database));
             services.AddSingleton(new UserDatabaseChecker(database));
-            services.AddSingleton(new UserAuthorization(database)); 
+            services.AddSingleton(new UserAuthorization(database));
         }
 
         private static void TestMethod(Database database)
@@ -91,13 +91,13 @@ namespace WebApi
             // if (env.IsDevelopment() || env.IsEnvironment())
             // {
             app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c =>
-                {
-                    // c.SwaggerEndpoint("../swagger/v1/swagger.json", "WebApi v1");
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApi v1");
-                    // c.RoutePrefix = string.Empty;
-                });
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("../swagger/v1/swagger.json", "WebApi v1");
+                // c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApi v1");
+                // c.RoutePrefix = string.Empty;
+            });
             // }
             app.UseCors(MyAllowSpecificOrigins);
 
