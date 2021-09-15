@@ -1,3 +1,5 @@
+import { FilterData } from '../components/filtering-tree/filtering-tree.component';
+
 export interface InputConfig {
     datasetId?: number;
 }
@@ -15,9 +17,7 @@ export interface SortConfig {
     orders: SortOrder[];
 }
 
-export interface FilterConfig {
-    condition: string;
-}
+export interface FilterConfig extends FilterData {}
 
 export enum JoinType {
     inner = 'inner join',

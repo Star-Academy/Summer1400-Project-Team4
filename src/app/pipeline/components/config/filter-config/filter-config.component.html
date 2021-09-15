@@ -1,18 +1,6 @@
 <div *ngIf="node !== undefined">
-    <h3>اطلاعات فیلتر</h3>
-    <mat-form-field class="wide-field">
-        <mat-label>شرط خام</mat-label>
-        <input
-            matInput
-            [(ngModel)]="node.config.condition"
-            type="text"
-            class="propery-input"
-            required
-        />
-    </mat-form-field>
-
     <button mat-raised-button color="accent" (click)="designClicked()">
         <mat-icon class="mat-icon-rtl-mirror">launch</mat-icon>
-        طراحی
+        طراحی فیلتر
     </button>
 </div>

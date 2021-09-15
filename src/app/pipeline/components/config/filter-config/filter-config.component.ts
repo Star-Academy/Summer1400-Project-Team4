@@ -20,14 +20,12 @@ export class FilterConfigComponent implements OnInit {
             panelClass: 'filterDialog',
             disableClose: false,
             closeOnNavigation: true,
+            data: this.node?.config,
         });
 
-        const sub = ref.componentInstance.onSaveGraph.subscribe(() => {
-            ref.close();
-        });
-
-        ref.afterClosed().subscribe(() => {
-            sub.unsubscribe();
+        ref.afterClosed().subscribe((result) => {
+            console.log(result);
+            this.node!.config = result;
         });
     }
 }

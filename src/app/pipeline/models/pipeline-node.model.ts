@@ -303,7 +303,7 @@ export class FilterNode extends PipelineNode {
     ) {
         super(id, name, PipelineNodeType.filter, position, inputs);
 
-        this.config = config || { condition: '' };
+        this.config = config || { Command: '=' };
     }
 
     async updateOutputFields(pipeline: Pipeline, store: DatasetStore) {
@@ -317,9 +317,7 @@ export class FilterNode extends PipelineNode {
     }
 
     static importConfig(exported: any): FilterConfig {
-        return {
-            condition: exported.condition,
-        };
+        return exported;
     }
 }
 
