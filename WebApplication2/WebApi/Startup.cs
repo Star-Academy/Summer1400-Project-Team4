@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using WebApi.Authentication;
 using WebApi.models;
 using WebApi.Services;
 using WebApi.Validations;
@@ -52,6 +53,7 @@ namespace WebApi
             services.AddSingleton(new UserValidation(database));
             services.AddSingleton(new UserAuthorization(database));
             services.AddSingleton(new SqlTableTransformer(database));
+            services.AddSingleton(new UserDatabaseChecker(database)); 
         }
 
         private static void TestMethod(Database database)

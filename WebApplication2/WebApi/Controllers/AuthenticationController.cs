@@ -14,18 +14,15 @@ namespace WebApi.Controllers
     {
         private readonly Database _database;
         private readonly UserDatabaseChecker _databaseChecker;
-        private readonly RequestChecker _requestChecker;
         private readonly UserValidation _userValidation;
 
         public UsersController(UserValidation userValidation,
             Database database,
-            UserDatabaseChecker databaseChecker,
-            RequestChecker requestChecker)
+            UserDatabaseChecker databaseChecker)
         {
             _userValidation = userValidation;
             _database = database;
             _databaseChecker = databaseChecker;
-            _requestChecker = requestChecker;
         }
 
         [HttpPost]
