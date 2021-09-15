@@ -17,6 +17,7 @@ import { SortConfigComponent } from './components/config/sort-config/sort-config
 import { JoinConfigComponent } from './components/config/join-config/join-config.component';
 import { FilteringTreeComponent } from './components/filtering-tree/filtering-tree.component';
 import { AuthGuard } from '../guard/auth.guard';
+import { AuthService } from '../services/auth.service';
 
 const routes: Routes = [
     {
@@ -58,6 +59,6 @@ const routes: Routes = [
         FormsModule,
         ReactiveFormsModule,
     ],
-    providers: [LineService, AuthGuard],
+    providers: [LineService, AuthService, AuthGuard],
 })
 export class PipelineModule {}

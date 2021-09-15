@@ -28,13 +28,13 @@ export function exportPipeline(pipeline: Pipeline): PipelineExport {
         (node) => node.type === PipelineNodeType.datasetInput
     );
     if (inputDatasetNodes.length > 1)
-        throw new Error('at most one input node is currently supported');
+        throw new Error('حداکثر یک گره دیتاست ورودی پشتیباتی می‌شود');
 
     const outputDatasetNodes = pipeline.nodes.filter(
         (node) => node.type === PipelineNodeType.datasetOutput
     );
     if (inputDatasetNodes.length > 1)
-        throw new Error('at most one output node is currently supported');
+        throw new Error('حداکثر یک گره دیتاست خروجی پشتیباتی می‌شود');
 
     const inputDataset = inputDatasetNodes[0] as DatasetInputNode | undefined;
     const outputDataset = outputDatasetNodes[0] as

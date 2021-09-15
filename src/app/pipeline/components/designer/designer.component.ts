@@ -11,15 +11,17 @@ import { PipelineService } from 'src/app/services/pipeline.service';
 import {
     exportPipeline,
     importPipeline,
+    PipelineExport,
 } from '../../models/pipeline-export.model';
 import {
     PipelineNode,
     pipelineNodeInfo,
     PipelineNodeType,
 } from '../../models/pipeline-node.model';
-import { Pipeline } from '../../models/pipeline.model';
+import { newPipeline, Pipeline } from '../../models/pipeline.model';
 import { DiagramComponent } from '../diagram/diagram.component';
 import fileDownload from 'js-file-download';
+import { hasError, listErrors } from '../../models/validation.model';
 
 @Component({
     selector: 'app-pipeline',
@@ -29,7 +31,7 @@ import fileDownload from 'js-file-download';
 export class DesignerComponent
     implements OnInit, AfterViewInit, AfterContentInit
 {
-    pipeline = new Pipeline(-1, 'سناریو جدید');
+    pipeline = importPipeline(exportPipeline(newPipeline));
     //pipeline?: Pipeline;
     selectedNode?: PipelineNode;
     @ViewChild('diagram') diagram!: DiagramComponent;
@@ -91,9 +93,34 @@ export class DesignerComponent
     }
 
     exportPipeline() {
-        this.pipeline!.reorder();
-        const exported = exportPipeline(this.pipeline!);
-        exported.pipelineId = undefined;
+        let errors = this.pipeline!.reorder();
+        if (hasError(errors)) {
+            console.error(errors);
+            const message = listErrors(errors)[0].value;
+            this.snackBar.open(message, '', {
+                duration: 3000,
+                verticalPosition: 'bottom',
+                horizontalPosition: 'center',
+                panelClass: 'red-snackbar',
+            });
+            return;
+        }
+
+        let exported: PipelineExport;
+        try {
+            exported = exportPipeline(this.pipeline!);
+            exported.pipelineId = undefined;
+        } catch (error) {
+            console.error(error);
+            const message = error.message;
+            this.snackBar.open(message, '', {
+                duration: 3000,
+                verticalPosition: 'bottom',
+                horizontalPosition: 'center',
+                panelClass: 'red-snackbar',
+            });
+            return;
+        }
 
         const json = JSON.stringify(exported, null, 4);
         console.log(json);

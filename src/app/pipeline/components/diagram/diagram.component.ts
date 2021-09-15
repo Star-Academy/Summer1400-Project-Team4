@@ -25,6 +25,7 @@ import {
     PipelineNode,
     PipelineNodeInfo,
     pipelineNodeInfo,
+    PipelineNodeType,
 } from '../../models/pipeline-node.model';
 import { Pipeline } from '../../models/pipeline.model';
 import { LineService } from '../../services/line.service';
@@ -95,7 +96,13 @@ export class DiagramComponent
     subscriptions: Subscription[] = [];
 
     Card = Card;
-    nodeTypes = Object.values(pipelineNodeInfo);
+    addNodeTypes = Object.values(pipelineNodeInfo).filter(
+        (info) =>
+            info.type !== PipelineNodeType.datasetInput &&
+            info.type !== PipelineNodeType.datasetOutput &&
+            info.type !== PipelineNodeType.sort
+    );
+    PipelineNodeType = PipelineNodeType;
     log = console.log;
 
     constructor() {}
