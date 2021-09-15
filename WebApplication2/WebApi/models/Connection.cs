@@ -36,5 +36,11 @@ namespace WebApi.models
                 return false;
             }
         }
+
+        public string GetConnectionString()
+        {
+            return
+                $"Data Source=tcp:{ServerIp}1433;Initial Catalog={DbName};User ID={DbUserName};Password={DbPassword};";
+        }
     }
 }

@@ -28,7 +28,7 @@ namespace WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             Database.ConnectionString = Configuration.GetConnectionString("DefaultConnection");
-            // Database.ConnectionString = Configuration.GetConnectionString("Somee");
+            //Database.ConnectionString = Configuration.GetConnectionString("Somee");
 
             services.AddCors(options =>
             {
@@ -94,8 +94,8 @@ namespace WebApi
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                // c.SwaggerEndpoint("../swagger/v1/swagger.json", "WebApi v1");
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApi v1");
+                //c.SwaggerEndpoint("../swagger/v1/swagger.json", "WebApi v1");
+                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApi v1");
                 // c.RoutePrefix = string.Empty;
             });
             // }

@@ -12,6 +12,12 @@ namespace WebApi.Services
             var connection = new SqlConnection(connectionString);
             return connection;
         }
+        
+        public SqlConnection Connect(string connectionString)
+        {
+            var connection = new SqlConnection(connectionString);
+            return connection;
+        }
 
         public static SqlConnection DefaultConnection()
         {

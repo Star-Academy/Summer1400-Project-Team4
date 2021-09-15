@@ -2,39 +2,18 @@
 
 namespace WebApi.Migrations
 {
-    public partial class dfre : Migration
+    public partial class @new : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Datasets",
-                columns: table => new
-                {
-                    DatasetId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DatasetName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    OwnerId = table.Column<int>(type: "int", nullable: false),
-                    ConnectionId = table.Column<int>(type: "int", nullable: false),
-                    DatabaseName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TableName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CsvFile = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AutoMap = table.Column<bool>(type: "bit", nullable: false),
-                    DoesHaveHeader = table.Column<bool>(type: "bit", nullable: false),
-                    IsLiked = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Datasets", x => x.DatasetId);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Username = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsLoggedIn = table.Column<bool>(type: "bit", nullable: false),
@@ -52,7 +31,9 @@ namespace WebApi.Migrations
                 {
                     ConnectionId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    ConnectionName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ServerIp = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DbName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DbUserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DbPassword = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserId = table.Column<long>(type: "bigint", nullable: true)
@@ -62,6 +43,27 @@ namespace WebApi.Migrations
                     table.PrimaryKey("PK_Connections", x => x.ConnectionId);
                     table.ForeignKey(
                         name: "FK_Connections_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Datasets",
+                columns: table => new
+                {
+                    DatasetId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DatasetName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsLiked = table.Column<bool>(type: "bit", nullable: false),
+                    UserId = table.Column<long>(type: "bigint", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Datasets", x => x.DatasetId);
+                    table.ForeignKey(
+                        name: "FK_Datasets_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -120,6 +122,11 @@ namespace WebApi.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Connections_UserId",
                 table: "Connections",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Datasets_UserId",
+                table: "Datasets",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
