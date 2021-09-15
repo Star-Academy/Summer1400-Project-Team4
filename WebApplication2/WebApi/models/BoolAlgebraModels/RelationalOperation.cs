@@ -4,12 +4,11 @@ namespace WebApi.models.BoolAlgebraModels
 {
     public abstract class RelationalOperation : IStatement
     {
-        [JsonProperty]
-        protected string Command;
-        [JsonProperty]
-        private readonly string _field;
-        [JsonProperty]
-        private readonly string _value; 
+        [JsonProperty] private readonly string _field;
+
+        [JsonProperty] private readonly string _value;
+
+        [JsonProperty] protected string Command;
 
         protected RelationalOperation(string field, string value)
         {
