@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import {
     Dataset,
     DatasetDetails,
@@ -12,10 +14,26 @@ import { AuthService } from './auth.service';
 export class DatasetService {
     constructor(private api: ApiService, private auth: AuthService) {}
 
-    getAll() {
+    getAll(): Observable<Dataset[]> {
         if (this.auth.authToken === null) throw Error('User is not logged in');
 
-        return this.api.get<Dataset[]>('datasets', this.auth.authToken);
+        return this.api
+            .get<
+                {
+                    datasetId: number;
+                    datasetName: string;
+                    isLiked: boolean;
+                }[]
+            >('datasets', this.auth.authToken)
+            .pipe(
+                map((datasets) =>
+                    datasets.map((dataset) => ({
+                        id: dataset.datasetId,
+                        name: dataset.datasetName,
+                        liked: dataset.isLiked,
+                    }))
+                )
+            );
     }
 
     get(id: number) {
@@ -30,13 +48,33 @@ export class DatasetService {
     createLocal(dataset: NewLocalDataset) {
         if (this.auth.authToken === null) throw Error('User is not logged in');
 
-        return this.api.post('datasets/upload', dataset, this.auth.authToken);
+        return this.api.post(
+            'datasets/upload',
+            {
+                datasetName: dataset.name,
+                csvContent: dataset.csvFile,
+                doesHaveHeader: dataset.doesHaveHeader,
+                doesHaveAutoMap: dataset.autoMap,
+                rowTerminator: dataset.rowSeparator,
+                fieldTerminator: dataset.fieldSeparator,
+            },
+            this.auth.authToken
+        );
     }
 
     createExternal(dataset: NewExternalDataset) {
         if (this.auth.authToken === null) throw Error('User is not logged in');
 
-        return this.api.post('datasets/create', dataset, this.auth.authToken);
+        return this.api.post(
+            'datasets/create',
+            {
+                connectionId: dataset.connectionId,
+                datasetName: dataset.name,
+                tableName: dataset.tableName,
+                //isLiked: false,
+            },
+            this.auth.authToken
+        );
     }
 
     editName(id: number, newName: string) {
