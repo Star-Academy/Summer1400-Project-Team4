@@ -19,7 +19,7 @@ export class Pipeline {
 
     validations = new ReplaySubject<ValidationErrorList>(1);
 
-    constructor(public id: number, public name: string) {}
+    constructor(public id: number | undefined, public name: string) {}
 
     getNode(id: number): { index: number; node: PipelineNode } | undefined {
         const index = this.nodes.findIndex((node) => node.id === id);
@@ -50,12 +50,7 @@ export class Pipeline {
             inputs = new Array(pipelineNodeInfo[type].numInputs).fill(null);
         }
 
-        const node = new nodeClasses[type](
-            this.nextId,
-            name,
-            position,
-            inputs
-        );
+        const node = new nodeClasses[type](this.nextId, name, position, inputs);
 
         this.addNode(node);
         return node.id;
@@ -171,3 +166,13 @@ export class Pipeline {
         return {};
     }
 }
+
+export let newPipeline = new Pipeline(undefined, 'سناریو جدید');
+newPipeline.createNode('دیتاست ورودی', PipelineNodeType.datasetInput, {
+    x: 3,
+    y: 5,
+});
+newPipeline.createNode('دیتاست خروجی', PipelineNodeType.datasetOutput, {
+    x: 11,
+    y: 5,
+});

@@ -1,4 +1,4 @@
-<mat-toolbar color="primary">
+<mat-toolbar color="primary" *ngIf="pipeline !== undefined">
     <a routerLink="/" mat-flat-button disableRipple color="primary">
         <mat-icon>call_split</mat-icon>
         <span class="logo-name"> سناریوچی</span>
@@ -32,26 +32,29 @@
     </span>
 
     <nav>
-        <button title="دانلود" mat-icon-button (click)="exportPipeline()">
+        <button title="ذخیره" mat-icon-button (click)="savePipeline()">
+            <mat-icon>save</mat-icon>
+        </button>
+        <button
+            title="دانلود سناریو"
+            mat-icon-button
+            (click)="exportPipeline()"
+        >
+            <mat-icon>file_download</mat-icon>
+        </button>
+        <button
+            title="آپلود سناریو"
+            mat-icon-button
+            (click)="pipelineImport.click()"
+        >
             <mat-icon>file_upload</mat-icon>
         </button>
-
-        <!-- <mat-button-toggle-group
-            name="ingredients"
-            aria-label="Ingredients"
-            multiple
-        >
-            <mat-button-toggle
-                ><mat-icon
-            color="primary">vertical_split</mat-icon></mat-button-toggle
-            >
-            <mat-button-toggle
-                ><mat-icon>horizontal_split</mat-icon></mat-button-toggle
-            >
-            <mat-button-toggle
-                ><mat-icon class="mat-icon-rtl-mirror">vertical_split</mat-icon></mat-button-toggle
-            >
-        </mat-button-toggle-group> -->
+        <input
+            type="file"
+            #pipelineImport
+            (change)="importPipeline($event)"
+            hidden
+        />
 
         <button mat-button [matMenuTriggerFor]="accountMenu">
             <mat-icon>person</mat-icon>
@@ -73,7 +76,7 @@
     </nav>
 </mat-toolbar>
 
-<mat-sidenav-container>
+<mat-sidenav-container *ngIf="pipeline !== undefined">
     <mat-sidenav mode="side" opened disableClose>
         <h2 class="no-selected-node" *ngIf="selectedNode === undefined">
             <mat-icon>info</mat-icon>

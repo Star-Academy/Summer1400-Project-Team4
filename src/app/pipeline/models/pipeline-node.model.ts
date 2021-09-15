@@ -211,6 +211,12 @@ export class DatasetInputNode extends PipelineNode {
         return errors;
     }
 
+    exportConfig() {
+        return {
+            datasetId: this.config.datasetId,
+        };
+    }
+
     static importConfig(exported: any): InputConfig {
         return {
             datasetId: exported.datasetId,
@@ -242,6 +248,12 @@ export class DatasetOutputNode extends PipelineNode {
         return errors;
     }
 
+    exportConfig() {
+        return {
+            datasetId: this.config.datasetId,
+        };
+    }
+
     static importConfig(exported: any): InputConfig {
         return {
             datasetId: exported.datasetId,
@@ -259,7 +271,7 @@ export class SortNode extends PipelineNode {
         public inputs: (number | null)[],
         config?: SortConfig
     ) {
-        super(id, name, PipelineNodeType.filter, position, inputs);
+        super(id, name, PipelineNodeType.sort, position, inputs);
 
         this.config = config || { orders: [] };
     }
@@ -282,6 +294,12 @@ export class SortNode extends PipelineNode {
         }
 
         return errors;
+    }
+
+    exportConfig() {
+        return {
+            orders: this.config.orders,
+        };
     }
 
     static importConfig(exported: any): SortConfig {
@@ -316,6 +334,10 @@ export class FilterNode extends PipelineNode {
         return errors;
     }
 
+    exportConfig() {
+        return this.config;
+    }
+
     static importConfig(exported: any): FilterConfig {
         return exported;
     }
@@ -331,7 +353,7 @@ export class JoinNode extends PipelineNode {
         public inputs: (number | null)[],
         config?: JoinConfig
     ) {
-        super(id, name, PipelineNodeType.filter, position, inputs);
+        super(id, name, PipelineNodeType.join, position, inputs);
 
         this.config = config || {
             type: JoinType.inner,
@@ -370,6 +392,15 @@ export class JoinNode extends PipelineNode {
         return errors;
     }
 
+    exportConfig() {
+        return {
+            type: this.config.type,
+            joinWith: this.config.joinWith,
+            leftTableKey: this.config.leftTableKey,
+            rightTableKey: this.config.rightTableKey,
+        };
+    }
+
     static importConfig(exported: any): JoinConfig {
         return {
             type: exported.type,
@@ -390,7 +421,7 @@ export class AggregateNode extends PipelineNode {
         public inputs: (number | null)[],
         config?: AggregateConfig
     ) {
-        super(id, name, PipelineNodeType.filter, position, inputs);
+        super(id, name, PipelineNodeType.aggregate, position, inputs);
 
         this.config = config || {
             groupBy: [],
@@ -450,6 +481,10 @@ export class AggregateNode extends PipelineNode {
         }
 
         return errors;
+    }
+
+    exportConfig() {
+        return this.config;
     }
 
     static importConfig(exported: any): AggregateConfig {

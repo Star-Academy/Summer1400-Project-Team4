@@ -25,6 +25,7 @@ import { ApiService } from './services/api.service';
 import { ConnectionService } from './services/connection.service';
 import { DatasetService } from './services/dataset.service';
 import { AuthGuard } from './guard/auth.guard';
+import { PipelineService } from './services/pipeline.service';
 
 @NgModule({
     declarations: [
@@ -59,6 +60,7 @@ import { AuthGuard } from './guard/auth.guard';
         AuthService,
         ConnectionService,
         DatasetService,
+        PipelineService,
         AuthGuard,
     ],
     bootstrap: [AppComponent],

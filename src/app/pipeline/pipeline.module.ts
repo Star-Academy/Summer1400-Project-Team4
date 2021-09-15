@@ -15,11 +15,17 @@ import { FilterConfigComponent } from './components/config/filter-config/filter-
 import { SortConfigComponent } from './components/config/sort-config/sort-config.component';
 import { JoinConfigComponent } from './components/config/join-config/join-config.component';
 import { FilteringTreeComponent } from './components/filtering-tree/filtering-tree.component';
+import { AuthGuard } from '../guard/auth.guard';
 
 const routes: Routes = [
     {
-        path: '',
+        path: ':id',
+        canActivate: [AuthGuard],
         component: DesignerComponent,
+    },
+    {
+        path: '**',
+        redirectTo: '/',
     },
 ];
 
@@ -45,6 +51,6 @@ const routes: Routes = [
         FormsModule,
         ReactiveFormsModule,
     ],
-    providers: [LineService],
+    providers: [LineService, AuthGuard],
 })
 export class PipelineModule {}

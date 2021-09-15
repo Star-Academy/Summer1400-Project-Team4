@@ -14,11 +14,13 @@ import {
     ElementRef,
     EventEmitter,
     Input,
+    OnChanges,
     OnInit,
     Output,
+    SimpleChanges,
     ViewChild,
 } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import {
     PipelineNode,
     PipelineNodeInfo,
@@ -76,7 +78,7 @@ interface DropListData {
     styleUrls: ['./diagram.component.scss'],
 })
 export class DiagramComponent
-    implements OnInit, AfterViewInit, AfterViewChecked
+    implements OnInit, OnChanges, AfterViewInit, AfterViewChecked
 {
     @Input() pipeline!: Pipeline;
     @Output('selectedNode') selectedNodeEvent =
@@ -84,55 +86,43 @@ export class DiagramComponent
     @ViewChild('lineContainer') lineContainer?: ElementRef<HTMLElement>;
     @ViewChild('cardContainer') cardContainer?: ElementRef<HTMLElement>;
 
-    private Line?: object;
-    lines: any[] = [];
     baseOffset = { x: 0, y: 0 };
     dragOffset = { x: 0, y: 0 };
     cards: Card[] = [];
     reposition = new Subject<void>();
     selectedCard?: Card;
     shouldReposition = false;
+    subscriptions: Subscription[] = [];
 
     Card = Card;
     nodeTypes = Object.values(pipelineNodeInfo);
     log = console.log;
 
-    constructor(private lineService: LineService) {}
+    constructor() {}
 
-    ngOnInit(): void {
-        this.pipeline.nodes.forEach((node) => {
-            this.cards.push(new Card(node));
-        });
-        this.pipeline.nodes.forEach((node) => {
-            this.updateCardInputs(node);
-        });
+    ngOnInit(): void {}
 
-        this.pipeline.nodeAdded.subscribe((node) => {
-            this.cards.push(new Card(node));
-            this.updateCardInputs(node);
-        });
+    ngOnChanges(changes: SimpleChanges): void {
+        if (
+            changes.pipeline !== undefined &&
+            changes.pipeline.previousValue !== changes.pipeline.currentValue
+        ) {
+            // remove last
+            if (changes.pipeline.previousValue) {
+                this.subscriptions.forEach((sub) => sub.unsubscribe());
+                this.subscriptions.splice(0);
+                this.shouldReposition = false;
+                this.updateSelectedCard(undefined);
+                this.cards.splice(0);
+                this.baseOffset = { x: 0, y: 0 };
+                this.dragOffset = { x: 0, y: 0 };
+            }
 
-        this.pipeline.nodeEdited.subscribe((node) => {
-            this.updateCardInputs(node);
-        });
-
-        this.pipeline.nodeRemoved.subscribe((node) => {
-            const index = this.cards.findIndex(
-                (card) => card.node.id === node.id
-            )!;
-            this.cards.splice(index, 1);
-        });
-
-        this.pipeline.loaded.subscribe(() => {
-            this.autoView();
-        });
+            this.initPipeline();
+        }
     }
 
     ngAfterViewInit() {
-        this.Line = this.lineService.onContainer(
-            this.lineContainer!.nativeElement
-        );
-
         window.addEventListener('load', () => {
             this.reposition.next();
         });
@@ -148,6 +138,44 @@ export class DiagramComponent
     updateSelectedCard(card?: Card) {
         this.selectedCard = card;
         this.selectedNodeEvent.emit(card?.node);
+    }
+
+    initPipeline() {
+        this.pipeline.nodes.forEach((node) => {
+            this.cards.push(new Card(node));
+        });
+
+        this.pipeline.nodes.forEach((node) => {
+            this.updateCardInputs(node);
+        });
+
+        this.subscriptions.push(
+            this.pipeline.nodeAdded.subscribe((node) => {
+                this.cards.push(new Card(node));
+                this.updateCardInputs(node);
+            })
+        );
+
+        this.subscriptions.push(
+            this.pipeline.nodeEdited.subscribe((node) => {
+                this.updateCardInputs(node);
+            })
+        );
+
+        this.subscriptions.push(
+            this.pipeline.nodeRemoved.subscribe((node) => {
+                const index = this.cards.findIndex(
+                    (card) => card.node.id === node.id
+                )!;
+                this.cards.splice(index, 1);
+            })
+        );
+
+        this.subscriptions.push(
+            this.pipeline.loaded.subscribe(() => {
+                this.autoView();
+            })
+        );
     }
 
     autoView() {

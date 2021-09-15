@@ -7,8 +7,8 @@ import {
 import { Pipeline } from './pipeline.model';
 
 export interface PipelineExport {
-    id: number;
-    name: string;
+    pipelineId?: number;
+    pipelineName: string;
     inputDatasetId: number;
     inputDataset: string;
     outputDatasetId: number | null;
@@ -42,8 +42,8 @@ export function exportPipeline(pipeline: Pipeline): PipelineExport {
         | undefined;
 
     return {
-        id: pipeline.id,
-        name: pipeline.name,
+        pipelineId: pipeline.id,
+        pipelineName: pipeline.name,
         inputDatasetId: inputDataset.config.datasetId!,
         inputDataset: JSON.stringify(inputDataset.export()),
         outputDatasetId: outputDataset?.config.datasetId || null,
@@ -61,7 +61,7 @@ export function exportPipeline(pipeline: Pipeline): PipelineExport {
 }
 
 export function importPipeline(exported: PipelineExport) {
-    const pipeline = new Pipeline(exported.id, exported.name);
+    const pipeline = new Pipeline(exported.pipelineId, exported.pipelineName);
 
     const inputDatasetExport = JSON.parse(exported.inputDataset);
     pipeline.addNode(importPipelineNode(inputDatasetExport));
@@ -73,4 +73,6 @@ export function importPipeline(exported: PipelineExport) {
         const outputDatasetExport = JSON.parse(exported.outputDataset);
         pipeline.addNode(importPipelineNode(outputDatasetExport));
     }
+
+    return pipeline;
 }
