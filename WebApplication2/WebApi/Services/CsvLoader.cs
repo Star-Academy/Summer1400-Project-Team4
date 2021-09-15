@@ -30,7 +30,7 @@ namespace WebApi.Services
             Console.WriteLine(bulkQuery);
             ExecuteCommands(newTableQuery);
             ExecuteCommands(bulkQuery);
-            //DeletePath(); 
+            DeletePath(); 
             return true;
         }
 
@@ -99,7 +99,7 @@ namespace WebApi.Services
                 rows[i] = rows[i].Replace(_csvProp.FieldTerminator, ",");
             }
 
-            _filePath = $"F:\\_{_dataSetId}.csv";
+            _filePath = $"_{_dataSetId}.csv";
             File.WriteAllLines(_filePath, rows);
         }
         

@@ -40,9 +40,17 @@ namespace WebApi.Controllers
             var connection = _database.Connections.FirstOrDefault(x => x.ConnectionId == dataset.connectionId);
             if (connection == null)
                 return BadRequest("Wrong Connection ID");
-            new SqlTableCreator().CopySql(connection.GetConnectionString());
-            _database.SaveChangesAsync();
-            return Ok("created");
+            try
+            {
+                new SqlTableCreator().CopySql(connection.GetConnectionString(), dataset);
+                _database.SaveChangesAsync();
+                return Ok("created");
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+            
         }
 
         [HttpPost]
