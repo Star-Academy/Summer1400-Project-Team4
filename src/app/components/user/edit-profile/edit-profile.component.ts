@@ -20,7 +20,7 @@ export class EditProfileComponent implements OnInit {
   public form!: FormGroup;
   public hide = true;
   public disableBtn: boolean = false;
-  public firstName: string = "";
+  public fullName: string = "";
   public email: string = "";
   public userName: string = "";
 
@@ -29,28 +29,28 @@ export class EditProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const userId: string | null = this.auth.getUserId(); /* fix me! */
-    if (!userId) {
-      this.router.navigateByUrl('/').then();
-    }
-    this.userService.getUserInfos(userId).subscribe(res => {
-      this.userData = res.user;
-      console.log(this.userData);
-      this.firstName = res.user.first_name;
-      this.email = res.user.email;
-      this.userName = res.user.username;
-      this.imageSrc = res.user.avatar;
-    }, (error => {
-      this.snackBar.open('خطایی رخ داد', '', {
-        duration: 2000, panelClass: 'red-snackbar'
-      });
-    }));
+    // const userId: string | null = this.auth.getUserId(); /* fix me! */
+    // if (!userId) {
+    //   this.router.navigateByUrl('/').then();
+    // }
+    // this.userService.getUserInfos(userId).subscribe(res => {
+    //   this.userData = res.user;
+    //   console.log(this.userData);
+    //   this.fullName = res.user.first_name;
+    //   this.email = res.user.email;
+    //   this.userName = res.user.username;
+    //   this.imageSrc = res.user.avatar;
+    // }, (error => {
+    //   this.snackBar.open('خطایی رخ داد', '', {
+    //     duration: 2000, panelClass: 'red-snackbar'
+    //   });
+    // }));
     this.form = this.formBuilder.group({
       username: [null, [Validators.required]],
       password: [null, Validators.pattern('pattern=.{0}|.{4,}')],
       email: [null, Validators.email],
       // email: [null, [Validators.email ,  Validators.required]],
-      firstName: [null, Validators.required],
+      fullName: [null, Validators.required],
     });
   }
 
@@ -68,7 +68,7 @@ export class EditProfileComponent implements OnInit {
     } else {
       userdata = {
         token: this.auth.authToken, username: this.userName, email: this.email,
-        firstName: this.firstName, avatar: this.imageSrc
+        fullName: this.fullName, avatar: this.imageSrc
       };
     }
     this.userService.updateUserInfos(userdata).subscribe(() => {

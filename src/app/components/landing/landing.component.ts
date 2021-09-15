@@ -17,9 +17,6 @@ export class LandingComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (!this.auth.isLoggedIn) {
-      this.router.navigate(['user', 'login']).then();
-    }
   }
 
   alertLoginSignUp = (): void => {

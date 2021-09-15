@@ -16,10 +16,10 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userService.getUserInfos(/* fix me! */).subscribe(res => {
-      this.name = res.user.first_name;
-      this.imgSrc = res.user.avatar;
-    })
+    // this.userService.getUserInfos(/* fix me! */).subscribe(res => {
+    //   this.name = res.user.first_name;
+    //   this.imgSrc = res.user.avatar;
+    // })
   }
 
 }

@@ -13,17 +13,17 @@ export class UserService {
     constructor(private api: ApiService) {}
 
     getUser(userData: userLogin): Observable<Token> {
-        return this.api.post<Token>(`user/login`, userData);
+        return this.api.post<Token>(`Users/login`, userData);
     }
 
     getSignUp(userData: userSignUp): Observable<Token> {
-        return this.api.post<Token>(`user/register`, userData);
+        return this.api.post<Token>(`Users/register`, userData);
     }
 
     getUserInfos(id: string | null): Observable<UserEditData> {
         return this.api.get<UserEditData>(`user/one/${id}`);
     }
     updateUserInfos(userData: Object): Observable<void> {
-        return this.api.post<void>(`user/alter`, userData);
+        return this.api.post<void>(`Users/alter`, userData);
     }
 }

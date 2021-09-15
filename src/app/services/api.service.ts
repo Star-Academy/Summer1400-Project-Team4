@@ -4,13 +4,12 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class ApiService {
-    API_URL = 'https://songs.code-star.ir/' as const;
+    API_URL = 'http://team4.somee.com/api/' as const;
 
     HEADERS: { [header: string]: string } = {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        'Cache-Control':
-            'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
+      'Cache-Control': 'no-cache, no-store, must-revalidate, post-check=0, pre-check=0' ,
         Pragma: 'no-cache',
         Expires: '0',
     };

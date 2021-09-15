@@ -22,7 +22,7 @@ export class SignupComponent implements OnInit {
       username: [null, [Validators.required]],
       password: [null, Validators.required],
       email   : [null , Validators.email],
-      firstName    : [null , Validators.required],
+      fullName    : [null , Validators.required],
     });
   }
 
@@ -36,18 +36,20 @@ export class SignupComponent implements OnInit {
     event.preventDefault();
     this.disableBtn = true ;
     const form = event.target as HTMLFormElement;
-    const firstName : string = form.firstName.value;
+    const fullName : string = form.fullName.value;
     const email : string = form.email.value;
     const username : string = form.username.value;
     const password : string = form.password.value;
 
-    const userdata = {username : username , email : email , password : password , first_name: firstName};
+    const userdata = {username : username , email : email , password : password , fullName: fullName};
 
     //alternative way to pass the body of http request that is userData here :
     // const userdata = this.form.value
 
     this.userService.getSignUp(userdata).subscribe(res =>
-      {}
+      {
+        console.log(res);
+      }
       , error =>
       {
         this.disableBtn = false ;

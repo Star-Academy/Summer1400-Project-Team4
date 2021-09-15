@@ -45,7 +45,6 @@ export class LoginComponent implements OnInit {
 
     this.userService.getUser(userdata).subscribe(res => {
         this.auth.authToken = res.token;
-        this.auth.setUserLocal(username , (res.id).toString() , res.token); /* fix me! */
       }
       , error => {
         this.disableBtn = false;
