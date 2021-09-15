@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {TableVirtualScrollDataSource} from 'ng-table-virtual-scroll';
-import {LoginSignupAlertComponent} from "../messages/login-signup-alert/login-signup-alert.component";
 import {FilteringTreeComponent} from "../filtering-tree/filtering-tree.component";
 import {MatDialog} from "@angular/material/dialog";
+import {MatSort} from "@angular/material/sort";
 export interface PeriodicElement {
   name: string;
   position: number;
@@ -55,9 +55,10 @@ let ELEMENT_DATA: PeriodicElement[] = [
   templateUrl: './dashbord.component.html',
   styleUrls: ['./dashbord.component.scss']
 })
-export class DashbordComponent implements OnInit {
+export class DashbordComponent implements OnInit , AfterViewInit {
   displayedColumns: string[] = ['position', 'name', 'like', 'deleteEmployee'];
   dataSource!: TableVirtualScrollDataSource<PeriodicElement>;
+  @ViewChild(MatSort) sort!: MatSort;
 
   constructor(public dialog : MatDialog) {
     ELEMENT_DATA.map((data: any) => {
@@ -78,6 +79,12 @@ export class DashbordComponent implements OnInit {
     });
     this.dataSource = new TableVirtualScrollDataSource(ELEMENT_DATA);
   }
+
+  ngAfterViewInit(): void
+  {
+    this.dataSource.sort = this.sort;
+  }
+
 
   handleMouseOver(row: { position: any; }) {
     const position = row.position;
@@ -103,4 +110,11 @@ export class DashbordComponent implements OnInit {
   clickName(element: PeriodicElement) {
     console.log(element);
   }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+  }
+
 }

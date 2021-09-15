@@ -1,9 +1,20 @@
 .wrapper {
-  height: 94%;
+  height: 100%;
   overflow: auto;
 }
 
 table {
+  width: 70%;
+}
+
+td , th
+{
+  width: 25%;
+}
+
+.mat-form-field {
+  font-size: 1.4rem;
+  margin-right: 6rem;
   width: 70%;
 }
 

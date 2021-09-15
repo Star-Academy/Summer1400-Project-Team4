@@ -1,25 +1,29 @@
-<p style="padding-right: 10px">دیتاست </p>
+<!--<p style="padding-right: 10px">دیتاست </p>-->
 <cdk-virtual-scroll-viewport (scrolledIndexChange)="getNextBatch($event)" class="wrapper mat-elevation-z2" tvsItemSize>
-  <table *ngIf="dataSource" [dataSource]="dataSource" class="mat-elevation-z8" mat-table style="margin-right: 6rem">
+  <mat-form-field (keyup)="applyFilter($event)" appearance="standard">
+    <mat-label>فیلتر</mat-label>
+    <input matInput  #input>
+  </mat-form-field>
+  <table *ngIf="dataSource" [dataSource]="dataSource" class="mat-elevation-z8" mat-table matSort style="margin-right: 6rem">
     <!-- Position Column -->
     <ng-container matColumnDef="position">
-      <th *matHeaderCellDef mat-header-cell>ردیف</th>
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>ردیف</th>
       <td *matCellDef="let element" mat-cell> {{element.position}} </td>
     </ng-container>
 
     <!-- Name Column -->
     <ng-container matColumnDef="name">
-      <th  *matHeaderCellDef mat-header-cell> نام</th>
+      <th  *matHeaderCellDef mat-header-cell mat-sort-header> نام</th>
       <td (click)="clickName(element)" *matCellDef="let element" mat-cell>
         <button mat-button style="margin-right: -2rem"> {{element.name}} </button>
       </td>
     </ng-container>
 
     <ng-container matColumnDef="like">
-      <th *matHeaderCellDef mat-header-cell>
+      <th   *matHeaderCellDef mat-header-cell>
         <mat-icon>star</mat-icon>
       </th>
-      <td *matCellDef="let element" mat-cell>
+      <td  *matCellDef="let element" mat-cell>
         <mat-icon>star_border</mat-icon>
       </td>
     </ng-container>
@@ -40,11 +44,17 @@
       </td>
     </ng-container>
 
-    <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
 
     <tr (mouseleave)="handleMouseLeave(element)" (mouseover)="handleMouseOver(element)"
         *matRowDef="let element; columns: displayedColumns;"
         mat-row>
     </tr>
+
+    <!-- Row shown when there is no matching data. -->
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">دیتاستی با مضمون "{{input.value}}"  وجود ندارد </td>
+    </tr>
+
   </table>
 </cdk-virtual-scroll-viewport>

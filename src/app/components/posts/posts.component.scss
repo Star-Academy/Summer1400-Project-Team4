@@ -25,13 +25,16 @@ table {
   width: 70%;
   height: 600px;
 }
-
+td , th
+{
+  width: 25%;
+}
 cdk-virtual-scroll-viewport {
   height: 100vh;
 }
 
 .wrapper {
-  height: 94%;
+  height: 95%;
 }
 .mat-row:nth-child(even)
 {

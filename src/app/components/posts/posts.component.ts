@@ -1,8 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {TableVirtualScrollDataSource} from "ng-table-virtual-scroll";
 import {PeriodicElement} from "../dashbord/dashbord.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {HttpClient} from "@angular/common/http";
+import {MatSort} from "@angular/material/sort";
 
 const buffer = 200;
 const message = 'نمونه های بیشتر لود شدند  ...';
@@ -12,13 +13,27 @@ const message = 'نمونه های بیشتر لود شدند  ...';
   templateUrl: './posts.component.html',
   styleUrls: ['./posts.component.scss']
 })
-export class PostsComponent implements OnInit {
+export class PostsComponent implements OnInit , AfterViewInit {
 
   displayedColumns = ['position', 'name'];
   dataSource!: TableVirtualScrollDataSource<PeriodicElement>;
   public enableScroll: boolean = true;
+  @ViewChild(MatSort) sort!: MatSort;
 
   constructor(public snackBar: MatSnackBar, public http: HttpClient) {
+  }
+
+  ngOnInit(): void {
+    this.dataSource = new TableVirtualScrollDataSource(ELEM);
+    // console.log("ngOnInit");
+    // setTimeout(()=>{
+    //   this.dataSource.data[0].name = "opotoniom";
+    // } , 3000)
+  }
+
+  ngAfterViewInit(): void
+  {
+    this.dataSource.sort = this.sort;
   }
 
   onTableScroll(e: { target: any; }) {
@@ -54,13 +69,9 @@ export class PostsComponent implements OnInit {
     console.log('*'.repeat(25))
   }
 
-  ngOnInit(): void {
-    this.dataSource = new TableVirtualScrollDataSource(ELEM);
-
-    // console.log("ngOnInit");
-    // setTimeout(()=>{
-    //   this.dataSource.data[0].name = "opotoniom";
-    // } , 3000)
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
 }
