@@ -6,6 +6,7 @@ using WebApi.models;
 using WebApi.Services;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
+using WebApi.models.boolAlgebra;
 using WebApi.models.BoolAlgebraModels;
 using WebApi.models.BoolAlgebraModels.BoolOperations;
 
@@ -47,21 +48,10 @@ namespace WebApi
 
         // public static void Main()
         // {
-        // var x = JsonConvert.DeserializeObject<dynamic>(
-        //     "{\"Command\":\"AND\",\"_leftStatement\":{\"Command\":\"OR\",\"_leftStatement\":{\"Command\":\"=\",\"_field\":\"name\",\"_value\":\"\\\"arash\\\"\"},\"_rightStatement\":{\"Command\":\"<\",\"_field\":\"age\",\"_value\":\"19\"}\r\n},\"_rightStatement\":{\"Command\":\"<\",\"_field\":\"fatherName\",\"_value\":\"\\\"saeed\\\"\"}}");
-        // dynamic y;
-        // if (x.Command == "AND")
-        //     y = JsonConvert.DeserializeObject<AndOperation>(x.ToString());
-        // else
-        //     y = JsonConvert.DeserializeObject<OrOperation>(x.ToString());
+        // var x = JsonConvert.DeserializeObject<FilterOperation>(
+        //     "{\r\n  \"Command\": \"AND\",\r\n  \"_statements\": [\r\n    {\r\n      \"Command\": \"=\",\r\n      \"_field\": \"name\",\r\n      \"_value\": \"ali\"\r\n    },\r\n    {\r\n      \"Command\": \"OR\",\r\n      \"_statements\": [\r\n        {\r\n          \"Command\": \"<\",\r\n          \"_field\": \"age\",\r\n          \"_value\": \"19\"\r\n        },\r\n        {\r\n          \"Command\": \">\",\r\n          \"_field\": \"mark\",\r\n          \"_value\": \"19.5\"\r\n        }\r\n      ]\r\n    },\r\n    {\r\n      \"Command\": \"AND\",\r\n      \"_statements\": [\r\n        {\r\n          \"Command\": \"=\",\r\n          \"_field\": \"uni\",\r\n          \"_value\": \"sharif\"\r\n        },\r\n        {\r\n          \"Command\": \"=\",\r\n          \"_field\": \"intern\",\r\n          \"_value\": \"codestar\"\r\n        }\r\n      ]\r\n    }\r\n  ]\r\n}");
         //
-        // Console.WriteLine(y);
-        //
-        //
-        // // var x = JsonConvert.DeserializeObject<BoolOperation>(
-        // //     "{\"Command\":\"AND\",\"_leftStatement\":{\"Command\":\"OR\",\"_leftStatement\":{\"Command\":\"=\",\"_field\":\"name\",\"_value\":\"\\\"arash\\\"\"},\"_rightStatement\":{\"Command\":\"<\",\"_field\":\"age\",\"_value\":\"19\"}\r\n},\"_rightStatement\":{\"Command\":\"<\",\"_field\":\"fatherName\",\"_value\":\"\\\"saeed\\\"\"}}");
-        // //
-        // // Console.WriteLine(x.ToString());
+        // Console.WriteLine(x.ToString());
         // }
 
         //

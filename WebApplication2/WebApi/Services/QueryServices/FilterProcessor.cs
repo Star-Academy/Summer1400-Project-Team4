@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using WebApi.models.boolAlgebra;
 using WebApi.Services.Sql;
 
 namespace WebApi.Services.QueryServices
@@ -24,7 +25,7 @@ namespace WebApi.Services.QueryServices
 
         private static string InterpretToSql(string instruction)
         {
-            var filterBooleanStatement = JsonConvert.DeserializeObject<dynamic>(instruction);
+            var filterBooleanStatement = JsonConvert.DeserializeObject<FilterOperation>(instruction);
             return filterBooleanStatement.ToString();
         }
     }
