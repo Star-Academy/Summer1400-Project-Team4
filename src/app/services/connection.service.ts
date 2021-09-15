@@ -15,23 +15,23 @@ export class ConnectionService {
         return this.api
             .get<
                 {
-                    id: number;
+                    connectionId: number;
                     connectionName: string;
-                    host: string;
-                    username: string;
-                    password: string;
-                    databaseName: string;
+                    serverIp: string;
+                    DBUserName: string;
+                    dpPassword: string;
+                    dbName: string;
                 }[]
-            >('connections', this.auth.authToken)
+            >('connection', this.auth.authToken)
             .pipe(
                 map((connections) =>
                     connections.map((connection) => ({
-                        id: connection.id,
+                        id: connection.connectionId,
                         name: connection.connectionName,
-                        host: connection.host,
-                        username: connection.username,
-                        password: connection.password,
-                        databaseName: connection.databaseName,
+                        host: connection.serverIp,
+                        username: connection.DBUserName,
+                        password: connection.dpPassword,
+                        databaseName: connection.dbName,
                     }))
                 )
             );
@@ -42,21 +42,21 @@ export class ConnectionService {
 
         return this.api
             .get<{
-                id: number;
+                connectionId: number;
                 connectionName: string;
-                host: string;
-                username: string;
-                password: string;
-                databaseName: string;
-            }>(`connections/${id}`, this.auth.authToken)
+                serverIp: string;
+                dbUserName: string;
+                dbPassword: string;
+                dbName: string;
+            }>(`connection/${id}`, this.auth.authToken)
             .pipe(
                 map((connection) => ({
-                    id: connection.id,
+                    id: connection.connectionId,
                     name: connection.connectionName,
-                    host: connection.host,
-                    username: connection.username,
-                    password: connection.password,
-                    databaseName: connection.databaseName,
+                    host: connection.serverIp,
+                    username: connection.dbUserName,
+                    password: connection.dbPassword,
+                    databaseName: connection.dbName,
                 }))
             );
     }
@@ -65,12 +65,13 @@ export class ConnectionService {
         if (this.auth.authToken === null) throw Error('User is not logged in');
 
         return this.api.post(
-            'connections',
+            'connection',
             {
                 connectionName: connection.name,
-                host: connection.host,
-                user: connection.username,
-                password: connection.password,
+                serverIp: connection.host,
+                dbUserName: connection.username,
+                dbPassword: connection.password,
+                dbName: connection.databaseName,
             },
             this.auth.authToken
         );
@@ -80,7 +81,7 @@ export class ConnectionService {
         if (this.auth.authToken === null) throw Error('User is not logged in');
 
         return this.api.put(
-            `connections/${id}`,
+            `connection/${id}`,
             { newName: newName },
             this.auth.authToken
         );
@@ -89,15 +90,6 @@ export class ConnectionService {
     delete(id: number) {
         if (this.auth.authToken === null) throw Error('User is not logged in');
 
-        return this.api.delete(`connections/${id}`, this.auth.authToken);
-    }
-
-    getConnectionDatabases(id: number) {
-        if (this.auth.authToken === null) throw Error('User is not logged in');
-
-        return this.api.get<string[]>(
-            `connections/${id}/databaseName`,
-            this.auth.authToken
-        );
+        return this.api.delete(`connection/${id}`, this.auth.authToken);
     }
 }
