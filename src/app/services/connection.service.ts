@@ -18,8 +18,9 @@ export class ConnectionService {
                     id: number;
                     connectionName: string;
                     host: string;
-                    user: string;
+                    username: string;
                     password: string;
+                    databaseName: string;
                 }[]
             >('connections', this.auth.authToken)
             .pipe(
@@ -28,8 +29,9 @@ export class ConnectionService {
                         id: connection.id,
                         name: connection.connectionName,
                         host: connection.host,
-                        user: connection.user,
+                        username: connection.username,
                         password: connection.password,
+                        databaseName: connection.databaseName,
                     }))
                 )
             );
@@ -43,16 +45,18 @@ export class ConnectionService {
                 id: number;
                 connectionName: string;
                 host: string;
-                user: string;
+                username: string;
                 password: string;
+                databaseName: string;
             }>(`connections/${id}`, this.auth.authToken)
             .pipe(
                 map((connection) => ({
                     id: connection.id,
                     name: connection.connectionName,
                     host: connection.host,
-                    user: connection.user,
+                    username: connection.username,
                     password: connection.password,
+                    databaseName: connection.databaseName,
                 }))
             );
     }
@@ -65,7 +69,7 @@ export class ConnectionService {
             {
                 connectionName: connection.name,
                 host: connection.host,
-                user: connection.user,
+                user: connection.username,
                 password: connection.password,
             },
             this.auth.authToken
