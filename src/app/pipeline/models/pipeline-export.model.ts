@@ -44,11 +44,11 @@ export function exportPipeline(pipeline: Pipeline): PipelineExport {
     return {
         pipelineId: pipeline.id,
         pipelineName: pipeline.name,
-        inputDatasetId: inputDataset?.config.datasetId || null,
+        inputDatasetId: inputDataset?.config.datasetId || 0,
         inputDataset: inputDataset
             ? JSON.stringify(inputDataset.export())
             : null,
-        outputDatasetId: outputDataset?.config.datasetId || null,
+        outputDatasetId: outputDataset?.config.datasetId || 0,
         outputDataset: outputDataset
             ? JSON.stringify(outputDataset.export())
             : null,

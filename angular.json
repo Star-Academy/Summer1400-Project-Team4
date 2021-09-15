@@ -37,7 +37,8 @@
               "src/styles.scss"
             ],
             "scripts": [
-              "node_modules/leader-line/leader-line.min.js"
+              "node_modules/leader-line/leader-line.min.js",
+              "node_modules/js-file-download/file-download.js"
             ]
           },
           "configurations": {
@@ -107,7 +108,8 @@
               "src/styles.scss"
             ],
             "scripts": [
-              "node_modules/leader-line/leader-line.min.js"
+              "node_modules/leader-line/leader-line.min.js",
+              "node_modules/js-file-download/file-download.js"
             ]
           }
         },
