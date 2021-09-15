@@ -26,6 +26,7 @@ import { ConnectionService } from './services/connection.service';
 import { DatasetService } from './services/dataset.service';
 import { AuthGuard } from './guard/auth.guard';
 import { PipelineService } from './services/pipeline.service';
+import { DatasetComponent } from './components/dataset/dataset.component';
 
 @NgModule({
     declarations: [
@@ -42,8 +43,9 @@ import { PipelineService } from './services/pipeline.service';
         SignupComponent,
         LoginFailedComponent,
         EditProfileComponent,
+        DatasetComponent,
     ],
-    entryComponents: [LoginSignupAlertComponent, LoginFailedComponent],
+    entryComponents: [LoginSignupAlertComponent, LoginFailedComponent , DatasetComponent],
     imports: [
         BrowserModule,
         AppRoutingModule,
