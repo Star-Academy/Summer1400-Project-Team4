@@ -7,10 +7,12 @@ import { UserComponent } from './components/user/user.component';
 import { LoginComponent } from './components/user/login/login.component';
 import { SignupComponent } from './components/user/signup/signup.component';
 import { EditProfileComponent } from './components/user/edit-profile/edit-profile.component';
+import {AuthGuard} from "./guard/auth.guard";
 
 const routes: Routes = [
     {
         path: 'pipeline',
+        canActivate : [AuthGuard],
         loadChildren: () =>
             import('./pipeline/pipeline.module').then(
                 (module) => module.PipelineModule
@@ -31,12 +33,14 @@ const routes: Routes = [
             {
                 path: 'edit_profile',
                 component: EditProfileComponent,
+                canActivate : [AuthGuard]
             },
         ],
     },
     {
         path: '',
         component: LandingComponent,
+        canActivate : [AuthGuard],
         children: [
             {
                 path: '',

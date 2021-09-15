@@ -1,5 +1,4 @@
 export interface Token {
-  id : number ,
   token : string
 }
 export interface userLogin {
@@ -10,7 +9,7 @@ export interface userSignUp {
   username : string ,
   email : string ,
   password : string ,
-  first_name : string,
+  fullName : string,
   avatar?: string;
 }
 export interface UserEditData {
@@ -19,6 +18,6 @@ export interface UserEditData {
     username : string ,
     email : string ,
     password : string ,
-    first_name : string
+    fullName : string
   }
 }

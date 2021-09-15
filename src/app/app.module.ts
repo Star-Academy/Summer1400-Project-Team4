@@ -25,6 +25,7 @@ import { FilteringTreeComponent } from './components/filtering-tree/filtering-tr
 import { ApiService } from './services/api.service';
 import { ConnectionService } from './services/connection.service';
 import { DatasetService } from './services/dataset.service';
+import {AuthGuard} from "./guard/auth.guard";
 
 @NgModule({
     declarations: [
@@ -64,6 +65,7 @@ import { DatasetService } from './services/dataset.service';
         AuthService,
         ConnectionService,
         DatasetService,
+        AuthGuard
     ],
     bootstrap: [AppComponent],
     exports: [],
