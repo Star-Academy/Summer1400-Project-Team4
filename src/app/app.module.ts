@@ -21,11 +21,10 @@ import { LoginFailedComponent } from './components/messages/login-failed/login-f
 import { EditProfileComponent } from './components/user/edit-profile/edit-profile.component';
 import { UserService } from './services/user.service';
 import { AuthService } from './services/auth.service';
-import { FilteringTreeComponent } from './components/filtering-tree/filtering-tree.component';
 import { ApiService } from './services/api.service';
 import { ConnectionService } from './services/connection.service';
 import { DatasetService } from './services/dataset.service';
-import {AuthGuard} from "./guard/auth.guard";
+import { AuthGuard } from './guard/auth.guard';
 
 @NgModule({
     declarations: [
@@ -42,13 +41,8 @@ import {AuthGuard} from "./guard/auth.guard";
         SignupComponent,
         LoginFailedComponent,
         EditProfileComponent,
-        FilteringTreeComponent,
     ],
-    entryComponents: [
-        LoginSignupAlertComponent,
-        LoginFailedComponent,
-        FilteringTreeComponent,
-    ],
+    entryComponents: [LoginSignupAlertComponent, LoginFailedComponent],
     imports: [
         BrowserModule,
         AppRoutingModule,
@@ -65,7 +59,7 @@ import {AuthGuard} from "./guard/auth.guard";
         AuthService,
         ConnectionService,
         DatasetService,
-        AuthGuard
+        AuthGuard,
     ],
     bootstrap: [AppComponent],
     exports: [],

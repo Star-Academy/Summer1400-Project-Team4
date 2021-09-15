@@ -1,7 +1,5 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {TableVirtualScrollDataSource} from 'ng-table-virtual-scroll';
-import {FilteringTreeComponent} from "../filtering-tree/filtering-tree.component";
-import {MatDialog} from "@angular/material/dialog";
 import {MatSort} from "@angular/material/sort";
 export interface PeriodicElement {
   name: string;
@@ -60,23 +58,13 @@ export class DashbordComponent implements OnInit , AfterViewInit {
   dataSource!: TableVirtualScrollDataSource<PeriodicElement>;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(public dialog : MatDialog) {
+  constructor() {
     ELEMENT_DATA.map((data: any) => {
       data.show = false
     });
   }
 
   ngOnInit(): void {
-    const ref = this.dialog.open(FilteringTreeComponent, {
-      panelClass: 'filterDialog', disableClose: false,
-      closeOnNavigation: false
-    });
-    const sub = ref.componentInstance.onSaveGraph.subscribe(() => {
-      ref.close();
-    });
-    ref.afterClosed().subscribe(()=> {
-    sub.unsubscribe();
-    });
     this.dataSource = new TableVirtualScrollDataSource(ELEMENT_DATA);
   }
 
