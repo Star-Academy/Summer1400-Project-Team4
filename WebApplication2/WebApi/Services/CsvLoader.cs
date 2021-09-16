@@ -21,7 +21,7 @@ namespace WebApi.Services
             _dataSetId = dataSetId;
         }
 
-        public bool TransportCsvToSql()
+        public void TransportCsvToSql()
         {
             CreatePath();
             var newTableQuery = GenerateCreateTableQuery();
@@ -29,9 +29,8 @@ namespace WebApi.Services
             Console.WriteLine(newTableQuery);
             Console.WriteLine(bulkQuery);
             ExecuteCommands(newTableQuery);
-            ExecuteCommands(bulkQuery);
-            DeletePath(); 
-            return true;
+             ExecuteCommands(bulkQuery);
+             DeletePath();
         }
 
         private void DeletePath()
@@ -43,7 +42,7 @@ namespace WebApi.Services
         {
             var stringBuilder = new StringBuilder();
             stringBuilder.Append($"BULK INSERT _{_dataSetId}\n");
-            stringBuilder.Append($"FROM '{_filePath}'\n");
+            stringBuilder.Append($"FROM '{Path.GetFullPath(_filePath)}'\n");
             stringBuilder.Append("WITH (\n" +
                                  $"FIRSTROW = {FirstRow},\n" +
                                  $"FIELDTERMINATOR = ',',\n" +

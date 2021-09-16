@@ -1,10 +1,8 @@
 using System;
-using System.IO;
 using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
 using WebApi.models;
 using WebApi.Services;
 using WebApi.Validations;
@@ -33,10 +31,16 @@ namespace WebApi.Controllers
         [Route("create")]
         public IActionResult Create([FromBody] Dataset dataset, [FromHeader] string token)
         {
-            var user = _database.Users.FirstOrDefault(x => x.Token == token);
-            if (user == null)
-                return Unauthorized("Wrong token");
-            user.UserDatasets.Add(dataset);
+            try
+            {
+                var user = _userValidator.IsUserValid(token);
+                user.UserDatasets.Add(dataset);
+            }
+            catch (Exception e)
+            {
+                return Unauthorized(e.Message);
+            }
+
             var connection = _database.Connections.FirstOrDefault(x => x.ConnectionId == dataset.connectionId);
             if (connection == null)
                 return BadRequest("Wrong Connection ID");
@@ -44,13 +48,12 @@ namespace WebApi.Controllers
             {
                 new SqlTableCreator().CopySql(connection.GetConnectionString(), dataset);
                 _database.SaveChangesAsync();
-                return Ok("created");
+                return Ok(dataset.DatasetId);
             }
             catch (Exception e)
             {
-                return BadRequest();
+                return BadRequest(e.Message);
             }
-            
         }
 
         [HttpPost]
@@ -60,33 +63,27 @@ namespace WebApi.Controllers
             try
             {
                 var user = _userValidator.IsUserValid(token);
-                user.UserDatasets.Add(new Dataset()
+                var dataset = new Dataset()
                 {
                     DatasetName = data.DatasetName, IsLiked = false
-                });
+                };
+                user.UserDatasets.Add(dataset);
+                var loader = new CsvLoader(data, dataset.DatasetId);
+                loader.TransportCsvToSql();
+                _database.SaveChanges();
+                return Ok(dataset.DatasetId);
             }
             catch (Exception e)
             {
                 return Unauthorized(e.Message);
             }
-
-            var max = Enumerable.Prepend(_database.Datasets.Select(databaseDataset 
-                    => databaseDataset.DatasetId), 0)
-                .Max();
-            var loader = new CsvLoader(data, max + 1);
-            if (!loader.TransportCsvToSql())
-            {
-                return BadRequest();
-            }
-
-            _database.SaveChanges();
-            return Ok();
         }
+
         [HttpPut]
         [Route("{id:int}")]
         public IActionResult ChangeName(int id, string newName)
         {
-            Console.WriteLine("ali\"" );
+            Console.WriteLine("ali\"");
             var dataset = _database.Datasets.FirstOrDefault(x => x.DatasetId == id);
             if (dataset == null)
                 return BadRequest("No such id");
