@@ -45,22 +45,16 @@ export class DatasetComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  onFileChange(event: any) {
-    const reader = new FileReader();
-    if (event.target.files) {
-      const [file] = event.target.files;
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        this.fileString = reader.result as string;
-        this.form.patchValue({
-          csvFile: reader.result
-        });
-      }
-    }
+  async onFileChange(event: any) {
     const file: File = event.target.files[0];
     if (file) {
       this.fileName = file.name;
       this.file = file;
+      const text = await file.text();
+      this.fileString = text;
+      this.form.patchValue({
+        csvFile: text
+      });
     }
   }
 

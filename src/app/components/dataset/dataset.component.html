@@ -6,20 +6,24 @@
   </mat-form-field>
 
   <mat-form-field>
-    <mat-label>جدا کننده ی سطر</mat-label>
-    <mat-select [(value)]="rowSelected" required>
-      <mat-option value=",">ویرگول</mat-option>
-      <mat-option value="-">خط فاصله</mat-option>
-      <mat-option value="//n">سطر جدید</mat-option>
+    <mat-label>جدا کننده‌ی ستون</mat-label>
+    <mat-select [(value)]="filedSelected"  required>
+      <mat-option value=",">,</mat-option>
+      <mat-option value=":">:</mat-option>
+      <mat-option value=";">;</mat-option>
+      <mat-option value="-">-</mat-option>
+      <mat-option value="\n">خط جدید</mat-option>
     </mat-select>
   </mat-form-field>
 
   <mat-form-field>
-    <mat-label>جدا کننده ی ستون</mat-label>
-    <mat-select [(value)]="filedSelected"  required>
-      <mat-option value=",">ویرگول</mat-option>
-      <mat-option value="-">خط فاصله</mat-option>
-      <mat-option value="\\n">سطر جدید</mat-option>
+    <mat-label>جدا کننده‌ی سطر</mat-label>
+    <mat-select [(value)]="rowSelected" required>
+      <mat-option value=",">,</mat-option>
+      <mat-option value=":">:</mat-option>
+      <mat-option value=";">;</mat-option>
+      <mat-option value="-">-</mat-option>
+      <mat-option value="\n">خط حدید</mat-option>
     </mat-select>
   </mat-form-field>
 
