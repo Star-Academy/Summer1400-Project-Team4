@@ -18,6 +18,7 @@ import { JoinConfigComponent } from './components/config/join-config/join-config
 import { FilteringTreeComponent } from './components/filtering-tree/filtering-tree.component';
 import { AuthGuard } from '../guard/auth.guard';
 import { AuthService } from '../services/auth.service';
+import { DatasetStore } from './services/dataset-store';
 
 const routes: Routes = [
     {
@@ -59,6 +60,6 @@ const routes: Routes = [
         FormsModule,
         ReactiveFormsModule,
     ],
-    providers: [LineService, AuthService, AuthGuard],
+    providers: [LineService, AuthService, DatasetStore, AuthGuard],
 })
 export class PipelineModule {}

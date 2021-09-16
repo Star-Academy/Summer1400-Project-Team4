@@ -37,7 +37,11 @@
                     <mat-icon>person</mat-icon>
                 </button>
                 <mat-menu #menu="matMenu">
-                    <button (click)="logOut()" mat-menu-item>
+                    <button mat-menu-item routerLink="/user/edit_profile">
+                        <mat-icon>manage_accounts</mat-icon>
+                        مدیریت حساب
+                    </button>
+                    <button mat-menu-item (click)="logOut()">
                         <mat-icon>exit_to_app</mat-icon>
                         خروج
                     </button>

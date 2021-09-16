@@ -7,7 +7,7 @@ import {
     pipelineNodeInfo,
     PipelineNodeType,
 } from './pipeline-node.model';
-import { ValidationErrorList } from './validation.model';
+import { hasError, ValidationErrorList } from './validation.model';
 
 export class Pipeline {
     nodes: PipelineNode[] = [];
@@ -133,9 +133,12 @@ export class Pipeline {
                 await node.updateOutputFields(this, store);
             }
 
+            let nodesHaveError = false;
             for (const node of this.nodes) {
-                await node.validate(this, store);
+                const nodeErrors = await node.validate(this, store);
+                nodesHaveError ||= hasError(nodeErrors);
             }
+            if (nodesHaveError) errors.nodes = 'یکی از گره‌ها نامعتبر است';
 
             return errors;
         });

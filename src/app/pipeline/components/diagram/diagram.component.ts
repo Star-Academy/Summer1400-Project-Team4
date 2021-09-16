@@ -28,6 +28,7 @@ import {
     PipelineNodeType,
 } from '../../models/pipeline-node.model';
 import { Pipeline } from '../../models/pipeline.model';
+import { hasError } from '../../models/validation.model';
 import { LineService } from '../../services/line.service';
 
 const REM_IN_PIXLES = parseFloat(
@@ -103,7 +104,7 @@ export class DiagramComponent
             info.type !== PipelineNodeType.sort
     );
     PipelineNodeType = PipelineNodeType;
-    log = console.log;
+    hasError = hasError;
 
     constructor() {}
 
