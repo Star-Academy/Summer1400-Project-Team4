@@ -27,8 +27,6 @@ namespace WebApi.Services
             CreatePath();
             var newTableQuery = GenerateCreateTableQuery();
             var bulkQuery = GenerateBulkQuery();
-            Console.WriteLine(newTableQuery);
-            Console.WriteLine(bulkQuery);
             ExecuteCommands(newTableQuery);
             ExecuteCommands(bulkQuery);
             DeletePath();
@@ -104,7 +102,7 @@ namespace WebApi.Services
 
         private void ExecuteCommands(string query)
         {
-            using var connection = DbConnector.DefaultConnection("server");
+            using var connection = DbConnector.DefaultConnection("default");
             connection.Open();
             var sqlCommand = new SqlCommand(query, connection);
             sqlCommand.ExecuteNonQuery();
@@ -133,7 +131,7 @@ namespace WebApi.Services
                 var row = streamReader.ReadLine()?.Split(_csvProp.FieldTerminator);
                 if (row != null) column.Add(row[columnNumber]);
             }
-
+            streamReader.Close();
             return column.ToArray();
         }
     }

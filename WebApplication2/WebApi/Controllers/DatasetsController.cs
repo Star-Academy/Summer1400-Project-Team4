@@ -68,7 +68,7 @@ namespace WebApi.Controllers
                     DatasetName = data.DatasetName, IsLiked = false
                 };
                 user.UserDatasets.Add(dataset);
-                var loader = new CsvLoader(data, dataset.DatasetId);
+                var loader = new CsvLoader(data, dataset.DatasetId + 1);
                 loader.TransportCsvToSql();
                 _database.SaveChanges();
                 return Ok(dataset.DatasetId);

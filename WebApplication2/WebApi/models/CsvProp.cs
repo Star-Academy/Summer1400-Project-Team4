@@ -3,8 +3,8 @@
 namespace WebApi.models
 {
     public class CsvProp
-    {
-        [Required] public string CsvContent { set; get; }
+    { 
+        public string CsvContent { set; get; }
         [Required] public string DatasetName { set; get; }
         [Required] public bool DoesHaveHeader { set; get; }
 
