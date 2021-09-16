@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using Microsoft.Data.SqlClient;
+using SqlMapperLib.Extensions;
 using WebApi.models;
 
 namespace WebApi.Services
@@ -13,7 +14,7 @@ namespace WebApi.Services
         private readonly CsvProp _csvProp;
         private string _filePath;
         private const int FirstRow = 2;
-        private readonly int _dataSetId; 
+        private readonly int _dataSetId;
 
         public CsvLoader(CsvProp csvProp, int dataSetId)
         {
@@ -29,8 +30,8 @@ namespace WebApi.Services
             Console.WriteLine(newTableQuery);
             Console.WriteLine(bulkQuery);
             ExecuteCommands(newTableQuery);
-             ExecuteCommands(bulkQuery);
-             DeletePath();
+            ExecuteCommands(bulkQuery);
+            DeletePath();
         }
 
         private void DeletePath()
@@ -61,16 +62,37 @@ namespace WebApi.Services
             Debug.Assert(fields != null, nameof(fields) + " != null");
             if (_csvProp.DoesHaveHeader)
             {
-                foreach (var header in fields)
+                if (_csvProp.DoesHaveAutoMap)
                 {
-                    stringBuilder.Append(header + " NVARCHAR(255),\n");
+                    for (var i = fields.Length - 1; i >= 0; i--)
+                    {
+                        stringBuilder.Append($"{fields[i]}" + $" {GetColumn(i).ToSqlType().ToString()},\n");
+                    }
+                }
+                else
+                {
+                    foreach (var header in fields)
+                    {
+                        stringBuilder.Append(header + " NVARCHAR(MAX),\n");
+                    }
                 }
             }
             else
             {
-                for (var i = 0; i < fields.Length; i++)
+                if (_csvProp.DoesHaveAutoMap)
                 {
-                    stringBuilder.Append($"field{i + 1} " + " NVARCHAR(MAX),\n");
+                    for (var i = fields.Length - 1; i >= 0; i--)
+                    {
+                        stringBuilder.Append($"fields{i + 1}" + $" {GetColumn(i).ToSqlType().ToString()},\n");
+                    }
+                }
+
+                else
+                {
+                    for (var i = 0; i < fields.Length; i++)
+                    {
+                        stringBuilder.Append($"field{i + 1} " + " NVARCHAR(MAX),\n");
+                    }
                 }
             }
 
@@ -79,10 +101,10 @@ namespace WebApi.Services
             streamReader.Close();
             return stringBuilder.ToString();
         }
-        
+
         private void ExecuteCommands(string query)
         {
-            using var connection = DbConnector.DefaultConnection("server"); 
+            using var connection = DbConnector.DefaultConnection("server");
             connection.Open();
             var sqlCommand = new SqlCommand(query, connection);
             sqlCommand.ExecuteNonQuery();
@@ -101,7 +123,7 @@ namespace WebApi.Services
             _filePath = $"_{_dataSetId}.csv";
             File.WriteAllLines(_filePath, rows);
         }
-        
+
         public string[] GetColumn(int columnNumber)
         {
             var column = new List<string>();
@@ -114,6 +136,5 @@ namespace WebApi.Services
 
             return column.ToArray();
         }
-        
     }
 }

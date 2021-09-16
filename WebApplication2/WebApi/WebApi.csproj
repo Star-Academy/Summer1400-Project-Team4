@@ -19,4 +19,8 @@
       <Folder Include="Authentication" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\SqlMapperLib\SqlMapperLib.csproj" />
+    </ItemGroup>
+
 </Project>
