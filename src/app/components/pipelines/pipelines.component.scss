@@ -1,0 +1,26 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    padding: var(--density-larger);
+    max-height: 100%;
+    overflow: auto;
+}
+
+.mat-column-delete-add {
+    width: fit-content;
+}
+
+.mat-row {
+    .delete-button {
+        opacity: 0%;
+    }
+
+    &:hover .delete-button {
+        opacity: 100%;
+    }
+}
+
+.add-button,
+.delete-button {
+    float: left;
+}

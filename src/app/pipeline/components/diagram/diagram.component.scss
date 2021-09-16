@@ -66,6 +66,18 @@
         cursor: move;
     }
 
+    &.errored {
+        @include mat.elevation(2, theme.mat-color(theme.$warn-palette), 4);
+
+        &.selected {
+            @include mat.elevation(4, theme.mat-color(theme.$warn-palette), 3);
+        }
+
+        &.cdk-drag-dragging {
+            @include mat.elevation(6, theme.mat-color(theme.$warn-palette), 3);
+        }
+    }
+
     .mat-card-title,
     .mat-card-subtitle {
         display: flex;

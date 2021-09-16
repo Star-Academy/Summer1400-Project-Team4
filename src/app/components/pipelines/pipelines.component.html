@@ -1,0 +1,51 @@
+<h2>سناریوها</h2>
+
+<table [dataSource]="pipelines" class="mat-elevation-z8" mat-table matSort>
+    <!-- Name Column -->
+    <ng-container matColumnDef="pipelineName">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>نام</th>
+        <td *matCellDef="let element" mat-cell>
+            <a
+                mat-button
+                style="margin-right: -2rem"
+                [routerLink]="['/pipeline', element.pipelineId]"
+            >
+                {{ element.pipelineName }}
+            </a>
+        </td>
+    </ng-container>
+
+    <!-- Delete/add Column -->
+    <ng-container matColumnDef="delete-add">
+        <th *matHeaderCellDef mat-header-cell>
+            <button
+                (click)="addPipeline()"
+                color="primary"
+                mat-icon-button
+                title="افزودن دیتاست"
+                class="add-button"
+            >
+                <mat-icon>add_box</mat-icon>
+            </button>
+        </th>
+
+        <td *matCellDef="let element" mat-cell>
+            <button
+                (click)="deletePipeline(element)"
+                color="primary"
+                mat-icon-button
+                class="delete-button"
+            >
+                <mat-icon>delete</mat-icon>
+            </button>
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+    <!-- Row shown when there is no matching data. -->
+    <tr *matNoDataRow class="mat-row">
+        <td class="mat-cell" colspan="2">سناریویی وجود ندارد</td>
+    </tr>
+</table>

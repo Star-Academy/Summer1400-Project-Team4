@@ -42,6 +42,9 @@
                         [class.selected]="
                             selectedCard?.node?.id === card.node.id
                         "
+                        [class.errored]="
+                            hasError((card.node?.validations | async) || {})
+                        "
                         (click)="updateSelectedCard(card)"
                         cdkDrag
                         [cdkDragData]="card"

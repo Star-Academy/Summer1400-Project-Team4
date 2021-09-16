@@ -6,7 +6,7 @@
     <input #input matInput>
   </mat-form-field>
   <table *ngIf="dataSource" [dataSource]="dataSource" class="mat-elevation-z8" mat-table matSort
-         style="margin-right: 6rem">
+         style="margin-right: 6rem; margin-bottom: 6rem">
     <!-- id Column -->
     <ng-container matColumnDef="id">
       <th *matHeaderCellDef mat-header-cell mat-sort-header>ردیف</th>
@@ -72,7 +72,8 @@
 
     <!-- Row shown when there is no matching data. -->
     <tr *matNoDataRow class="mat-row">
-      <td class="mat-cell" colspan="4">دیتاستی با مضمون "{{input.value}}" وجود ندارد</td>
+      <td *ngIf="input.value" class="mat-cell" colspan="4">دیتاستی با مضمون "{{input.value}}" وجود ندارد</td>
+      <td *ngIf="!input.value" class="mat-cell" colspan="4">دیتاستی وجود ندارد</td>
     </tr>
 
   </table>

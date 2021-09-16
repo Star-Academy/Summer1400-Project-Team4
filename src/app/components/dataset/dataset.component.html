@@ -1,25 +1,29 @@
 <h2 mat-dialog-title>افزودن دیتاست</h2>
 
-<mat-dialog-content [formGroup]="form">
+<mat-dialog-content [formGroup]="form" >
   <mat-form-field>
-    <input formControlName="name" matInput placeholder="نام دیتاست" required>
+    <input formControlName="name" matInput  placeholder="نام دیتاست" required >
   </mat-form-field>
 
   <mat-form-field>
-    <mat-label>جدا کننده ی سطر</mat-label>
-    <mat-select [(value)]="rowSelected" required>
-      <mat-option value=",">ویرگول</mat-option>
-      <mat-option value="-">خط فاصله</mat-option>
-      <mat-option value="//n">سطر جدید</mat-option>
+    <mat-label>جدا کننده‌ی ستون</mat-label>
+    <mat-select [(value)]="filedSelected"  required>
+      <mat-option value=",">,</mat-option>
+      <mat-option value=":">:</mat-option>
+      <mat-option value=";">;</mat-option>
+      <mat-option value="-">-</mat-option>
+      <mat-option value="\n">خط جدید</mat-option>
     </mat-select>
   </mat-form-field>
 
   <mat-form-field>
-    <mat-label>جدا کننده ی ستون</mat-label>
-    <mat-select [(value)]="filedSelected" required>
-      <mat-option value=",">ویرگول</mat-option>
-      <mat-option value="-">خط فاصله</mat-option>
-      <mat-option value="\\n">سطر جدید</mat-option>
+    <mat-label>جدا کننده‌ی سطر</mat-label>
+    <mat-select [(value)]="rowSelected" required>
+      <mat-option value=",">,</mat-option>
+      <mat-option value=":">:</mat-option>
+      <mat-option value=";">;</mat-option>
+      <mat-option value="-">-</mat-option>
+      <mat-option value="\n">خط حدید</mat-option>
     </mat-select>
   </mat-form-field>
 
@@ -47,16 +51,16 @@
 
 <mat-dialog-actions [formGroup]="form">
 
-  <button (click)="onUpload()" [disabled]="loading || !form.valid || !filedSelected|| !rowSelected" color="primary"
-          mat-raised-button>
+  <button mat-raised-button color="primary" [disabled]="loading || !form.valid || !filedSelected|| !rowSelected"
+          (click)="onUpload()">
     آپلود
   </button>
 
-  <button (click)="close()" class="mat-raised-button"
-          style="margin-right: 1rem">
+  <button style="margin-right: 1rem" class="mat-raised-button"
+          (click)="close()">
     انصراف
   </button>
 
 </mat-dialog-actions>
 
-<mat-progress-bar *ngIf="loading" mode="indeterminate" style="margin-top: 2rem"></mat-progress-bar>
+<mat-progress-bar *ngIf="loading" style="margin-top: 2rem" mode="indeterminate"></mat-progress-bar>

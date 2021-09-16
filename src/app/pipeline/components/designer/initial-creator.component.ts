@@ -19,7 +19,7 @@ export class InitialCreatorComponent implements OnInit {
         this.pipelineService
             .create(exportPipeline(newPipeline))
             .subscribe((id) => {
-                this.router.navigate([id]);
+                this.router.navigate(['pipeline', id]);
             });
     }
 }

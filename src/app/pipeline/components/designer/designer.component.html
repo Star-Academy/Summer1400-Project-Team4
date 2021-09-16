@@ -5,7 +5,13 @@
     </a>
 
     <span class="pipeline-info">
-        <button title="اجرا" mat-icon-button mat-raised-button mat-tip>
+        <button
+            title="اجرا"
+            mat-icon-button
+            mat-raised-button
+            mat-tip
+            (click)="runPipeline()"
+        >
             <mat-icon class="mat-icon-rtl-mirror" color="primary">
                 play_arrow
             </mat-icon>
@@ -68,7 +74,7 @@
                 <mat-icon>manage_accounts</mat-icon>
                 مدیریت حساب
             </button>
-            <button mat-menu-item>
+            <button mat-menu-item click="logOut()">
                 <mat-icon>exit_to_app</mat-icon>
                 خروج
             </button>
