@@ -1,8 +1,10 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, ValidationErrors, Validators} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {HttpClient, HttpEventType} from "@angular/common/http";
 import {Subscription} from "rxjs";
+import {NewLocalDataset} from "../../models/dataset.model";
+import {DatasetService} from "../../services/dataset.service";
 
 @Component({
   selector: 'app-dataset',
@@ -12,15 +14,16 @@ import {Subscription} from "rxjs";
 export class DatasetComponent implements OnInit {
 
   form!: FormGroup;
-  toppings!: FormGroup;
   fileName = '';
   file! : File;
   fileString! : string;
   uploadSubscription! : Subscription;
   loading: boolean = false; // Flag check loading
   datasetName : string = '';
+  rowSelected!: string;
+  filedSelected!: string;
 
-  constructor( public http : HttpClient,
+  constructor( private http : HttpClient, private datasetService : DatasetService,
     private formBuilder: FormBuilder,
     public dialogRef: MatDialogRef<DatasetComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
@@ -71,9 +74,9 @@ export class DatasetComponent implements OnInit {
 
     const formData = new FormData();
 
-    formData.append("file", this.file, this.file.name);
+    const data : NewLocalDataset  = {...this.form.value , ...{fieldSeparator : this.filedSelected , rowSeparator : this.rowSelected}};
 
-    this.uploadSubscription = this.http.post("https://file.io" , formData ).subscribe(
+    this.datasetService.createLocal(data).subscribe(
       (event: any) => {
         if (typeof (event) === 'object') {
           console.log(event);
@@ -87,6 +90,21 @@ export class DatasetComponent implements OnInit {
         this.dialogRef.close(this.form.value);
       }
     );
+
+    // this.uploadSubscription = this.http.post("https://file.io" , formData ).subscribe(
+    //   (event: any) => {
+    //     if (typeof (event) === 'object') {
+    //       console.log(event);
+    //       this.loading = false; // Flag variable
+    //     }
+    //   }
+    //   , error => {
+    //     alert('خطایی رخ داد لطفا مجددا تلاش کنید');
+    //     this.loading = false ;
+    //   } , ()=>{
+    //     this.dialogRef.close(this.form.value);
+    //   }
+    // );
 
   }
 }

@@ -5,6 +5,24 @@
     <input formControlName="datasetName" matInput name="datasetName" placeholder="نام دیتاست" required >
   </mat-form-field>
 
+  <mat-form-field>
+    <mat-label>جدا کننده ی سطر</mat-label>
+    <mat-select [(value)]="rowSelected" required>
+      <mat-option value=",">ویرگول</mat-option>
+      <mat-option value="-">خط فاصله</mat-option>
+      <mat-option value="//n">سطر جدید</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>جدا کننده ی ستون</mat-label>
+    <mat-select [(value)]="filedSelected"  required>
+      <mat-option value=",">ویرگول</mat-option>
+      <mat-option value="-">خط فاصله</mat-option>
+      <mat-option value="\\n">سطر جدید</mat-option>
+    </mat-select>
+  </mat-form-field>
+
   <input type="file" class="file-input" (change)="onFileChange($event)" #fileUpload
          formcontrolname="csvFile" required>
 
@@ -25,7 +43,7 @@
 
 <mat-dialog-actions [formGroup]="form">
 
-  <button mat-raised-button color="primary" [disabled]="loading || !form.valid"
+  <button mat-raised-button color="primary" [disabled]="loading || !form.valid || !filedSelected|| !rowSelected"
           (click)="onUpload()">
     آپلود
   </button>

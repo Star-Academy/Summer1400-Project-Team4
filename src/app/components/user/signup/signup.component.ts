@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import { Router } from '@angular/router';
 import {UserService} from "../../../services/user.service";
+import {AuthService} from "../../../services/auth.service";
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
@@ -14,7 +15,7 @@ export class SignupComponent implements OnInit {
   public form! : FormGroup ;
   hide = true;
   constructor(public snackBar : MatSnackBar , private formBuilder: FormBuilder , public userService : UserService ,
-              public router : Router) { }
+              public router : Router  , private auth : AuthService) { }
 
   ngOnInit(): void
   {
@@ -48,7 +49,7 @@ export class SignupComponent implements OnInit {
 
     this.userService.getSignUp(userdata).subscribe(res =>
       {
-        console.log(res);
+        this.auth.authToken = res.token;
       }
       , error =>
       {
@@ -59,11 +60,11 @@ export class SignupComponent implements OnInit {
       } ,
       ()=>
       {
-        const message = 'ثبت نام موفقیت آمیز در حال انتقال به صفحه ی ورود ...';
+        const message = 'ثبت نام موفقیت آمیز در حال انتقال به صفحه ی اصلی ...';
         this.snackBar.open(message , '' , {duration : 2000 , verticalPosition :"bottom" ,
           horizontalPosition : "center" , panelClass : 'green-snackbar' } );
         setTimeout( ()=> {
-          this.router.navigateByUrl('/user/login', {skipLocationChange: false}).then();
+          this.router.navigate(['/']).then();
         } , 2000 );
       });
   }

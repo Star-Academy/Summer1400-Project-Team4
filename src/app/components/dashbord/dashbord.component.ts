@@ -113,7 +113,7 @@ export class DashbordComponent implements OnInit , AfterViewInit {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.direction = "rtl";
-    dialogConfig.width = '40rem';
+    dialogConfig.width = '35rem';
     this.dialog.open(DatasetComponent, dialogConfig);
   }
 
