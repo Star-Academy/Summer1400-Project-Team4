@@ -51,7 +51,7 @@ import { NewConnectionComponent } from './components/new-connection/new-connecti
         ConnectionsComponent,
         NewConnectionComponent,
     ],
-    entryComponents: [LoginSignupAlertComponent, LoginFailedComponent , DatasetComponent],
+    entryComponents: [LoginSignupAlertComponent, LoginFailedComponent , DatasetComponent , NewConnectionComponent],
     imports: [
         BrowserModule,
         AppRoutingModule,

@@ -87,7 +87,6 @@ export class DashbordComponent implements OnInit, AfterViewInit {
   openDialog() {
 
     const dialogConfig = new MatDialogConfig();
-
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.direction = "rtl";

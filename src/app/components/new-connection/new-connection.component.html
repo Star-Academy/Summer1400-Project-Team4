@@ -1,0 +1,38 @@
+<<h2 mat-dialog-title>افزودن دیتاست</h2>
+
+<mat-dialog-content [formGroup]="form" >
+  <mat-form-field>
+    <input formControlName="name" matInput  placeholder="نام دیتاست" required >
+  </mat-form-field>
+  <mat-form-field>
+    <input formControlName="host" matInput  placeholder="نام میزبان" required >
+  </mat-form-field>
+
+
+  <mat-form-field>
+    <input formControlName="databaseName" matInput  placeholder="نام پایگاه داده" required >
+  </mat-form-field>
+
+  <mat-form-field>
+    <input formControlName="username" matInput  placeholder="نام کاربری" required >
+  </mat-form-field>
+
+  <mat-form-field>
+    <input formControlName="password" matInput  placeholder="رمز عبور" required >
+  </mat-form-field>
+
+</mat-dialog-content>
+
+<mat-dialog-actions [formGroup]="form">
+
+  <button mat-raised-button color="primary" [disabled]="!form.valid"
+          (click)="onUpload()">
+    ایجاد
+  </button>
+
+  <button style="margin-right: 1rem" class="mat-raised-button"
+          (click)="close()">
+    انصراف
+  </button>
+
+</mat-dialog-actions>
