@@ -28,6 +28,8 @@ import { AuthGuard } from './guard/auth.guard';
 import { PipelineService } from './services/pipeline.service';
 import { DatasetComponent } from './components/dataset/dataset.component';
 import { PipelinesComponent } from './components/pipelines/pipelines.component';
+import { ConnectionsComponent } from './components/connections/connections.component';
+import { NewConnectionComponent } from './components/new-connection/new-connection.component';
 
 @NgModule({
     declarations: [
@@ -46,6 +48,8 @@ import { PipelinesComponent } from './components/pipelines/pipelines.component';
         EditProfileComponent,
         DatasetComponent,
         PipelinesComponent,
+        ConnectionsComponent,
+        NewConnectionComponent,
     ],
     entryComponents: [LoginSignupAlertComponent, LoginFailedComponent , DatasetComponent],
     imports: [

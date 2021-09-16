@@ -4,6 +4,7 @@ import { map } from 'rxjs/operators';
 import {
     Dataset,
     DatasetDetails,
+    DatasetPreview,
     NewExternalDataset,
     NewLocalDataset,
 } from '../models/dataset.model';
@@ -116,7 +117,7 @@ export class DatasetService {
     preview(id: number, startingIndex: number, size: number) {
         if (this.auth.authToken === null) throw Error('User is not logged in');
 
-        return this.api.post(
+        return this.api.post<DatasetPreview>(
             `datasets/${id}/preview`,
             {
                 startingIndex: startingIndex,

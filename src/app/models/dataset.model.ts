@@ -1,43 +1,45 @@
 export interface Dataset {
-  id: number;
-  name: string;
-  liked: boolean;
+    id: number;
+    name: string;
+    liked: boolean;
 }
 
 export enum DatasetFieldType {
-  number = 'number',
-  string = 'string',
+    number = 'number',
+    string = 'string',
 }
 
 export interface DatasetField {
-  name: string;
-  type: DatasetFieldType;
+    name: string;
+    type: DatasetFieldType;
 }
 
 export interface DatasetDetails extends Dataset {
-  fields: DatasetField[];
+    fields: DatasetField[];
 }
 
 export interface NewLocalDataset {
-  name: string;
-  csvFile: string;
-  autoMap: boolean;
-  doesHaveHeader: boolean;
-  fieldSeparator: string;
-  rowSeparator: string;
+    name: string;
+    csvFile: string;
+    autoMap: boolean;
+    doesHaveHeader: boolean;
+    fieldSeparator: string;
+    rowSeparator: string;
 }
 
 export interface NewExternalDataset {
-  name: string;
-  connectionId: number;
-  databaseName: string;
-  tableName: string;
+    name: string;
+    connectionId: number;
+    databaseName: string;
+    tableName: string;
 }
 
+export type DatasetPreview = { data: any[] }[];
+
 export function hasField(fields: DatasetField[], name: string) {
-  return fields.some((field) => field.name === name);
+    return fields.some((field) => field.name === name);
 }
 
 export function findField(fields: DatasetField[], name: string) {
-  return fields.find((field) => field.name === name);
+    return fields.find((field) => field.name === name);
 }

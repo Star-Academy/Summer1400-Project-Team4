@@ -9,6 +9,7 @@ import { SignupComponent } from './components/user/signup/signup.component';
 import { EditProfileComponent } from './components/user/edit-profile/edit-profile.component';
 import { AuthGuard } from './guard/auth.guard';
 import { PipelinesComponent } from './components/pipelines/pipelines.component';
+import { ConnectionsComponent } from './components/connections/connections.component';
 
 const routes: Routes = [
     {
@@ -46,6 +47,10 @@ const routes: Routes = [
             {
                 path: 'pipelines',
                 component: PipelinesComponent,
+            },
+            {
+                path: 'connections',
+                component: ConnectionsComponent,
             },
             {
                 path: 'datasets',
