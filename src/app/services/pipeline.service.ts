@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { PipelineExport } from '../pipeline/models/pipeline-export.model';
 import { ApiService } from './api.service';
 import { AuthService } from './auth.service';
@@ -23,14 +24,12 @@ export class PipelineService {
         );
     }
 
-    create(pipeline: PipelineExport) {
+    create(pipeline: PipelineExport): Observable<number> {
         if (this.auth.authToken === null) throw Error('User is not logged in');
 
-        return this.api.post<number>(
-            'pipelines',
-            pipeline,
-            this.auth.authToken
-        );
+        return this.api
+            .post<PipelineExport>('pipelines', pipeline, this.auth.authToken)
+            .pipe(map((pipeline) => pipeline.pipelineId!));
     }
 
     update(pipeline: PipelineExport) {
