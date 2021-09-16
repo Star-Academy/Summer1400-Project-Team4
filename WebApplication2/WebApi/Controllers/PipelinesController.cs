@@ -25,17 +25,18 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddNewPipeline([FromBody] Pipeline pipeline, [FromHeader] string token)
+        public async Task<ActionResult<Pipeline>> AddNewPipeline([FromBody] Pipeline pipeline, [FromHeader] string token)
         {
             var user = await GetUserByToken(token);
             user.Pipelines.Add(pipeline);
 
             await _database.SaveChangesAsync();
-            return Ok("پایپلاین با موفقیت اضافه شد");
+            return Ok(user.Pipelines[^1]);
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdatePipeline([FromRoute] int pipelineId, [FromBody] Pipeline pipeline,
+        [Route("{pipelineId:int}")]
+        public async Task<IActionResult> UpdatePipeline(int pipelineId, [FromBody] Pipeline pipeline,
             [FromHeader] string token)
         {
             var user = await GetUserByToken(token);
@@ -93,10 +94,8 @@ namespace WebApi.Controllers
             var pipeline = _database.Pipelines.Include(a => a.Processes).FirstOrDefault(p => p.PipelineId == pipelineId);
             if (pipeline == null) return BadRequest("پایپلاینی با این آی دی پیدا نشد");
 
-            var pipelineExecutor =//todo handle getting connection string from app settings
-                new PipelineExecutor(@"Data Source=localhost\SQLExpress,1433;Database=ETL;Integrated Security=sspi;MultipleActiveResultSets=True;",
-                    pipeline);
-//workstation id=team4DB.mssql.somee.com;packet size=4096;user id=team4_SQLLogin_1;pwd=ke7eltso65;data source=team4DB.mssql.somee.com;persist security info=False;initial catalog=team4DB
+            var pipelineExecutor = new PipelineExecutor(Database.ConnectionString, pipeline);
+
             pipelineExecutor.Execute("_" + pipeline.InputDatasetId, "_" + pipeline.OutputDatasetId);
 
             return Ok();
