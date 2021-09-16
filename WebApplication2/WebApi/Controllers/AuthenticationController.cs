@@ -111,7 +111,7 @@ namespace WebApi.Controllers
             if (!string.IsNullOrEmpty(from.Password)) to.Password = from.Password;
             if (!string.IsNullOrEmpty(from.FullName)) to.FullName = from.FullName;
             if (!string.IsNullOrEmpty(from.Email)) to.Email = from.Email;
-            if (!string.IsNullOrEmpty(from.Avatar)) to.Email = from.Avatar;
+            if (!string.IsNullOrEmpty(from.Avatar)) to.Avatar = from.Avatar;
         }
     }
 }
