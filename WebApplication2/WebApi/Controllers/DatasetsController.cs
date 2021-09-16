@@ -60,7 +60,8 @@ namespace WebApi.Controllers
                 return Unauthorized(e.Message);
             }
 
-            var max = Enumerable.Prepend(_database.Datasets.Select(databaseDataset => databaseDataset.DatasetId), 0)
+            var max = Enumerable.Prepend(_database.Datasets.Select(databaseDataset 
+                    => databaseDataset.DatasetId), 0)
                 .Max();
             var loader = new CsvLoader(data, max + 1);
             if (!loader.TransportCsvToSql())
@@ -71,11 +72,11 @@ namespace WebApi.Controllers
             _database.SaveChanges();
             return Ok();
         }
-
         [HttpPut]
         [Route("{id:int}")]
         public IActionResult ChangeName(int id, string newName)
         {
+            Console.WriteLine("ali\"" );
             var dataset = _database.Datasets.FirstOrDefault(x => x.DatasetId == id);
             if (dataset == null)
                 return BadRequest("No such id");
