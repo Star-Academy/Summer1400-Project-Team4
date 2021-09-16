@@ -25,6 +25,7 @@ import { ApiService } from './services/api.service';
 import { ConnectionService } from './services/connection.service';
 import { DatasetService } from './services/dataset.service';
 import { AuthGuard } from './guard/auth.guard';
+import { DatasetComponent } from './components/dataset/dataset.component';
 
 @NgModule({
     declarations: [
@@ -41,8 +42,9 @@ import { AuthGuard } from './guard/auth.guard';
         SignupComponent,
         LoginFailedComponent,
         EditProfileComponent,
+        DatasetComponent,
     ],
-    entryComponents: [LoginSignupAlertComponent, LoginFailedComponent],
+    entryComponents: [LoginSignupAlertComponent, LoginFailedComponent , DatasetComponent],
     imports: [
         BrowserModule,
         AppRoutingModule,

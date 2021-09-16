@@ -44,6 +44,14 @@
       </td>
     </ng-container>
 
+    <ng-container matColumnDef="add">
+      <th  *matHeaderCellDef mat-header-cell>
+        <button (click)="openDialog()" mat-icon-button color="primary" title="افزودن دیتاست"> <mat-icon>add_box</mat-icon> </button>
+      </th>
+      <td  *matCellDef="let element" mat-cell>
+      </td>
+    </ng-container>
+
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
 
     <tr (mouseleave)="handleMouseLeave(element)" (mouseover)="handleMouseOver(element)"

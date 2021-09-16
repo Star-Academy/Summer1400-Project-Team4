@@ -1,6 +1,8 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {TableVirtualScrollDataSource} from 'ng-table-virtual-scroll';
 import {MatSort} from "@angular/material/sort";
+import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
+import {DatasetComponent} from "../dataset/dataset.component";
 export interface PeriodicElement {
   name: string;
   position: number;
@@ -54,11 +56,11 @@ let ELEMENT_DATA: PeriodicElement[] = [
   styleUrls: ['./dashbord.component.scss']
 })
 export class DashbordComponent implements OnInit , AfterViewInit {
-  displayedColumns: string[] = ['position', 'name', 'like', 'deleteEmployee'];
+  displayedColumns: string[] = ['position', 'name', 'like', 'deleteEmployee' , 'add'];
   dataSource!: TableVirtualScrollDataSource<PeriodicElement>;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor() {
+  constructor(private dialog: MatDialog) {
     ELEMENT_DATA.map((data: any) => {
       data.show = false
     });
@@ -102,7 +104,17 @@ export class DashbordComponent implements OnInit , AfterViewInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
 
+  openDialog() {
+
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.direction = "rtl";
+    dialogConfig.width = '40rem';
+    this.dialog.open(DatasetComponent, dialogConfig);
   }
 
 }

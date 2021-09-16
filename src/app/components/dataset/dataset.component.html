@@ -1,0 +1,40 @@
+<h2 mat-dialog-title>افزودن دیتاست</h2>
+
+<mat-dialog-content [formGroup]="form" >
+  <mat-form-field>
+    <input formControlName="datasetName" matInput name="datasetName" placeholder="نام دیتاست" required >
+  </mat-form-field>
+
+  <input type="file" class="file-input" (change)="onFileChange($event)" #fileUpload
+         formcontrolname="csvFile" required>
+
+  <div>
+    <button mat-mini-fab color="primary" class="upload-btn"
+            (click)="fileUpload.click()">
+      <mat-icon>attach_file</mat-icon>
+    </button>
+    {{fileName ||  "فایلی انتخاب نشده است"}}
+  </div>
+  <section style="margin-top: 2rem">
+    <p><mat-checkbox formControlName="autoMap">اتومپ</mat-checkbox></p>
+    <p><mat-checkbox formControlName="doesHaveHeader">هدر</mat-checkbox></p>
+  </section>
+
+
+</mat-dialog-content>
+
+<mat-dialog-actions [formGroup]="form">
+
+  <button mat-raised-button color="primary" [disabled]="loading || !form.valid"
+          (click)="onUpload()">
+    آپلود
+  </button>
+
+  <button style="margin-right: 1rem" class="mat-raised-button"
+          (click)="close()">
+    انصراف
+  </button>
+
+</mat-dialog-actions>
+
+<mat-progress-bar *ngIf="loading" style="margin-top: 2rem" mode="indeterminate"></mat-progress-bar>
