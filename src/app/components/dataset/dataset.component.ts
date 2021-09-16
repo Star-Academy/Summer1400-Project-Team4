@@ -33,7 +33,7 @@ export class DatasetComponent implements OnInit {
   ngOnInit() {
     this.form = this.formBuilder.group({
       name: [null, [Validators.required]],
-      csvFile: [null, Validators.required],
+      csvFile: [null],
       autoMap: [false, Validators.required],
       doesHaveHeader: [false, Validators.required]
     });
