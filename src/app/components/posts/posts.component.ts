@@ -15,7 +15,7 @@ const message = 'نمونه های بیشتر لود شدند  ...';
 })
 export class PostsComponent implements OnInit , AfterViewInit {
 
-  displayedColumns = ['position', 'name'];
+  displayedColumns = ['id', 'name'];
   dataSource!: TableVirtualScrollDataSource<PeriodicElement>;
   public enableScroll: boolean = true;
   @ViewChild(MatSort) sort!: MatSort;
@@ -42,13 +42,8 @@ export class PostsComponent implements OnInit , AfterViewInit {
     const tableScrollHeight = e.target.scrollHeight // the length of loaded datas exist in hole table
     const scrollLocation = e.target.scrollTop; // how far user scrolled
     const limit = tableScrollHeight - tableViewHeight - buffer;
-    console.log('tableViewHeight : ' + tableViewHeight)
-    console.log('tableScrollHeight : ' + tableScrollHeight)
-    console.log('scrollLocation : ' + scrollLocation)
-    console.log('limit : ' + limit)
 
     if (scrollLocation > limit && this.enableScroll) {
-      console.log('scrollLocation : ' + scrollLocation)
       this.enableScroll = false;
       (this.http.get<Object>('https://songs.code-star.ir' + '/song/all').subscribe(res => {
           this.dataSource.data = this.dataSource.data.concat(ELEM);
@@ -56,7 +51,6 @@ export class PostsComponent implements OnInit , AfterViewInit {
             duration: 1000, verticalPosition: "bottom",
             horizontalPosition: "left", panelClass: 'purple-snackbar'
           });
-          console.log('scroll height : ' + e.target.scrollHeight)
           console.log(res);
         }, error => {
           console.log('error')
@@ -75,47 +69,47 @@ export class PostsComponent implements OnInit , AfterViewInit {
   }
 
 }
-
 let ELEM: PeriodicElement[] = [
-  {position: 1, name: 'هیدروزن'},
-  {position: 2, name: 'هلیم'},
-  {position: 3, name: 'لیتیم'},
-  {position: 4, name: 'برلیم'},
-  {position: 5, name: 'بورن'},
-  {position: 6, name: 'بور'},
-  {position: 7, name: 'نیترو'},
-  {position: 8, name: 'اکسیژ'},
-  {position: 9, name: 'فبور'},
-  {position: 10, name: 'نیون'},
-  {position: 11, name: 'هیدروزن'},
-  {position: 12, name: 'هلیم'},
-  {position: 13, name: 'لیتیم'},
-  {position: 14, name: 'برلیم'},
-  {position: 15, name: 'بورن'},
-  {position: 16, name: 'بور'},
-  {position: 17, name: 'نیترو'},
-  {position: 18, name: 'اکسیژ'},
-  {position: 19, name: 'فبور'},
-  {position: 20, name: 'نیون'},
-  {position: 21, name: 'هیدروزن'},
-  {position: 22, name: 'هلیم'},
-  {position: 23, name: 'لیتیم'},
-  {position: 24, name: 'برلیم'},
-  {position: 25, name: 'بورن'},
-  {position: 26, name: 'بور'},
-  {position: 27, name: 'نیترو'},
-  {position: 28, name: 'اکسیژ'},
-  {position: 29, name: 'فبور'},
-  {position: 30, name: 'نیون'},
-  {position: 31, name: 'هیدروزن'},
-  {position: 32, name: 'هلیم'},
-  {position: 33, name: 'لیتیم'},
-  {position: 34, name: 'برلیم'},
-  {position: 35, name: 'بورن'},
-  {position: 36, name: 'بور'},
-  {position: 37, name: 'نیترو'},
-  {position: 38, name: 'اکسیژ'},
-  {position: 39, name: 'فبور'},
-  {position: 40, name: 'نیون'},
+  {id: 1, name: 'هیدروزن'},
+  {id: 2, name: 'هلیم'},
+  {id: 3, name: 'لیتیم'},
+  {id: 4, name: 'برلیم'},
+  {id: 5, name: 'بورن'},
+  {id: 6, name: 'بور'},
+  {id: 7, name: 'نیترو'},
+  {id: 8, name: 'اکسیژ'},
+  {id: 9, name: 'فبور'},
+  {id: 10, name: 'نیون'},
+  {id: 11, name: 'هیدروزن'},
+  {id: 12, name: 'هلیم'},
+  {id: 13, name: 'لیتیم'},
+  {id: 14, name: 'برلیم'},
+  {id: 15, name: 'بورن'},
+  {id: 16, name: 'بور'},
+  {id: 17, name: 'نیترو'},
+  {id: 18, name: 'اکسیژ'},
+  {id: 19, name: 'فبور'},
+  {id: 20, name: 'نیون'},
+  {id: 21, name: 'هیدروزن'},
+  {id: 22, name: 'هلیم'},
+  {id: 23, name: 'لیتیم'},
+  {id: 24, name: 'برلیم'},
+  {id: 25, name: 'بورن'},
+  {id: 26, name: 'بور'},
+  {id: 27, name: 'نیترو'},
+  {id: 28, name: 'اکسیژ'},
+  {id: 29, name: 'فبور'},
+  {id: 30, name: 'نیون'},
+  {id: 31, name: 'هیدروزن'},
+  {id: 32, name: 'هلیم'},
+  {id: 33, name: 'لیتیم'},
+  {id: 34, name: 'برلیم'},
+  {id: 35, name: 'بورن'},
+  {id: 36, name: 'بور'},
+  {id: 37, name: 'نیترو'},
+  {id: 38, name: 'اکسیژ'},
+  {id: 39, name: 'فبور'},
+  {id: 40, name: 'نیون'}
 ];
+
 

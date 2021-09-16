@@ -1,14 +1,14 @@
 <!--<p style="padding-right: 10px">دیتاست </p>-->
-<cdk-virtual-scroll-viewport (scrolledIndexChange)="getNextBatch($event)" class="wrapper mat-elevation-z2" tvsItemSize>
+<cdk-virtual-scroll-viewport  *ngIf="dataSource"  (scrolledIndexChange)="getNextBatch($event)"  class="wrapper mat-elevation-z2" tvsItemSize>
   <mat-form-field (keyup)="applyFilter($event)" appearance="standard">
     <mat-label>فیلتر</mat-label>
     <input matInput  #input>
   </mat-form-field>
   <table *ngIf="dataSource" [dataSource]="dataSource" class="mat-elevation-z8" mat-table matSort style="margin-right: 6rem">
-    <!-- Position Column -->
-    <ng-container matColumnDef="position">
+    <!-- id Column -->
+    <ng-container matColumnDef="id">
       <th *matHeaderCellDef mat-header-cell mat-sort-header>ردیف</th>
-      <td *matCellDef="let element" mat-cell> {{element.position}} </td>
+      <td *matCellDef="let element" mat-cell> {{element.id}} </td>
     </ng-container>
 
     <!-- Name Column -->
@@ -20,11 +20,11 @@
     </ng-container>
 
     <ng-container matColumnDef="like">
-      <th   *matHeaderCellDef mat-header-cell>
-        <mat-icon>star</mat-icon>
+      <th *matHeaderCellDef mat-header-cell>
+        <button mat-icon-button><mat-icon>star</mat-icon></button>
       </th>
-      <td  *matCellDef="let element" mat-cell>
-        <mat-icon>star_border</mat-icon>
+      <td (click)="likedRequest(element)" *matCellDef="let element" mat-cell>
+        <button mat-icon-button><mat-icon>star_border</mat-icon></button>
       </td>
     </ng-container>
 

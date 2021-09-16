@@ -4,92 +4,65 @@ import {MatSort} from "@angular/material/sort";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {DatasetComponent} from "../dataset/dataset.component";
 import {AuthService} from "../../services/auth.service";
+import {DatasetService} from "../../services/dataset.service";
+import {Dataset} from "../../models/dataset.model";
 export interface PeriodicElement {
-  name: string;
-  position: number;
+  id : number;
+  liked?: boolean;
+  name:string;
 }
-let ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'هیدروزن'},
-  {position: 2, name: 'هلیم'},
-  {position: 3, name: 'لیتیم'},
-  {position: 4, name: 'برلیم'},
-  {position: 5, name: 'بورن'},
-  {position: 6, name: 'بور'},
-  {position: 7, name: 'نیترو'},
-  {position: 8, name: 'اکسیژ'},
-  {position: 9, name: 'فبور'},
-  {position: 10, name: 'نیون'},
-  {position: 11, name: 'هیدروزن'},
-  {position: 12, name: 'هلیم'},
-  {position: 13, name: 'لیتیم'},
-  {position: 14, name: 'برلیم'},
-  {position: 15, name: 'بورن'},
-  {position: 16, name: 'بور'},
-  {position: 17, name: 'نیترو'},
-  {position: 18, name: 'اکسیژ'},
-  {position: 19, name: 'فبور'},
-  {position: 20, name: 'نیون'},
-  {position: 21, name: 'هیدروزن'},
-  {position: 22, name: 'هلیم'},
-  {position: 23, name: 'لیتیم'},
-  {position: 24, name: 'برلیم'},
-  {position: 25, name: 'بورن'},
-  {position: 26, name: 'بور'},
-  {position: 27, name: 'نیترو'},
-  {position: 28, name: 'اکسیژ'},
-  {position: 29, name: 'فبور'},
-  {position: 30, name: 'نیون'},
-  {position: 31, name: 'هیدروزن'},
-  {position: 32, name: 'هلیم'},
-  {position: 33, name: 'لیتیم'},
-  {position: 34, name: 'برلیم'},
-  {position: 35, name: 'بورن'},
-  {position: 36, name: 'بور'},
-  {position: 37, name: 'نیترو'},
-  {position: 38, name: 'اکسیژ'},
-  {position: 39, name: 'فبور'},
-  {position: 40, name: 'نیون'}
-];
-
 @Component({
   selector: 'app-dashbord',
   templateUrl: './dashbord.component.html',
   styleUrls: ['./dashbord.component.scss']
 })
 export class DashbordComponent implements OnInit , AfterViewInit {
-  displayedColumns: string[] = ['position', 'name', 'like', 'deleteEmployee' , 'add'];
-  dataSource!: TableVirtualScrollDataSource<PeriodicElement>;
+  displayedColumns: string[] = ['id', 'name', 'like', 'deleteEmployee' , 'add'];
+  dataSource = new TableVirtualScrollDataSource<Dataset>();
+  dataSets!:Dataset[];
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private dialog: MatDialog , public auth : AuthService) {
-    ELEMENT_DATA.map((data: any) => {
-      data.show = false
-    });
+  constructor(private dialog: MatDialog , private auth : AuthService , private datasetService : DatasetService) {
   }
 
   ngOnInit(): void {
-    this.dataSource = new TableVirtualScrollDataSource(ELEMENT_DATA);
+
+    this.datasetService.getAll().subscribe(res=>
+      {
+       this.dataSets = res;
+      },
+       error =>
+      {
+      alert('خطا در دریافت دیتاست ها ');
+      },
+      ()=>{
+        this.dataSets.map((data: any) => {
+          data.show = false
+        });
+        this.dataSource = new TableVirtualScrollDataSource<Dataset>(this.dataSets);
+        this.dataSource.sort = this.sort;
+        console.log(this.dataSets);
+      }
+    )
   }
 
   ngAfterViewInit(): void
   {
-    this.dataSource.sort = this.sort;
   }
 
-
-  handleMouseOver(row: { position: any; }) {
-    const position = row.position;
-    ELEMENT_DATA.map((data: any) => {
-      if (data.position === position) {
+  handleMouseOver(row: { id: any; }) {
+    const id = row.id;
+    this.dataSets.map((data: any) => {
+      if (data.id === id) {
         data.show = true;
       }
     });
   }
 
-  handleMouseLeave(row: { position: any; }) {
-    const position = row.position;
-    ELEMENT_DATA.map((data: any) => {
-      if (data.position === position) {
+  handleMouseLeave(row: { id: any; }) {
+    const id = row.id;
+    this.dataSets.map((data: any) => {
+      if (data.id === id) {
         data.show = false;
       }
     });
@@ -98,7 +71,7 @@ export class DashbordComponent implements OnInit , AfterViewInit {
   getNextBatch(event: any) {
   }
 
-  clickName(element: PeriodicElement) {
+  clickName(element: Dataset) {
     console.log(element);
   }
 
@@ -118,4 +91,8 @@ export class DashbordComponent implements OnInit , AfterViewInit {
     this.dialog.open(DatasetComponent, dialogConfig);
   }
 
+  likedRequest(element : Dataset)
+  {
+    console.log(element);
+  }
 }
