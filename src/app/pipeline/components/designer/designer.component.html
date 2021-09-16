@@ -121,10 +121,12 @@
                 <app-input-config
                     *ngSwitchCase="PipelineNodeType.datasetInput"
                     [node]="$any(selectedNode)"
+                    [store]="datasetStore"
                 ></app-input-config>
                 <app-output-config
                     *ngSwitchCase="PipelineNodeType.datasetOutput"
                     [node]="$any(selectedNode)"
+                    [store]="datasetStore"
                 ></app-output-config>
                 <app-filter-config
                     *ngSwitchCase="PipelineNodeType.filter"
@@ -137,6 +139,7 @@
                 <app-join-config
                     *ngSwitchCase="PipelineNodeType.join"
                     [node]="$any(selectedNode)"
+                    [store]="datasetStore"
                 ></app-join-config>
                 <app-aggregate-config
                     *ngSwitchCase="PipelineNodeType.aggregate"

@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { DatasetOutputNode } from 'src/app/pipeline/models/pipeline-node.model';
+import { DatasetStore } from 'src/app/pipeline/services/dataset-store';
 
 @Component({
     selector: 'app-output-config',
@@ -8,8 +9,11 @@ import { DatasetOutputNode } from 'src/app/pipeline/models/pipeline-node.model';
 })
 export class OutputConfigComponent implements OnInit {
     @Input() node?: DatasetOutputNode;
+    @Input() store?: DatasetStore;
 
     constructor() {}
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.store?.update();
+    }
 }

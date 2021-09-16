@@ -46,7 +46,7 @@ export class DesignerComponent
         private router: Router,
         private pipelineService: PipelineService,
         private auth: AuthService,
-        private datasetStore: DatasetStore,
+        public datasetStore: DatasetStore,
         private snackBar: MatSnackBar
     ) {}
 

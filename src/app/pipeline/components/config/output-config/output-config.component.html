@@ -1,12 +1,15 @@
-<div *ngIf="node !== undefined">
+<div *ngIf="node !== undefined && store !== undefined">
     <h3>اطلاعات دیتاست</h3>
     <mat-form-field class="wide-field">
         <mat-label>دیتاست</mat-label>
         <mat-select [(ngModel)]="node.config.datasetId" required>
             <mat-option></mat-option>
-            <mat-option [value]="1"> اطلاعات کاربری </mat-option>
-            <mat-option [value]="2"> اطلاعات بانکی </mat-option>
-            <mat-option [value]="3"> اطلاعات آبااجدادی </mat-option>
+            <mat-option
+                *ngFor="let ds of store.datasets | async"
+                [value]="ds.id"
+            >
+                {{ ds.name }}
+            </mat-option>
         </mat-select>
         <mat-error>لطفاً یک دیتاست انتخاب کنید</mat-error>
     </mat-form-field>
