@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System;
+using Newtonsoft.Json.Linq;
 using WebApi.Services.Sql;
 
 namespace WebApi.Services.QueryServices
@@ -15,6 +16,14 @@ namespace WebApi.Services.QueryServices
         public override void Handle(ISqlConnection applyingSql, string startingDatasetName,
             string destinationDatasetName)
         {
+            try
+            {
+                applyingSql.SendQuery($"DROP TABLE {destinationDatasetName}");
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
             applyingSql.SendQuery("SELECT * " +
                                   $"INTO {destinationDatasetName} " +
                                   $"FROM {startingDatasetName} " +

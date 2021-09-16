@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using WebApi.models.boolAlgebra;
 using WebApi.Services.Sql;
 
@@ -16,7 +17,15 @@ namespace WebApi.Services.QueryServices
         public override void Handle(ISqlConnection applyingSql, string startingDatasetName,
             string destinationDatasetName)
         {
-            //todo Drop existing destination table before use INTO
+            try
+            {
+                applyingSql.SendQuery($"DROP TABLE {destinationDatasetName}");
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
             applyingSql.SendQuery("SELECT * " +
                                   $"INTO {destinationDatasetName} " +
                                   $"FROM {startingDatasetName} " +
