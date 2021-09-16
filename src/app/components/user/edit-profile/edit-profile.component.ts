@@ -29,22 +29,26 @@ export class EditProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // const userId: string | null = this.auth.getUserId(); /* fix me! */
-    // if (!userId) {
-    //   this.router.navigateByUrl('/').then();
-    // }
-    // this.userService.getUserInfos(userId).subscribe(res => {
-    //   this.userData = res.user;
-    //   console.log(this.userData);
-    //   this.fullName = res.user.first_name;
-    //   this.email = res.user.email;
-    //   this.userName = res.user.username;
-    //   this.imageSrc = res.user.avatar;
-    // }, (error => {
-    //   this.snackBar.open('خطایی رخ داد', '', {
-    //     duration: 2000, panelClass: 'red-snackbar'
-    //   });
-    // }));
+    const userToken: string | null = this.auth.authToken;
+    if (!userToken) {
+      this.router.navigateByUrl('/').then();
+    }
+
+    if(this.auth.authToken)
+    {
+      this.userService.getUserInfos(this.auth.authToken).subscribe(res => {
+        this.userData = res;
+        this.fullName = res.fullName;
+        this.email = res.email;
+        this.userName = res.username;
+        this.imageSrc = res.avatar;
+      }, (error => {
+        this.snackBar.open('خطایی رخ داد', '', {
+          duration: 2000, panelClass: 'red-snackbar'
+        });
+      }));
+    }
+
     this.form = this.formBuilder.group({
       username: [null, [Validators.required]],
       password: [null, Validators.pattern('pattern=.{0}|.{4,}')],
@@ -61,17 +65,17 @@ export class EditProfileComponent implements OnInit {
 
   handleEditing() {
     this.disableBtn = true;
-    const tokenData = {token: this.auth.authToken};
     let userdata: Object;
     if (this.form.value.password) {
-      userdata = {...tokenData, ...this.form.value , ...{avatar: this.imageSrc} };
+      userdata = {...this.form.value , ...{avatar: this.imageSrc} };
     } else {
-      userdata = {
-        token: this.auth.authToken, username: this.userName, email: this.email,
+      userdata = {username: this.userName, email: this.email,
         fullName: this.fullName, avatar: this.imageSrc
       };
     }
-    this.userService.updateUserInfos(userdata).subscribe(() => {
+    console.log(userdata);
+    if (this.auth.authToken)
+    this.userService.updateUserInfos(userdata , this.auth.authToken).subscribe(() => {
       }, error => {
         this.disableBtn = false;
         this.snackBar.open('ایمیل یا نام کاربری از قبل ثبت شده است ', '', {
@@ -99,7 +103,7 @@ export class EditProfileComponent implements OnInit {
       reader.onload = () => {
         this.imageSrc = reader.result as string;
         this.form.patchValue({
-          avatarSource: reader.result
+          avatar: reader.result
         });
       }
     }

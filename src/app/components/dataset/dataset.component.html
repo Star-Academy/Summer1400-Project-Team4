@@ -1,8 +1,8 @@
 <h2 mat-dialog-title>افزودن دیتاست</h2>
 
-<mat-dialog-content [formGroup]="form" >
+<mat-dialog-content [formGroup]="form">
   <mat-form-field>
-    <input formControlName="name" matInput  placeholder="نام دیتاست" required >
+    <input formControlName="name" matInput placeholder="نام دیتاست" required>
   </mat-form-field>
 
   <mat-form-field>
@@ -16,26 +16,30 @@
 
   <mat-form-field>
     <mat-label>جدا کننده ی ستون</mat-label>
-    <mat-select [(value)]="filedSelected"  required>
+    <mat-select [(value)]="filedSelected" required>
       <mat-option value=",">ویرگول</mat-option>
       <mat-option value="-">خط فاصله</mat-option>
       <mat-option value="\\n">سطر جدید</mat-option>
     </mat-select>
   </mat-form-field>
 
-  <input type="file" class="file-input" (change)="onFileChange($event)" #fileUpload
-         formcontrolname="csvFile" required>
+  <input #fileUpload (change)="onFileChange($event)" class="file-input" formcontrolname="csvFile"
+         required type="file">
 
   <div>
-    <button mat-mini-fab color="primary" class="upload-btn"
-            (click)="fileUpload.click()">
+    <button (click)="fileUpload.click()" class="upload-btn" color="primary"
+            mat-mini-fab>
       <mat-icon>attach_file</mat-icon>
     </button>
-    {{fileName ||  "فایلی انتخاب نشده است"}}
+    {{fileName || "فایلی انتخاب نشده است"}}
   </div>
   <section style="margin-top: 2rem">
-    <p><mat-checkbox formControlName="autoMap">اتومپ</mat-checkbox></p>
-    <p><mat-checkbox formControlName="doesHaveHeader">هدر</mat-checkbox></p>
+    <p>
+      <mat-checkbox formControlName="autoMap">اتومپ</mat-checkbox>
+    </p>
+    <p>
+      <mat-checkbox formControlName="doesHaveHeader">هدر</mat-checkbox>
+    </p>
   </section>
 
 
@@ -43,16 +47,16 @@
 
 <mat-dialog-actions [formGroup]="form">
 
-  <button mat-raised-button color="primary" [disabled]="loading || !form.valid || !filedSelected|| !rowSelected"
-          (click)="onUpload()">
+  <button (click)="onUpload()" [disabled]="loading || !form.valid || !filedSelected|| !rowSelected" color="primary"
+          mat-raised-button>
     آپلود
   </button>
 
-  <button style="margin-right: 1rem" class="mat-raised-button"
-          (click)="close()">
+  <button (click)="close()" class="mat-raised-button"
+          style="margin-right: 1rem">
     انصراف
   </button>
 
 </mat-dialog-actions>
 
-<mat-progress-bar *ngIf="loading" style="margin-top: 2rem" mode="indeterminate"></mat-progress-bar>
+<mat-progress-bar *ngIf="loading" mode="indeterminate" style="margin-top: 2rem"></mat-progress-bar>

@@ -7,10 +7,11 @@ import {
     UserEditData,
 } from '../interfaces/interface';
 import { ApiService } from './api.service';
+import {AuthService} from "./auth.service";
 
 @Injectable()
 export class UserService {
-    constructor(private api: ApiService) {}
+    constructor(private api: ApiService , public auth : AuthService) {}
 
     getUser(userData: userLogin): Observable<string> {
         return this.api.post<string>(`Users/login`, userData);
@@ -20,10 +21,10 @@ export class UserService {
         return this.api.post<string>(`Users/register`, userData);
     }
 
-    getUserInfos(id: string | null): Observable<UserEditData> {
-        return this.api.get<UserEditData>(`user/one/${id}`);
+  getUserInfos(token: string ): Observable<any>  {
+        return this.api.get<any>(`Users/UserData` , token);
     }
-    updateUserInfos(userData: Object): Observable<void> {
-        return this.api.post<void>(`Users/alter`, userData);
+    updateUserInfos(userData: Object , token : string): Observable<any> {
+        return this.api.post<any>(`Users/alter`, userData , token);
     }
 }

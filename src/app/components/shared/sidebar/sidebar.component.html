@@ -6,7 +6,8 @@
     <div class="sidebarHeader">
       <h2>{{name}}</h2>
     </div>
-    <img alt="" [src] = "imgSrc" >
+    <img *ngIf="!imgSrc" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQd326Nlb2A9bZXER6wetzJ_cBaaz6JLljAg&usqp=CAU" alt="">
+    <img *ngIf="imgSrc" alt="" [src] = "imgSrc" >
   </div>
 
   <mat-divider></mat-divider>
