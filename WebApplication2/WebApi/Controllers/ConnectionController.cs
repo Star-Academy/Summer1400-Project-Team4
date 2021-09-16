@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.models;
@@ -28,7 +30,7 @@ namespace WebApi.Controllers
             try
             {
                 var user = _userValidation.IsUserValid(token);
-               // if (!connection.TestConnection())   return BadRequest("can't connect to sql server");
+                // if (!connection.TestConnection())   return BadRequest("can't connect to sql server");
                 user.UserConnections.Add(connection);
             }
             catch (Exception e)
@@ -88,12 +90,34 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public  IActionResult GetAllConnections([FromHeader] string token)
+        public IActionResult GetAllConnections([FromHeader] string token)
         {
             try
             {
                 var user = _userValidation.IsUserValid(token);
                 return Ok(user.UserConnections);
+            }
+            catch (Exception e)
+            {
+                return Unauthorized(e.Message);
+            }
+        }
+
+        [HttpPut]
+        [Route("alter/{connectionId:int}")]
+        public IActionResult AlterConnection([FromRoute] int connectionId, [FromBody] string newName,
+            [FromHeader] string token)
+        {
+            try
+            {
+                var user = _userValidation.IsUserValid(token);
+                if (!_authorizationChecker.DoesBelongToUser(user.Id, connectionId, UserProp.Connection))
+                    return Unauthorized();
+                var connection = user.UserConnections.FirstOrDefault(c => c.ConnectionId == connectionId);
+                Debug.Assert(connection != null, nameof(connection) + " != null");
+                connection.ConnectionName = newName;
+                return Ok();
+
             }
             catch (Exception e)
             {
