@@ -1,10 +1,12 @@
 <!--<p style="padding-right: 10px">دیتاست </p>-->
-<cdk-virtual-scroll-viewport  *ngIf="dataSource"  (scrolledIndexChange)="getNextBatch($event)"  class="wrapper mat-elevation-z2" tvsItemSize>
+<cdk-virtual-scroll-viewport (scrolledIndexChange)="getNextBatch($event)" *ngIf="dataSource"
+                             class="wrapper mat-elevation-z2" tvsItemSize>
   <mat-form-field (keyup)="applyFilter($event)" appearance="standard">
     <mat-label>فیلتر</mat-label>
-    <input matInput  #input>
+    <input #input matInput>
   </mat-form-field>
-  <table *ngIf="dataSource" [dataSource]="dataSource" class="mat-elevation-z8" mat-table matSort style="margin-right: 6rem">
+  <table *ngIf="dataSource" [dataSource]="dataSource" class="mat-elevation-z8" mat-table matSort
+         style="margin-right: 6rem">
     <!-- id Column -->
     <ng-container matColumnDef="id">
       <th *matHeaderCellDef mat-header-cell mat-sort-header>ردیف</th>
@@ -13,7 +15,7 @@
 
     <!-- Name Column -->
     <ng-container matColumnDef="name">
-      <th  *matHeaderCellDef mat-header-cell mat-sort-header> نام</th>
+      <th *matHeaderCellDef mat-header-cell mat-sort-header> نام</th>
       <td (click)="clickName(element)" *matCellDef="let element" mat-cell>
         <button mat-button style="margin-right: -2rem"> {{element.name}} </button>
       </td>
@@ -21,10 +23,17 @@
 
     <ng-container matColumnDef="like">
       <th *matHeaderCellDef mat-header-cell>
-        <button mat-icon-button><mat-icon>star</mat-icon></button>
+        <button mat-icon-button>
+          <mat-icon>star</mat-icon>
+        </button>
       </th>
-      <td (click)="likedRequest(element)" *matCellDef="let element" mat-cell>
-        <button mat-icon-button><mat-icon>star_border</mat-icon></button>
+      <td *matCellDef="let element" mat-cell>
+        <button (click)="likedRequest(element)" *ngIf="!element.liked" mat-icon-button>
+          <mat-icon>star_border</mat-icon>
+        </button>
+        <button (click)="likedRequest(element)" *ngIf="element.liked" mat-icon-button>
+          <mat-icon color="accent">star</mat-icon>
+        </button>
       </td>
     </ng-container>
 
@@ -34,7 +43,7 @@
 
       <td *matCellDef="let element" mat-cell>
         <div [style.opacity]="element.show ? 100 : 0">
-          <button color="primary" mat-icon-button>
+          <button (click)="removeRequest(element)" color="primary" mat-icon-button>
             <mat-icon>delete</mat-icon>
           </button>
           <button color="primary" mat-icon-button>
@@ -45,14 +54,16 @@
     </ng-container>
 
     <ng-container matColumnDef="add">
-      <th  *matHeaderCellDef mat-header-cell>
-        <button (click)="openDialog()" mat-icon-button color="primary" title="افزودن دیتاست"> <mat-icon>add_box</mat-icon> </button>
+      <th *matHeaderCellDef mat-header-cell>
+        <button (click)="openDialog()" color="primary" mat-icon-button title="افزودن دیتاست">
+          <mat-icon>add_box</mat-icon>
+        </button>
       </th>
-      <td  *matCellDef="let element" mat-cell>
+      <td *matCellDef="let element" mat-cell>
       </td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr *matHeaderRowDef="displayedColumns; sticky: true" mat-header-row></tr>
 
     <tr (mouseleave)="handleMouseLeave(element)" (mouseover)="handleMouseOver(element)"
         *matRowDef="let element; columns: displayedColumns;"
@@ -60,8 +71,8 @@
     </tr>
 
     <!-- Row shown when there is no matching data. -->
-    <tr class="mat-row" *matNoDataRow>
-      <td class="mat-cell" colspan="4">دیتاستی با مضمون "{{input.value}}"  وجود ندارد </td>
+    <tr *matNoDataRow class="mat-row">
+      <td class="mat-cell" colspan="4">دیتاستی با مضمون "{{input.value}}" وجود ندارد</td>
     </tr>
 
   </table>

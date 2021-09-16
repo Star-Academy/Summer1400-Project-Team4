@@ -6,36 +6,39 @@ import {DatasetComponent} from "../dataset/dataset.component";
 import {AuthService} from "../../services/auth.service";
 import {DatasetService} from "../../services/dataset.service";
 import {Dataset} from "../../models/dataset.model";
+
 export interface PeriodicElement {
-  id : number;
+  id: number;
   liked?: boolean;
-  name:string;
+  name: string;
 }
+
 @Component({
   selector: 'app-dashbord',
   templateUrl: './dashbord.component.html',
   styleUrls: ['./dashbord.component.scss']
 })
-export class DashbordComponent implements OnInit , AfterViewInit {
-  displayedColumns: string[] = ['id', 'name', 'like', 'deleteEmployee' , 'add'];
+export class DashbordComponent implements OnInit, AfterViewInit {
+  displayedColumns: string[] = ['id', 'name', 'like', 'deleteEmployee', 'add'];
   dataSource = new TableVirtualScrollDataSource<Dataset>();
-  dataSets!:Dataset[];
+  dataSets!: Dataset[];
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private dialog: MatDialog , private auth : AuthService , private datasetService : DatasetService) {
+  constructor(private dialog: MatDialog, private auth: AuthService, private datasetService: DatasetService) {
   }
 
   ngOnInit(): void {
+    this.getDataSets();
+  }
 
-    this.datasetService.getAll().subscribe(res=>
-      {
-       this.dataSets = res;
+  getDataSets() {
+    this.datasetService.getAll().subscribe(res => {
+        this.dataSets = res;
       },
-       error =>
-      {
-      alert('خطا در دریافت دیتاست ها ');
+      error => {
+        alert('خطا در دریافت دیتاست ها ');
       },
-      ()=>{
+      () => {
         this.dataSets.map((data: any) => {
           data.show = false
         });
@@ -46,8 +49,7 @@ export class DashbordComponent implements OnInit , AfterViewInit {
     )
   }
 
-  ngAfterViewInit(): void
-  {
+  ngAfterViewInit(): void {
   }
 
   handleMouseOver(row: { id: any; }) {
@@ -91,8 +93,33 @@ export class DashbordComponent implements OnInit , AfterViewInit {
     this.dialog.open(DatasetComponent, dialogConfig);
   }
 
-  likedRequest(element : Dataset)
-  {
-    console.log(element);
+  likedRequest(element: Dataset) {
+    if (element.liked) {
+      this.datasetService.dislike(element.id).subscribe(() => {
+      }, error => {
+        alert('خطا هنگام ارتباط با سرور');
+      }, () => {
+        this.getDataSets();
+      });
+    } else {
+      this.datasetService.like(element.id).subscribe(res => {
+
+      }, error => {
+        alert('خطا هنگام ارتباط با سرور');
+      }, () => {
+        this.getDataSets();
+      })
+    }
+
+  }
+
+  removeRequest(element: Dataset) {
+    this.datasetService.delete(element.id).subscribe(() => {
+      }, error => {
+        alert('خطا هنگام ارتباط با سرور');
+      }
+      , () => {
+        this.getDataSets();
+      });
   }
 }

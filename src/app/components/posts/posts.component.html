@@ -169,7 +169,7 @@
       <td *matCellDef="let element" mat-cell> {{element.name}} </td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr *matHeaderRowDef="displayedColumns; sticky: true" mat-header-row></tr>
 
     <tr *matRowDef="let element; columns: displayedColumns;" mat-row></tr>
 
