@@ -26,6 +26,7 @@ namespace WebApi.Services
             CreatePath();
             var newTableQuery = GenerateCreateTableQuery();
             var bulkQuery = GenerateBulkQuery();
+            Console.WriteLine(newTableQuery);
             Console.WriteLine(bulkQuery);
             ExecuteCommands(newTableQuery);
             ExecuteCommands(bulkQuery);
@@ -42,11 +43,11 @@ namespace WebApi.Services
         {
             var stringBuilder = new StringBuilder();
             stringBuilder.Append($"BULK INSERT _{_dataSetId}\n");
-            stringBuilder.Append($"FROM 'G:\\codeStrar\\project\\Summer1400-Project-Team4\\WebApplication2\\WebApi\\{_filePath}'\n");
+            stringBuilder.Append($"FROM '{_filePath}'\n");
             stringBuilder.Append("WITH (\n" +
                                  $"FIRSTROW = {FirstRow},\n" +
-                                 $"FIELDTERMINATOR = '{_csvProp.FieldTerminator}',\n" +
-                                 $"ROWTERMINATOR = '{_csvProp.RowTerminator}',\n" +
+                                 $"FIELDTERMINATOR = ',',\n" +
+                                 $"ROWTERMINATOR = '\\n',\n" +
                                  "TABLOCK\n" +
                                  ");");
             return stringBuilder.ToString();

@@ -37,10 +37,20 @@ namespace WebApi.Controllers
             if (user == null)
                 return Unauthorized("Wrong token");
             user.UserDatasets.Add(dataset);
-            /*new SqlTableCreator().CopySql("localhost", dataset.DatabaseName,
-                dataset.TableName, dataset.DatasetName);*/
-            _database.SaveChangesAsync();
-            return Ok("created");
+            var connection = _database.Connections.FirstOrDefault(x => x.ConnectionId == dataset.connectionId);
+            if (connection == null)
+                return BadRequest("Wrong Connection ID");
+            try
+            {
+                new SqlTableCreator().CopySql(connection.GetConnectionString(), dataset);
+                _database.SaveChangesAsync();
+                return Ok("created");
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+            
         }
 
         [HttpPost]

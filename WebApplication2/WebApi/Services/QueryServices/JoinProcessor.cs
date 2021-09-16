@@ -27,14 +27,10 @@ namespace WebApi.Services.QueryServices
 
             string joinKeys;
             if (joinDetails["LeftTableKey"] == null || joinDetails["RightTableKey"] == null)
-            {
                 joinKeys = "";
-            }
             else
-            {
                 joinKeys =
                     $"ON {startingDatasetName}.{joinDetails["LeftTableKey"]}=_{joinDetails["JoinWith"]}.{joinDetails["RightTableKey"]}";
-            }
 
             return $"{joinDetails["Type"]} _{joinDetails["JoinWith"]} {joinKeys}";
         }

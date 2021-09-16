@@ -14,7 +14,7 @@ namespace WebApi.Services
 
         public PipelineExecutor(string connectionString, Pipeline pipeline)
         {
-            _queriesList = JsonPipelineInterpreter.GetQueriesList(pipeline).ToList();
+            _queriesList = PipelineInterpreter.GetQueriesList(pipeline).ToList();
             _sqlConnection = new SqlConnection(connectionString);
         }
 
