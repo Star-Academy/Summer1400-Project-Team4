@@ -52,7 +52,7 @@ const routes: Routes = [
                 component: DashbordComponent,
             },
             {
-                path: 'posts',
+                path: 'posts/:datasetId',
                 component: PostsComponent,
             },
             {

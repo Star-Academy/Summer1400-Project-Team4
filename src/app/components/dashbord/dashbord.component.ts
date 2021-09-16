@@ -6,6 +6,7 @@ import {DatasetComponent} from "../dataset/dataset.component";
 import {AuthService} from "../../services/auth.service";
 import {DatasetService} from "../../services/dataset.service";
 import {Dataset} from "../../models/dataset.model";
+import {Router} from "@angular/router";
 
 export interface PeriodicElement {
   id: number;
@@ -24,7 +25,8 @@ export class DashbordComponent implements OnInit, AfterViewInit {
   dataSets!: Dataset[];
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private dialog: MatDialog, private auth: AuthService, private datasetService: DatasetService) {
+  constructor(private dialog: MatDialog, private auth: AuthService, private datasetService: DatasetService
+              , private router : Router) {
   }
 
   ngOnInit(): void {
@@ -74,7 +76,7 @@ export class DashbordComponent implements OnInit, AfterViewInit {
   }
 
   clickName(element: Dataset) {
-    console.log(element);
+    this.router.navigate([`posts/${element.id}`]).then();
   }
 
   applyFilter(event: Event) {

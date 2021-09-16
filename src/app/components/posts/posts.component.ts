@@ -4,6 +4,7 @@ import {PeriodicElement} from "../dashbord/dashbord.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {HttpClient} from "@angular/common/http";
 import {MatSort} from "@angular/material/sort";
+import {ActivatedRoute} from "@angular/router";
 
 const buffer = 200;
 const message = 'نمونه های بیشتر لود شدند  ...';
@@ -17,18 +18,18 @@ export class PostsComponent implements OnInit , AfterViewInit {
 
   displayedColumns = ['id', 'name'];
   dataSource!: TableVirtualScrollDataSource<PeriodicElement>;
-  public enableScroll: boolean = true;
+  enableScroll: boolean = true;
+  datasetId!: string | null;
+
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(public snackBar: MatSnackBar, public http: HttpClient) {
+  constructor(public snackBar: MatSnackBar, public http: HttpClient , private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
+    this.datasetId = this.route.snapshot.paramMap.get('datasetId');
+    console.log(this.datasetId);
     this.dataSource = new TableVirtualScrollDataSource(ELEM);
-    // console.log("ngOnInit");
-    // setTimeout(()=>{
-    //   this.dataSource.data[0].name = "opotoniom";
-    // } , 3000)
   }
 
   ngAfterViewInit(): void
