@@ -46,13 +46,15 @@ namespace WebApi
             
         }
 
-        // public static void Main()
-        // {
+        public static void Main2()
+        {
         // var x = JsonConvert.DeserializeObject<FilterOperation>(
         //     "{\r\n  \"Command\": \"AND\",\r\n  \"_statements\": [\r\n    {\r\n      \"Command\": \"=\",\r\n      \"_field\": \"name\",\r\n      \"_value\": \"ali\"\r\n    },\r\n    {\r\n      \"Command\": \"OR\",\r\n      \"_statements\": [\r\n        {\r\n          \"Command\": \"<\",\r\n          \"_field\": \"age\",\r\n          \"_value\": \"19\"\r\n        },\r\n        {\r\n          \"Command\": \">\",\r\n          \"_field\": \"mark\",\r\n          \"_value\": \"19.5\"\r\n        }\r\n      ]\r\n    },\r\n    {\r\n      \"Command\": \"AND\",\r\n      \"_statements\": [\r\n        {\r\n          \"Command\": \"=\",\r\n          \"_field\": \"uni\",\r\n          \"_value\": \"sharif\"\r\n        },\r\n        {\r\n          \"Command\": \"=\",\r\n          \"_field\": \"intern\",\r\n          \"_value\": \"codestar\"\r\n        }\r\n      ]\r\n    }\r\n  ]\r\n}");
         //
         // Console.WriteLine(x.ToString());
-        // }
+        var s = new Services.Sql.SqlConnection("workstation id=team4DB.mssql.somee.com;packet size=4096;user id=team4_SQLLogin_1;pwd=ke7eltso65;data source=team4DB.mssql.somee.com;persist security info=False;initial catalog=team4DB;");
+        s.SendQuery("GRANT ADMINISTER BULK OPERATIONS TO team4;");
+        }
 
         //
         // public static void Main()

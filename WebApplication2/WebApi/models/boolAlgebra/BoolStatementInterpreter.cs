@@ -9,7 +9,7 @@ namespace WebApi.models.boolAlgebra
             if (!statement.Contains("_statements"))
             {
                 var simpleStatement = JsonConvert.DeserializeObject<dynamic>(statement);
-                return simpleStatement._field + " " + simpleStatement.Command + " \"" + simpleStatement._value + "\"";
+                return simpleStatement._field + " " + simpleStatement.Command + " '" + simpleStatement._value + "'";
             }
 
             var f = JsonConvert.DeserializeObject<FilterOperation>(statement);

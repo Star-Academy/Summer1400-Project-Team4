@@ -55,7 +55,8 @@ namespace WebApi.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeletePipeline([FromRoute] int pipelineId, [FromHeader] string token)
+        [Route("{pipelineId:int}")]
+        public async Task<IActionResult> DeletePipeline(int pipelineId, [FromHeader] string token)
         {
             var pipeline = _database.Pipelines.FirstOrDefaultAsync(p => p.PipelineId == pipelineId);
             if (pipeline == null) return BadRequest();

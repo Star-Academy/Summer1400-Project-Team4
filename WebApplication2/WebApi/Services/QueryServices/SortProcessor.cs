@@ -1,3 +1,4 @@
+using System;
 using System.Text.Json;
 using WebApi.models.SortModels;
 using WebApi.Services.Sql;
@@ -16,6 +17,14 @@ namespace WebApi.Services.QueryServices
         public override void Handle(ISqlConnection applyingSql, string startingDatasetName,
             string destinationDatasetName)
         {
+            try
+            {
+                applyingSql.SendQuery($"DROP TABLE {destinationDatasetName}");
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
             applyingSql.SendQuery(
                 InterpretToSql(Instruction.Replace("\\\"", "\""), startingDatasetName, destinationDatasetName));
         }
