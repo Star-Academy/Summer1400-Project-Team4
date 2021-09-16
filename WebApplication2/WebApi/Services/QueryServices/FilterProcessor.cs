@@ -29,7 +29,7 @@ namespace WebApi.Services.QueryServices
             applyingSql.SendQuery("SELECT * " +
                                   $"INTO {destinationDatasetName} " +
                                   $"FROM {startingDatasetName} " +
-                                  $"WHERE {InterpretToSql(Instruction)} ");
+                                  $"WHERE {InterpretToSql(Instruction.Replace("\\\"", "\""))} ");
         }
 
         private static string InterpretToSql(string instruction)
