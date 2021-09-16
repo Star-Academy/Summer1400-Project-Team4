@@ -11,7 +11,6 @@ export class SidebarComponent implements OnInit {
 
   public name: string = "";
   public imgSrc!: string | undefined;
-
   constructor(private userService: UserService, private auth: AuthService) {
   }
 
@@ -19,7 +18,7 @@ export class SidebarComponent implements OnInit {
     if (this.auth.authToken)
     {
       this.userService.getUserInfos(this.auth.authToken).subscribe(res => {
-        this.name = res.username;
+        this.name = res.fullName;
         this.imgSrc = res.avatar;
       })
     }
