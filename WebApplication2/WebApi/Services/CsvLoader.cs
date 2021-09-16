@@ -82,7 +82,7 @@ namespace WebApi.Services
         
         private void ExecuteCommands(string query)
         {
-            using var connection = DbConnector.DefaultConnection(); 
+            using var connection = DbConnector.DefaultConnection("server"); 
             connection.Open();
             var sqlCommand = new SqlCommand(query, connection);
             sqlCommand.ExecuteNonQuery();

@@ -104,7 +104,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPut]
-        [Route("alter/{connectionId:int}")]
+        [Route("{connectionId:int}")]
         public IActionResult AlterConnection([FromRoute] int connectionId, [FromBody] string newName,
             [FromHeader] string token)
         {

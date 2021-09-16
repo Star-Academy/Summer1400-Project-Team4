@@ -48,7 +48,7 @@ namespace WebApi.Services
         {
             var query =
                 $"SELECT TOP({upperBound}) * FROM _{datasetId} ";
-            var connectionString = DbConnector.DefaultConnectionString;
+            var connectionString = DbConnector.LocalConnectionString;
             using var dataAdapter = new SqlDataAdapter(query, connectionString);
             dataAdapter.Fill(table);
         }
