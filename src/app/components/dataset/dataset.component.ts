@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, ValidationErrors, Validators} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {HttpClient, HttpEventType} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {Subscription} from "rxjs";
 import {NewLocalDataset} from "../../models/dataset.model";
 import {DatasetService} from "../../services/dataset.service";
@@ -19,11 +19,11 @@ export class DatasetComponent implements OnInit {
   fileString! : string;
   uploadSubscription! : Subscription;
   loading: boolean = false; // Flag check loading
-  datasetName : string = '';
+  name : string = '';
   rowSelected!: string;
   filedSelected!: string;
 
-  constructor( private http : HttpClient, private datasetService : DatasetService,
+  constructor( private http : HttpClient, public datasetService : DatasetService,
     private formBuilder: FormBuilder,
     public dialogRef: MatDialogRef<DatasetComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
@@ -33,7 +33,7 @@ export class DatasetComponent implements OnInit {
   ngOnInit()
   {
     this.form = this.formBuilder.group({
-      datasetName: [null, [Validators.required]],
+      name: [null, [Validators.required]],
       csvFile: [null, Validators.required],
       autoMap:  [false, Validators.required],
       doesHaveHeader: [false, Validators.required]
@@ -68,20 +68,13 @@ export class DatasetComponent implements OnInit {
 
   onUpload() {
 
-    console.log(this.form.value);
-
     this.loading = !this.loading;
 
-    const formData = new FormData();
-
     const data : NewLocalDataset  = {...this.form.value , ...{fieldSeparator : this.filedSelected , rowSeparator : this.rowSelected}};
-
-    this.datasetService.createLocal(data).subscribe(
+    console.log(data);
+    this.uploadSubscription = this.datasetService.createLocal(data).subscribe(
       (event: any) => {
-        if (typeof (event) === 'object') {
-          console.log(event);
-          this.loading = false; // Flag variable
-        }
+          this.loading = false;
       }
       , error => {
         alert('خطایی رخ داد لطفا مجددا تلاش کنید');
@@ -90,21 +83,5 @@ export class DatasetComponent implements OnInit {
         this.dialogRef.close(this.form.value);
       }
     );
-
-    // this.uploadSubscription = this.http.post("https://file.io" , formData ).subscribe(
-    //   (event: any) => {
-    //     if (typeof (event) === 'object') {
-    //       console.log(event);
-    //       this.loading = false; // Flag variable
-    //     }
-    //   }
-    //   , error => {
-    //     alert('خطایی رخ داد لطفا مجددا تلاش کنید');
-    //     this.loading = false ;
-    //   } , ()=>{
-    //     this.dialogRef.close(this.form.value);
-    //   }
-    // );
-
   }
 }

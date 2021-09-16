@@ -12,12 +12,12 @@ import { ApiService } from './api.service';
 export class UserService {
     constructor(private api: ApiService) {}
 
-    getUser(userData: userLogin): Observable<Token> {
-        return this.api.post<Token>(`Users/login`, userData);
+    getUser(userData: userLogin): Observable<string> {
+        return this.api.post<string>(`Users/login`, userData);
     }
 
-    getSignUp(userData: userSignUp): Observable<Token> {
-        return this.api.post<Token>(`Users/register`, userData);
+    getSignUp(userData: userSignUp): Observable<string> {
+        return this.api.post<string>(`Users/register`, userData);
     }
 
     getUserInfos(id: string | null): Observable<UserEditData> {

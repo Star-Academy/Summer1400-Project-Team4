@@ -3,6 +3,7 @@ import {TableVirtualScrollDataSource} from 'ng-table-virtual-scroll';
 import {MatSort} from "@angular/material/sort";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {DatasetComponent} from "../dataset/dataset.component";
+import {AuthService} from "../../services/auth.service";
 export interface PeriodicElement {
   name: string;
   position: number;
@@ -60,7 +61,7 @@ export class DashbordComponent implements OnInit , AfterViewInit {
   dataSource!: TableVirtualScrollDataSource<PeriodicElement>;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private dialog: MatDialog) {
+  constructor(private dialog: MatDialog , public auth : AuthService) {
     ELEMENT_DATA.map((data: any) => {
       data.show = false
     });

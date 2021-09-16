@@ -49,7 +49,7 @@ export class SignupComponent implements OnInit {
 
     this.userService.getSignUp(userdata).subscribe(res =>
       {
-        this.auth.authToken = res.token;
+        this.auth.authToken = res;
       }
       , error =>
       {

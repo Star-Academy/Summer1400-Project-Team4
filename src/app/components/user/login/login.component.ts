@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
     const userdata = {username: username, password: password}
 
     this.userService.getUser(userdata).subscribe(res => {
-        this.auth.authToken = res.token;
+        this.auth.authToken = res;
       }
       , error => {
         this.disableBtn = false;
