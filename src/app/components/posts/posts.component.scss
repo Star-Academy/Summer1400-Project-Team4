@@ -1,5 +1,13 @@
 @use '~@angular/material' as mat;
 
+:host {
+  display: flex;
+  flex-direction: column;
+  padding: var(--density-larger);
+  max-height: 100%;
+  overflow: auto;
+}
+
 //.card
 //{
 //  width:90%;
