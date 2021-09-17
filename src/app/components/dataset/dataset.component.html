@@ -5,27 +5,35 @@
     <input formControlName="name" matInput  placeholder="نام دیتاست" required >
   </mat-form-field>
 
-  <mat-form-field *ngIf="fileName" >
-    <mat-label>جدا کننده‌ی ستون</mat-label>
-    <mat-select [(value)]="filedSelected"  required>
-      <mat-option value=",">,</mat-option>
-      <mat-option value=":">:</mat-option>
-      <mat-option value=";">;</mat-option>
-      <mat-option value="-">-</mat-option>
-      <mat-option value="\n">خط جدید</mat-option>
-    </mat-select>
+  <mat-form-field *ngIf="fileName">
+    <input  matInput  placeholder=" جداکننده ی ستون"  [(ngModel)]="filedSelected" [ngModelOptions]="{standalone: true}" >
   </mat-form-field>
 
   <mat-form-field *ngIf="fileName">
-    <mat-label>جدا کننده‌ی سطر</mat-label>
-    <mat-select [(value)]="rowSelected" required>
-      <mat-option value=",">,</mat-option>
-      <mat-option value=":">:</mat-option>
-      <mat-option value=";">;</mat-option>
-      <mat-option value="-">-</mat-option>
-      <mat-option value="\n">خط جدید</mat-option>
-    </mat-select>
+    <input  matInput  placeholder=" جداکننده ی سطر"  [(ngModel)]="rowSelected" [ngModelOptions]="{standalone: true}" >
   </mat-form-field>
+
+<!--  <mat-form-field *ngIf="fileName" >-->
+<!--    <mat-label>جدا کننده‌ی ستون</mat-label>-->
+<!--    <mat-select [(value)]="filedSelected"  required>-->
+<!--      <mat-option value=",">,</mat-option>-->
+<!--      <mat-option value=":">:</mat-option>-->
+<!--      <mat-option value=";">;</mat-option>-->
+<!--      <mat-option value="-">-</mat-option>-->
+<!--      <mat-option value="\n">خط جدید</mat-option>-->
+<!--    </mat-select>-->
+<!--  </mat-form-field>-->
+
+<!--  <mat-form-field *ngIf="fileName">-->
+<!--    <mat-label>جدا کننده‌ی سطر</mat-label>-->
+<!--    <mat-select [(value)]="rowSelected" required>-->
+<!--      <mat-option value=",">,</mat-option>-->
+<!--      <mat-option value=":">:</mat-option>-->
+<!--      <mat-option value=";">;</mat-option>-->
+<!--      <mat-option value="-">-</mat-option>-->
+<!--      <mat-option value="\n">خط جدید</mat-option>-->
+<!--    </mat-select>-->
+<!--  </mat-form-field>-->
 
   <input #fileUpload (change)="onFileChange($event)" class="file-input" formcontrolname="csvFile"
          required type="file">

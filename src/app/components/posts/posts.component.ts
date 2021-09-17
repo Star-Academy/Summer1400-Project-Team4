@@ -5,6 +5,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {HttpClient} from "@angular/common/http";
 import {MatSort} from "@angular/material/sort";
 import {ActivatedRoute} from "@angular/router";
+import { Location } from '@angular/common';
 
 const buffer = 200;
 const message = 'نمونه های بیشتر لود شدند  ...';
@@ -23,7 +24,7 @@ export class PostsComponent implements OnInit , AfterViewInit {
 
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(public snackBar: MatSnackBar, public http: HttpClient , private route: ActivatedRoute) {
+  constructor(public snackBar: MatSnackBar, public http: HttpClient , private route: ActivatedRoute , private location: Location) {
   }
 
   ngOnInit(): void {
@@ -38,7 +39,7 @@ export class PostsComponent implements OnInit , AfterViewInit {
   }
 
   onTableScroll(e: { target: any; }) {
-    console.log("datasource length : " + this.dataSource.data.length);
+    // console.log("datasource length : " + this.dataSource.data.length);
     const tableViewHeight = e.target.offsetHeight // viewport: 52rem
     const tableScrollHeight = e.target.scrollHeight // the length of loaded datas exist in hole table
     const scrollLocation = e.target.scrollTop; // how far user scrolled

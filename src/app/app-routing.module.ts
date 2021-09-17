@@ -60,6 +60,10 @@ const routes: Routes = [
                 path: 'posts/:datasetId',
                 component: PostsComponent,
             },
+          {
+            path : 'posts',
+            component: PostsComponent,
+          },
             {
                 path: '**',
                 redirectTo: 'datasets',
