@@ -40,6 +40,7 @@ export class DesignerComponent
 
     pipelineNodeInfo = pipelineNodeInfo;
     PipelineNodeType = PipelineNodeType;
+    listErrors = listErrors;
 
     constructor(
         private route: ActivatedRoute,

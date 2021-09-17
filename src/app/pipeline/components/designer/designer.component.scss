@@ -92,3 +92,7 @@ nav {
     align-items: center;
     gap: var(--density-small);
 }
+
+.error-list-item {
+    color: theme.mat-color(theme.$warn-palette);
+}

@@ -151,6 +151,19 @@
                     [node]="$any(selectedNode)"
                 ></app-aggregate-config>
             </div>
+
+            <div *ngIf="(selectedNode.validations | async) !== null">
+                <div
+                    *ngFor="
+                        let error of listErrors(
+                            (selectedNode.validations | async)!
+                        )
+                    "
+                    class="error-list-item"
+                >
+                    {{ error.value }}
+                </div>
+            </div>
         </div>
     </mat-sidenav>
     <mat-sidenav-content>

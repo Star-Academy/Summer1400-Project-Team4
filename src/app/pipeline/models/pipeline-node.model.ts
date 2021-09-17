@@ -167,12 +167,12 @@ export abstract class PipelineNode {
 
     export() {
         return {
-            id: this.id,
+            nodeId: this.id,
             name: this.name,
             type: this.type,
-            position: this.position,
-            inputs: this.inputs,
-            instruction: this.exportConfig(),
+            position: JSON.stringify(this.position),
+            inputs: JSON.stringify(this.inputs),
+            instruction: JSON.stringify(this.exportConfig()),
         };
     }
 
@@ -287,15 +287,15 @@ export class SortNode extends PipelineNode {
     async validateConfig(pipeline: Pipeline, store: DatasetStore) {
         let errors: ValidationErrorList = {};
 
-        for (const i in this.config.orders) {
-            if (
-                !hasField(
-                    this.inputFields[0].value,
-                    this.config.orders[i].fieldName
-                )
-            )
-                errors[`orders[${i}].fieldName`] = 'این فیلد وجود ندارد';
-        }
+        // for (const i in this.config.orders) {
+        //     if (
+        //         !hasField(
+        //             this.inputFields[0].value,
+        //             this.config.orders[i].fieldName
+        //         )
+        //     )
+        //         errors[`orders[${i}].fieldName`] = 'این فیلد وجود ندارد';
+        // }
 
         return errors;
     }
@@ -388,10 +388,10 @@ export class JoinNode extends PipelineNode {
 
         if (this.config.joinWith === undefined)
             errors.joinWith = 'دیتاست برای الحاق انتخاب نشده است';
-        if (hasField(this.inputFields[0].value, this.config.leftTableKey))
-            errors.leftTableKey = 'این فیلد وجود ندارد';
-        if (hasField(this.inputFields[1].value, this.config.rightTableKey))
-            errors.rightTableKey = 'این فیلد وجود ندارد';
+        // if (hasField(this.inputFields[0].value, this.config.leftTableKey))
+        //     errors.leftTableKey = 'این فیلد وجود ندارد';
+        // if (hasField(this.inputFields[1].value, this.config.rightTableKey))
+        //     errors.rightTableKey = 'این فیلد وجود ندارد';
 
         return errors;
     }
@@ -463,26 +463,26 @@ export class AggregateNode extends PipelineNode {
     async validateConfig(pipeline: Pipeline, store: DatasetStore) {
         let errors: ValidationErrorList = {};
 
-        for (const i in this.config.groupBy) {
-            if (!hasField(this.inputFields[0].value, this.config.groupBy[i]))
-                errors[`groupBy[${i}]`] = 'این فیلد وجود ندارد';
-        }
+        // for (const i in this.config.groupBy) {
+        //     if (!hasField(this.inputFields[0].value, this.config.groupBy[i]))
+        //         errors[`groupBy[${i}]`] = 'این فیلد وجود ندارد';
+        // }
 
-        for (const i in this.config.operations) {
-            const field = findField(
-                this.inputFields[0].value,
-                this.config.operations[i].fieldName
-            );
+        // for (const i in this.config.operations) {
+        //     const field = findField(
+        //         this.inputFields[0].value,
+        //         this.config.operations[i].fieldName
+        //     );
 
-            if (field === undefined)
-                errors[`operations[${i}].fieldName`] = 'این فیلد وجود ندارد';
-            else if (
-                field.type !== 'number' &&
-                this.config.operations[i].type !== AggregateOperationType.count
-            )
-                errors[`operations[${i}].type`] =
-                    'این عمل تنها روی فیلد عددی قابل استفاده است';
-        }
+        //     if (field === undefined)
+        //         errors[`operations[${i}].fieldName`] = 'این فیلد وجود ندارد';
+        //     else if (
+        //         field.type !== 'number' &&
+        //         this.config.operations[i].type !== AggregateOperationType.count
+        //     )
+        //         errors[`operations[${i}].type`] =
+        //             'این عمل تنها روی فیلد عددی قابل استفاده است';
+        // }
 
         return errors;
     }
@@ -509,20 +509,20 @@ export const nodeClasses = {
 };
 
 export function importPipelineNode(exported: {
-    id: number;
+    nodeId: number;
     name: string;
     type: PipelineNodeType;
-    inputs: (number | null)[];
-    position: { x: number; y: number };
+    inputs: string;
+    position: string;
     instruction: any;
 }): PipelineNode {
     const type = nodeClasses[exported.type as PipelineNodeType];
-    const config = type.importConfig(exported.instruction);
+    const config = type.importConfig(JSON.parse(exported.instruction));
     const node = new type(
-        exported.id,
+        exported.nodeId,
         exported.name,
-        exported.position,
-        exported.inputs,
+        JSON.parse(exported.position),
+        JSON.parse(exported.inputs),
         config as any
     );
     return node;

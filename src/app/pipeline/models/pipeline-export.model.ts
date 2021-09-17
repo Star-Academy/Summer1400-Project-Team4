@@ -15,12 +15,12 @@ export interface PipelineExport {
     outputDataset: string | null;
     overwrite: boolean;
     processes: {
-        id: number;
+        nodeId: number;
         name: string;
         type: PipelineNodeType;
-        inputs: (number | null)[];
-        position: { x: number; y: number };
-        instruction: any;
+        inputs: string;
+        position: string;
+        instruction: string;
     }[];
 }
 
