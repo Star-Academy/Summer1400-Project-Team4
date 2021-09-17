@@ -1,16 +1,16 @@
 <h2 mat-dialog-title>افزودن دیتاست</h2>
 
 <mat-dialog-content [formGroup]="form" >
-  <mat-form-field>
+  <mat-form-field class="wide-field">
     <input formControlName="name" matInput  placeholder="نام دیتاست" required >
   </mat-form-field>
 
-  <mat-form-field *ngIf="fileName">
-    <input  matInput  placeholder=" جداکننده ی ستون"  [(ngModel)]="filedSelected" [ngModelOptions]="{standalone: true}" >
+  <mat-form-field *ngIf="fileName" class="wide-field">
+    <input  matInput  placeholder=" جداکننده ی ستون" class="propery-input" [(ngModel)]="filedSelected" [ngModelOptions]="{standalone: true}" >
   </mat-form-field>
 
-  <mat-form-field *ngIf="fileName">
-    <input  matInput  placeholder=" جداکننده ی سطر"  [(ngModel)]="rowSelected" [ngModelOptions]="{standalone: true}" >
+  <mat-form-field *ngIf="fileName" class="wide-field">
+    <input  matInput  placeholder=" جداکننده ی سطر" class="propery-input"  [(ngModel)]="rowSelected" [ngModelOptions]="{standalone: true}" >
   </mat-form-field>
 
 <!--  <mat-form-field *ngIf="fileName" >-->
@@ -45,7 +45,7 @@
     </button>
     {{fileName || "فایلی انتخاب نشده است"}}
   </div>
-  <section *ngIf="fileName" style="margin-top: 2rem">
+  <section *ngIf="fileName" style="margin-top: 2rem; display: flex; flex-direction: row; gap: 2rem;">
     <p>
       <mat-checkbox formControlName="autoMap">اتومپ</mat-checkbox>
     </p>

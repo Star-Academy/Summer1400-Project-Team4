@@ -1,10 +1,16 @@
 .mat-form-field {
   display: block;
 }
+
 .file-input {
   display: none;
 }
-mat-form-field
-{
-  width: 70%;
+
+.wide-field {
+  width: 100%;
+}
+
+.propery-input {
+  direction: ltr;
+  text-align: left;
 }
