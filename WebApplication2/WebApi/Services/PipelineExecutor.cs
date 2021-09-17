@@ -22,6 +22,15 @@ namespace WebApi.Services
         {
             string startingTempTableName;
             var endingTempTableName = "";
+
+            if (_queriesList == null || _queriesList.Count() == 0)
+            {
+                _sqlConnection.SendQuery("SELECT * " +
+                                         $"INTO {destinationDatasetName} " +
+                                         $"FROM {startingDatasetName} ");
+                return;
+            }
+
             foreach (var query in _queriesList)
             {
                 startingTempTableName = query == _queriesList[0] ? startingDatasetName : endingTempTableName;
