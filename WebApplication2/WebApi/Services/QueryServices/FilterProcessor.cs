@@ -26,8 +26,6 @@ namespace WebApi.Services.QueryServices
                 // ignored
             }
 
-            Console.WriteLine(startingDatasetName);
-            Console.WriteLine(destinationDatasetName);
             applyingSql.SendQuery("SELECT * " +
                                   $"INTO {destinationDatasetName} " +
                                   $"FROM {startingDatasetName} " +
@@ -41,7 +39,6 @@ namespace WebApi.Services.QueryServices
                 instruction = "{\"Command\": \"OR\", \"_statement\": [" + instruction + "]}";
             }
 
-            Console.WriteLine(instruction);
             var filterBooleanStatement = JsonConvert.DeserializeObject<FilterOperation>(instruction);
             return filterBooleanStatement.ToString();
         }
