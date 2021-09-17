@@ -39,6 +39,7 @@ namespace WebApi.Services.QueryServices
                 instruction = "{\"Command\": \"OR\", \"_statement\": [" + instruction + "]}";
             }
 
+            Console.WriteLine(instruction);
             var filterBooleanStatement = JsonConvert.DeserializeObject<FilterOperation>(instruction);
             return filterBooleanStatement.ToString();
         }
