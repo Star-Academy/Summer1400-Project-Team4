@@ -33,7 +33,7 @@ namespace WebApi
                 options.AddPolicy(MyAllowSpecificOrigins,
                     builder =>
                     {
-                        builder.WithOrigins("http://localhost:53135",
+                        builder.WithOrigins("http://localhost:1433",
                                 "http://localhost:4200", "http://localhost:5000", "https://localhost:5001"
                             )
                             .AllowAnyHeader()
@@ -63,7 +63,7 @@ namespace WebApi
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("../swagger/v1/swagger.json", "WebApi v1");
-                 //c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApi v1");
+                // c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApi v1");
                 // c.RoutePrefix = string.Empty;
             });
             // }

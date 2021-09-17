@@ -1,12 +1,10 @@
-﻿using SqlMapperLib.SqlTypes;
-
-namespace SqlMapper.SqlTypes.Types
+﻿namespace SqlMapperLib.SqlTypes.Types
 {
     public class NVarChar : ISqlType
     {
         public override string ToString()
         {
-            return "NVARCHAR(255)";
+            return "NVARCHAR(MAX)";
         }
     }
 }

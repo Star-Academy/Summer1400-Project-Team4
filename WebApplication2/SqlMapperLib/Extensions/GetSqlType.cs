@@ -4,6 +4,7 @@ using SqlMapper.Checkers.ExactNumericCheckers;
 using SqlMapper.SqlTypes;
 using SqlMapper.SqlTypes.Types;
 using SqlMapperLib.SqlTypes;
+using SqlMapperLib.SqlTypes.Types;
 
 namespace SqlMapperLib.Extensions
 {

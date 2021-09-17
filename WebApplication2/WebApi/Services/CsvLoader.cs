@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.Data.SqlClient;
 using SqlMapperLib.Extensions;
 using WebApi.models;
+using WebApi.models.Table;
 
 namespace WebApi.Services
 {
@@ -28,7 +29,6 @@ namespace WebApi.Services
             var newTableQuery = GenerateCreateTableQuery();
             var bulkQuery = GenerateBulkQuery();
             Console.WriteLine(newTableQuery);
-            Console.WriteLine(bulkQuery);
             ExecuteCommands(newTableQuery);
             ExecuteCommands(bulkQuery);
             DeletePath();
@@ -64,7 +64,7 @@ namespace WebApi.Services
             {
                 if (_csvProp.DoesHaveAutoMap)
                 {
-                    for (var i = fields.Length - 1; i >= 0; i--)
+                    for (var i = 0; i < fields.Length; i++)
                     {
                         stringBuilder.Append($"{fields[i]}" + $" {GetColumn(i).ToSqlType().ToString()},\n");
                     }
@@ -81,7 +81,7 @@ namespace WebApi.Services
             {
                 if (_csvProp.DoesHaveAutoMap)
                 {
-                    for (var i = fields.Length - 1; i >= 0; i--)
+                    for (var i = 0; i < fields.Length; i++)
                     {
                         stringBuilder.Append($"fields{i + 1}" + $" {GetColumn(i).ToSqlType().ToString()},\n");
                     }
@@ -133,7 +133,8 @@ namespace WebApi.Services
                 var row = streamReader.ReadLine()?.Split(_csvProp.FieldTerminator);
                 if (row != null) column.Add(row[columnNumber]);
             }
-
+            if (_csvProp.DoesHaveHeader) column.RemoveAt(0);
+            streamReader.Close();
             return column.ToArray();
         }
     }

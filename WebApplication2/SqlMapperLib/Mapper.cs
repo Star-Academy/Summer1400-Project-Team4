@@ -5,6 +5,7 @@ using SqlMapper.SqlTypes.Types;
 using SqlMapper.SqlTypes.TypesSubset;
 using SqlMapperLib.Extensions;
 using SqlMapperLib.SqlTypes;
+using SqlMapperLib.SqlTypes.Types;
 
 namespace SqlMapperLib
 {
@@ -22,12 +23,13 @@ namespace SqlMapperLib
             var sample = _data.Where(data => !string.IsNullOrEmpty(data)).Take(50);
             var sampleToStringArray = sample as string[] ?? sample.ToArray();
             var firstData = sampleToStringArray.First();
+
             return firstData.ToSqlDataType() switch
             {
                 Date => CheckIfDateTypeIsAppropriate(sampleToStringArray),
                 ApproximateNumeric => CheckIfFloatTypeIsAppropriate(sampleToStringArray),
                 ExactNumeric => CheckIfIntTypeIsAppropriate(sampleToStringArray),
-                _ => throw new ArgumentOutOfRangeException()
+                _ => new NVarChar()
             };
         }
 
