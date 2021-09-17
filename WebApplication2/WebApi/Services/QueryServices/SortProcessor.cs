@@ -34,7 +34,7 @@ namespace WebApi.Services.QueryServices
         {
             var sortConfig = JsonSerializer.Deserialize<SortConfig>(instruction, new JsonSerializerOptions
             {
-                PropertyNameCaseInsensitive = false
+                PropertyNameCaseInsensitive = true
             });
 
             if (sortConfig == null) return "";
