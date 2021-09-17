@@ -24,7 +24,7 @@ export class PostsComponent implements OnInit, AfterViewInit {
   dataSets!: DatasetPreview;
   columns!: string[];
   dataSource = new TableVirtualScrollDataSource<any>();
-  enableScroll: boolean = true;
+  enableScroll: boolean = false;
   datasetId!: string | null;
 
   @ViewChild(MatSort) sort!: MatSort;
