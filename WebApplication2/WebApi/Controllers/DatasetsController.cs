@@ -67,8 +67,8 @@ namespace WebApi.Controllers
                 {
                     DatasetName = data.DatasetName, IsLiked = false
                 };
-                _database.SaveChanges();
                 user.UserDatasets.Add(dataset);
+                _database.SaveChanges();
                 var id = 1;
                 if (_database.Datasets.Any())
                 {
