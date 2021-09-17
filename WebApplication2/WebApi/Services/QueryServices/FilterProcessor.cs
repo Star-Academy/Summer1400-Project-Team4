@@ -34,6 +34,10 @@ namespace WebApi.Services.QueryServices
 
         private static string InterpretToSql(string instruction)
         {
+            if (!instruction.Contains("_statements"))
+            {
+                instruction = "{\"Command\": \"OR\", \"_statements\": [" + instruction + "]}";
+            }
             var filterBooleanStatement = JsonConvert.DeserializeObject<FilterOperation>(instruction);
             return filterBooleanStatement.ToString();
         }
