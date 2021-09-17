@@ -92,9 +92,17 @@ export class DesignerComponent
 
             this.pipelineService.update(exported).subscribe({
                 next: () => {
+                    const message = 'در حال اجرای سناریو';
+                    this.snackBar.open(message, '', {
+                        duration: 3000,
+                        verticalPosition: 'bottom',
+                        horizontalPosition: 'center',
+                        panelClass: 'purple-snackbar',
+                    });
                     this.pipelineService.execute(this.pipeline!.id!).subscribe({
                         next: () => {
-                            const message = 'سناریو با موفقیت در حال اجرا است؟';
+                            const message =
+                                'اجرای سناریو با موفقیت به اتمام رسید';
                             this.snackBar.open(message, '', {
                                 duration: 3000,
                                 verticalPosition: 'bottom',
