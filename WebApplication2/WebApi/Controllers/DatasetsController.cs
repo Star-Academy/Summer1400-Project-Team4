@@ -67,14 +67,13 @@ namespace WebApi.Controllers
                 {
                     DatasetName = data.DatasetName, IsLiked = false
                 };
-                user.UserDatasets.Add(dataset);
-                _database.SaveChanges();
                 var id = 1;
                 if (_database.Datasets.Any())
                 {
                     id = _database.Datasets.Max(c => c.DatasetId) + 1;
                 }
-
+                user.UserDatasets.Add(dataset);
+                _database.SaveChanges();
                 var loader = new CsvLoader(data, id);
                 loader.TransportCsvToSql();
                 return Ok(id);
