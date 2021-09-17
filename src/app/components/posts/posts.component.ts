@@ -6,10 +6,11 @@ import {HttpClient} from "@angular/common/http";
 import {MatSort} from "@angular/material/sort";
 import {ActivatedRoute} from "@angular/router";
 import { Location } from '@angular/common';
+import {DatasetService} from "../../services/dataset.service";
 
 const buffer = 200;
 const message = 'نمونه های بیشتر لود شدند  ...';
-
+const batchSize = 40 ;
 @Component({
   selector: 'app-posts',
   templateUrl: './posts.component.html',
@@ -17,26 +18,77 @@ const message = 'نمونه های بیشتر لود شدند  ...';
 })
 export class PostsComponent implements OnInit , AfterViewInit {
 
-  displayedColumns = ['id', 'name'];
-  dataSource!: TableVirtualScrollDataSource<PeriodicElement>;
+  displayedColumns! : string[];
+  dataSets!: any;
+  columns!:string[];
+  dataSource = new TableVirtualScrollDataSource<any>();
   enableScroll: boolean = true;
   datasetId!: string | null;
 
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(public snackBar: MatSnackBar, public http: HttpClient , private route: ActivatedRoute , private location: Location) {
+  constructor(public snackBar: MatSnackBar, public http: HttpClient , private route: ActivatedRoute , private location: Location ,
+              private datasetService : DatasetService) {
   }
 
   ngOnInit(): void {
+
+    let obj = {
+      "tableRows": [
+        {
+          "data": [
+            "name",
+            "password"
+          ]
+        },
+        {
+          "data": [
+            "ahmad",
+            "4321"
+          ]
+        }
+      ]
+    }
+
+    console.log(obj.tableRows[0].data);
+
     this.datasetId = this.route.snapshot.paramMap.get('datasetId');
-    console.log(this.datasetId);
-    this.dataSource = new TableVirtualScrollDataSource(ELEM);
+    // console.log(this.datasetId);
+    this.getPreview(0);
   }
 
   ngAfterViewInit(): void
   {
     this.dataSource.sort = this.sort;
   }
+
+  getPreview(startingIndex : number) {
+    if(this.datasetId)
+    this.datasetService.preview(+this.datasetId , startingIndex , batchSize).subscribe(res => {
+        this.dataSets = res;
+        console.log(this.dataSets);
+      },
+      error => {
+        this.snackBar.open('خطا در دریافت پیش نمایش', '', {
+          duration: 1000, verticalPosition: "bottom",
+          horizontalPosition: "left", panelClass: 'red-snackbar'
+        });
+      },
+      () => {
+        if(!this.displayedColumns)
+          this.displayedColumns = this.dataSets.tableRows.data;
+        this.dataSource.data = this.dataSource.data.concat(ELEM); //star
+        this.dataSource.sort = this.sort;
+        this.enableScroll = true;
+
+        this.snackBar.open(message, '', {
+          duration: 1000, verticalPosition: "bottom",
+          horizontalPosition: "left", panelClass: 'purple-snackbar'
+        });
+      }
+    )
+  }
+
 
   onTableScroll(e: { target: any; }) {
     // console.log("datasource length : " + this.dataSource.data.length);
@@ -47,20 +99,7 @@ export class PostsComponent implements OnInit , AfterViewInit {
 
     if (scrollLocation > limit && this.enableScroll) {
       this.enableScroll = false;
-      (this.http.get<Object>('https://songs.code-star.ir' + '/song/all').subscribe(res => {
-          this.dataSource.data = this.dataSource.data.concat(ELEM);
-          this.snackBar.open(message, '', {
-            duration: 1000, verticalPosition: "bottom",
-            horizontalPosition: "left", panelClass: 'purple-snackbar'
-          });
-          console.log(res);
-        }, error => {
-          console.log('error')
-        }, () => {
-          console.log('complete');
-          this.enableScroll = true;
-        }
-      ))
+      this.getPreview(this.dataSource.data.length);
     }
     console.log('*'.repeat(25))
   }

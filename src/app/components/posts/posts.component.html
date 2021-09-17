@@ -151,14 +151,15 @@
 <!--  </mat-card>-->
 
 <!--</div>-->
+<!--*ngFor="let hero in dataSets"-->
 <p style="padding-right: 10px"> پیش نمایش </p>
 <cdk-virtual-scroll-viewport (scroll)="onTableScroll($event)" [style.overflow]="enableScroll ? 'auto' : 'hidden'"
                              class="wrapper mat-elevation-z2" tvsItemSize>
-  <table #table *ngIf="dataSource" [dataSource]="dataSource" class="mat-elevation-z8" mat-table matSort
+  <table #table *ngIf="dataSource && displayedColumns" [dataSource]="dataSource" class="mat-elevation-z8" mat-table matSort
          style="margin-right: 6rem">
 
     <!-- id Column -->
-    <ng-container matColumnDef="id">
+    <ng-container matColumnDef="id" >
       <th *matHeaderCellDef mat-header-cell mat-sort-header> ردیف</th>
       <td *matCellDef="let element" mat-cell> {{element.id}} </td>
     </ng-container>
