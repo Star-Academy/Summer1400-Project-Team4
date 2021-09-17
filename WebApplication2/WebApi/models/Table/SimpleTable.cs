@@ -4,12 +4,11 @@ namespace WebApi.models.Table
 {
     public class SimpleTable
     {
-        public SimpleTable(List<Row> tableRows)
+        public SimpleTable()
         {
-            TableRows = tableRows;
+            TableRows = new List<Row>();
         }
-
-        public List<Row> TableRows { get; set;  }
+        public List<Row> TableRows { get; }
 
         public void AddRow(Row newRow)
         {

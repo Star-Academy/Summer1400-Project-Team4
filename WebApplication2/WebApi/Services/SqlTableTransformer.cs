@@ -21,7 +21,7 @@ namespace WebApi.Services
             _database.Datasets.Find(datasetId);
             var table = new DataTable();
             FillDataTable(datasetId, upperBound, table);
-            var simpleDataTable = new SimpleTable(new List<Row>());
+            var simpleDataTable = new SimpleTable();
             AddTableHeaders(table, simpleDataTable);
             AddTableRows(lowerBound, upperBound, table, simpleDataTable);
             return simpleDataTable;

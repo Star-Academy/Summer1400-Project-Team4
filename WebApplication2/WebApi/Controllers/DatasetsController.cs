@@ -67,8 +67,8 @@ namespace WebApi.Controllers
                 {
                     DatasetName = data.DatasetName, IsLiked = false
                 };
-                _database.SaveChanges();
                 user.UserDatasets.Add(dataset);
+                _database.SaveChanges();
                 var id = 1;
                 if (_database.Datasets.Any())
                 {
@@ -205,18 +205,18 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("preview")]
-        public IActionResult Preview([FromHeader] PreviewData data, [FromHeader] string token)
+        [Route("{datasetId:int}/preview")]
+        public IActionResult Preview([FromRoute]int datasetId , [FromBody] PreviewData data, [FromHeader] string token)
         {
             try
             {
                 var user = _userValidator.IsUserValid(token);
-                if (!_authorizationValidator.DoesBelongToUser(user.Id, data.DbId, UserProp.Dataset))
+                if (!_authorizationValidator.DoesBelongToUser(user.Id, datasetId, UserProp.Dataset))
                 {
                     return BadRequest("You have No database with this id");
                 }
 
-                var simpleTable = _sqlTableTransformer.TransferData(data.DbId, data.startingIndex, data.size);
+                var simpleTable = _sqlTableTransformer.TransferData(datasetId, data.StartingIndex, data.Size);
                 return Ok(simpleTable);
             }
             catch (Exception e)
