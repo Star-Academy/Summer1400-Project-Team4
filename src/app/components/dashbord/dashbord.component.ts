@@ -85,13 +85,14 @@ export class DashbordComponent implements OnInit, AfterViewInit {
   }
 
   openDialog() {
-
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.direction = "rtl";
     dialogConfig.width = '35rem';
-    this.dialog.open(DatasetComponent, dialogConfig);
+    this.dialog.open(DatasetComponent, dialogConfig).afterClosed().subscribe(res=>{
+      this.getDataSets();
+    });
   }
 
   likedRequest(element: Dataset) {
