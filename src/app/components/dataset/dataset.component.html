@@ -5,7 +5,7 @@
     <input formControlName="name" matInput  placeholder="نام دیتاست" required >
   </mat-form-field>
 
-  <mat-form-field>
+  <mat-form-field *ngIf="fileName" >
     <mat-label>جدا کننده‌ی ستون</mat-label>
     <mat-select [(value)]="filedSelected"  required>
       <mat-option value=",">,</mat-option>
@@ -16,14 +16,14 @@
     </mat-select>
   </mat-form-field>
 
-  <mat-form-field>
+  <mat-form-field *ngIf="fileName">
     <mat-label>جدا کننده‌ی سطر</mat-label>
     <mat-select [(value)]="rowSelected" required>
       <mat-option value=",">,</mat-option>
       <mat-option value=":">:</mat-option>
       <mat-option value=";">;</mat-option>
       <mat-option value="-">-</mat-option>
-      <mat-option value="\n">خط حدید</mat-option>
+      <mat-option value="\n">خط جدید</mat-option>
     </mat-select>
   </mat-form-field>
 
@@ -37,7 +37,7 @@
     </button>
     {{fileName || "فایلی انتخاب نشده است"}}
   </div>
-  <section style="margin-top: 2rem">
+  <section *ngIf="fileName" style="margin-top: 2rem">
     <p>
       <mat-checkbox formControlName="autoMap">اتومپ</mat-checkbox>
     </p>
@@ -51,7 +51,8 @@
 
 <mat-dialog-actions [formGroup]="form">
 
-  <button mat-raised-button color="primary" [disabled]="loading || !form.valid || !filedSelected|| !rowSelected"
+  <button mat-raised-button color="primary" [disabled]="loading || !form.valid ||( fileName  && (!filedSelected || !rowSelected)) "
+
           (click)="onUpload()">
     آپلود
   </button>

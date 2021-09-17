@@ -14,7 +14,7 @@ import {DatasetService} from "../../services/dataset.service";
 export class DatasetComponent implements OnInit {
 
   form!: FormGroup;
-  fileName = '';
+  fileName!:string;
   file!: File;
   fileString!: string;
   uploadSubscription!: Subscription;
