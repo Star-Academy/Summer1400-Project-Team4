@@ -6,7 +6,7 @@ namespace WebApi.models.boolAlgebra
     {
         public static string InterpretStatement(this string statement)
         {
-            if (!statement.Contains("_statements"))
+            if (!statement.Contains("_statement"))
             {
                 var simpleStatement = JsonConvert.DeserializeObject<dynamic>(statement);
                 return simpleStatement._field + " " + simpleStatement.Command + " '" + simpleStatement._value + "'";

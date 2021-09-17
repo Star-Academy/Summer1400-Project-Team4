@@ -28,6 +28,8 @@ namespace WebApi.Services
             CreatePath();
             var newTableQuery = GenerateCreateTableQuery();
             var bulkQuery = GenerateBulkQuery();
+            Console.WriteLine(newTableQuery);
+            Console.WriteLine(bulkQuery);
             ExecuteCommands(newTableQuery);
             ExecuteCommands(bulkQuery);
             DeletePath();
@@ -113,6 +115,7 @@ namespace WebApi.Services
 
         private void CreatePath()
         {
+            _csvProp.RowTerminator = _csvProp.RowTerminator.Replace(_csvProp.RowTerminator, "\n");
             var rows = _csvProp.CsvContent.Split(_csvProp.RowTerminator);
             for (var i = 0; i < rows.Length; i++)
             {

@@ -7,11 +7,11 @@ namespace WebApi.models.boolAlgebra
     {
         [JsonProperty] protected string Command;
 
-        [JsonProperty] private dynamic[] _statements;
+        [JsonProperty] private dynamic[] _statement;
 
         public override string ToString()
         {
-            var interpretedStatements = _statements.Select(statement =>
+            var interpretedStatements = _statement.Select(statement =>
                 BoolStatementInterpreter.InterpretStatement(statement.ToString())).Cast<string>().ToList();
 
             return string.Join(" " + Command + " ", interpretedStatements);
