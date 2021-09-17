@@ -4,17 +4,17 @@ namespace WebApplication2.models
 {
     public class AggregateConfig
     {
-        public string[] GroupBy { get; set; }
-        public AggregateOperation[] Operations { get; set; }
+        public string[] groupBy { get; set; }
+        public AggregateOperation[] operations { get; set; }
 
         public string GetGroupBySqlCommands()
         {
-            return string.Join(", ", GroupBy);
+            return string.Join(", ", groupBy);
         }
 
         public string GetAggregateOperationSqlCommands()
         {
-            return string.Join(", ", Operations.Select(o => o.ToString()));
+            return string.Join(", ", operations.Select(o => o.ToString()));
         }
     }
 }

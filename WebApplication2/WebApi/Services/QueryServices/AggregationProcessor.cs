@@ -26,6 +26,7 @@ namespace WebApi.Services.QueryServices
             {
                 // ignored
             }
+
             applyingSql.SendQuery(
                 $"{InterpretToSql(Instruction.Replace("\\\"", "\""), startingDatasetName, destinationDatasetName)}");
         }
@@ -53,7 +54,10 @@ namespace WebApi.Services.QueryServices
         public static string InterpretToSql(string instruction, string startingDatasetName,
             string destinationDatasetName)
         {
-            var aggregation = JsonSerializer.Deserialize<AggregateConfig>(instruction);
+            var aggregation = JsonSerializer.Deserialize<AggregateConfig>(instruction, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = false
+            });
 
             if (aggregation == null) return "";
 

@@ -32,7 +32,10 @@ namespace WebApi.Services.QueryServices
         public static string InterpretToSql(string instruction, string startingDatasetName,
             string destinationDatasetName)
         {
-            var sortConfig = JsonSerializer.Deserialize<SortConfig>(instruction);
+            var sortConfig = JsonSerializer.Deserialize<SortConfig>(instruction, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = false
+            });
 
             if (sortConfig == null) return "";
 
