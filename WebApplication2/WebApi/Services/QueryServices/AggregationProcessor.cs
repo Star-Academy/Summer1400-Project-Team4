@@ -56,7 +56,7 @@ namespace WebApi.Services.QueryServices
         {
             var aggregation = JsonSerializer.Deserialize<AggregateConfig>(instruction, new JsonSerializerOptions
             {
-                PropertyNameCaseInsensitive = false
+                PropertyNameCaseInsensitive = true
             });
 
             if (aggregation == null) return "";
