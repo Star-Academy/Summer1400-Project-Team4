@@ -21,7 +21,7 @@ namespace WebApi.Services
                     case "join":
                         queriesList.Add(new JoinProcessor(process.Instruction));
                         break;
-                    case "aggregation":
+                    case "aggregate":
                         queriesList.Add(new AggregationProcessor(process.Instruction));
                         break;
                     case "sort":

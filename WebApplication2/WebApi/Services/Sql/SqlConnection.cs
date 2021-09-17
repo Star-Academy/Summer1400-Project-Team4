@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using Microsoft.Data.SqlClient;
 
 namespace WebApi.Services.Sql
@@ -22,6 +23,7 @@ namespace WebApi.Services.Sql
 
         public void SendQuery(string query)
         {
+            Console.WriteLine("--a query sent: " + query);
             var sqlCommand = new SqlCommand
             {
                 CommandText = query, CommandType = CommandType.Text, Connection = _sqlConnection
