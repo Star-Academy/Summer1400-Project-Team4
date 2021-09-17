@@ -64,7 +64,6 @@ namespace WebApi
             {
                 // c.SwaggerEndpoint("../swagger/v1/swagger.json", "WebApi v1");
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApi v1");
-                // c.RoutePrefix = string.Empty;
             });
             // }
             app.UseCors(MyAllowSpecificOrigins);
