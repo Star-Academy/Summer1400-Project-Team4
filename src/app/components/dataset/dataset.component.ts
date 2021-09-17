@@ -20,8 +20,8 @@ export class DatasetComponent implements OnInit {
   uploadSubscription!: Subscription;
   loading: boolean = false; // Flag check loading
   name: string = '';
-  rowSelected!: string;
-  filedSelected!: string;
+  rowSelected= '';
+  filedSelected= '';
 
   constructor(private http: HttpClient, public datasetService: DatasetService,
               private formBuilder: FormBuilder,
