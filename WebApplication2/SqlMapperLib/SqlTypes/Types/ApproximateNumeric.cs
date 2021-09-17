@@ -13,7 +13,7 @@ namespace SqlMapper.SqlTypes.Types
 
         public override string ToString()
         {
-            return $"FLOAT[{Mantis}]";
+            return $"FLOAT({Mantis})";
         }
     }
 }

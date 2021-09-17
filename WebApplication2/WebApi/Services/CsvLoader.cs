@@ -117,7 +117,9 @@ namespace WebApi.Services
         {
             if (!string.IsNullOrEmpty(_csvProp.RowTerminator))
             {
-                _csvProp.RowTerminator = _csvProp.RowTerminator.Replace(_csvProp.RowTerminator, "\n");
+                var temp = _csvProp.RowTerminator; 
+                _csvProp.RowTerminator = _csvProp.RowTerminator.Replace(_csvProp.RowTerminator, "*");
+                _csvProp.CsvContent = _csvProp.CsvContent.Replace(temp, _csvProp.RowTerminator); 
             }
             var rows = _csvProp.CsvContent.Split(_csvProp.RowTerminator);
             if (rows[0] != "")
