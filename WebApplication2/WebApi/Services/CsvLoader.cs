@@ -117,11 +117,12 @@ namespace WebApi.Services
         {
             if (!string.IsNullOrEmpty(_csvProp.RowTerminator))
             {
-                var temp = _csvProp.RowTerminator; 
-                _csvProp.RowTerminator = _csvProp.RowTerminator.Replace(_csvProp.RowTerminator, "*");
-                _csvProp.CsvContent = _csvProp.CsvContent.Replace(temp, _csvProp.RowTerminator); 
+                _csvProp.CsvContent = _csvProp.CsvContent.Replace("\n", "*");
+                if (!_csvProp.CsvContent.Contains("*"))
+                    _csvProp.CsvContent = _csvProp.CsvContent.Replace("\r\n", "*");
             }
-            var rows = _csvProp.CsvContent.Split(_csvProp.RowTerminator);
+
+            var rows = _csvProp.CsvContent.Split("*");
             if (rows[0] != "")
             {
                 for (var i = 0; i < rows.Length; i++)
@@ -138,8 +139,11 @@ namespace WebApi.Services
         {
             var column = new List<string>();
             var streamReader = new StreamReader(_filePath);
+            int i = 0; 
             while (!streamReader.EndOfStream)
             {
+                i++; 
+                if (i++ > 100) break;
                 var row = streamReader.ReadLine()?.Split(_csvProp.FieldTerminator);
                 if (row != null) column.Add(row[columnNumber]);
             }
