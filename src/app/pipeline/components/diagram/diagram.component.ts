@@ -100,8 +100,7 @@ export class DiagramComponent
     addNodeTypes = Object.values(pipelineNodeInfo).filter(
         (info) =>
             info.type !== PipelineNodeType.datasetInput &&
-            info.type !== PipelineNodeType.datasetOutput &&
-            info.type !== PipelineNodeType.sort
+            info.type !== PipelineNodeType.datasetOutput
     );
     PipelineNodeType = PipelineNodeType;
     hasError = hasError;
