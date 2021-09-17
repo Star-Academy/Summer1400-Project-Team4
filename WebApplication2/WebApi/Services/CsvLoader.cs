@@ -117,10 +117,11 @@ namespace WebApi.Services
         {
             _csvProp.RowTerminator = _csvProp.RowTerminator.Replace(_csvProp.RowTerminator, "\n");
             var rows = _csvProp.CsvContent.Split(_csvProp.RowTerminator);
-            for (var i = 0; i < rows.Length; i++)
-            {
-                rows[i] = rows[i].Replace(_csvProp.FieldTerminator, ",");
-            }
+            if (rows[0] != "")
+                for (var i = 0; i < rows.Length; i++)
+                {
+                    rows[i] = rows[i].Replace(_csvProp.FieldTerminator, ",");
+                }
 
             _filePath = $"_{_dataSetId}.csv";
             File.WriteAllLines(_filePath, rows);
@@ -135,6 +136,7 @@ namespace WebApi.Services
                 var row = streamReader.ReadLine()?.Split(_csvProp.FieldTerminator);
                 if (row != null) column.Add(row[columnNumber]);
             }
+
             if (_csvProp.DoesHaveHeader) column.RemoveAt(0);
             streamReader.Close();
             return column.ToArray();
