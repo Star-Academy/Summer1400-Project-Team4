@@ -34,7 +34,7 @@ export interface NewExternalDataset {
     tableName: string;
 }
 
-export type DatasetPreview = { data: any[] }[];
+export type DatasetPreview = { tableRows: { data: any[] }[] };
 
 export function hasField(fields: DatasetField[], name: string) {
     return fields.some((field) => field.name === name);
