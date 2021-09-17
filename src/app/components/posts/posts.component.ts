@@ -7,6 +7,7 @@ import {MatSort} from "@angular/material/sort";
 import {ActivatedRoute} from "@angular/router";
 import {Location} from '@angular/common';
 import {DatasetService} from "../../services/dataset.service";
+import { DatasetPreview } from 'src/app/models/dataset.model';
 
 const buffer = 200;
 const message = 'نمونه های بیشتر لود شدند  ...';
@@ -20,7 +21,7 @@ const batchSize = 40;
 export class PostsComponent implements OnInit, AfterViewInit {
 
   displayedColumns!: string[];
-  dataSets!: any;
+  dataSets!: DatasetPreview;
   columns!: string[];
   dataSource = new TableVirtualScrollDataSource<any>();
   enableScroll: boolean = true;
@@ -55,7 +56,7 @@ export class PostsComponent implements OnInit, AfterViewInit {
         },
         () => {
           if (!this.displayedColumns)
-            this.displayedColumns = this.dataSets.tableRows.data;
+            this.displayedColumns = this.dataSets.tableRows[0].data;
           this.dataSets.tableRows.shift();
           this.dataSource.data = this.dataSource.data.concat(this.dataSets); //star
           this.dataSource.sort = this.sort;
