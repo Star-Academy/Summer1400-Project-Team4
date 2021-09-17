@@ -26,6 +26,8 @@ namespace WebApi.Services.QueryServices
                 // ignored
             }
 
+            Console.WriteLine(startingDatasetName);
+            Console.WriteLine(destinationDatasetName);
             applyingSql.SendQuery("SELECT * " +
                                   $"INTO {destinationDatasetName} " +
                                   $"FROM {startingDatasetName} " +

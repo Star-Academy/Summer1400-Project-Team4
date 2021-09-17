@@ -115,13 +115,15 @@ namespace WebApi.Services
 
         private void CreatePath()
         {
-            _csvProp.RowTerminator = _csvProp.RowTerminator.Replace(_csvProp.RowTerminator, "\n");
             var rows = _csvProp.CsvContent.Split(_csvProp.RowTerminator);
             if (rows[0] != "")
+            {
+                _csvProp.RowTerminator = _csvProp.RowTerminator.Replace(_csvProp.RowTerminator, "\n");
                 for (var i = 0; i < rows.Length; i++)
                 {
                     rows[i] = rows[i].Replace(_csvProp.FieldTerminator, ",");
                 }
+            }
 
             _filePath = $"_{_dataSetId}.csv";
             File.WriteAllLines(_filePath, rows);
