@@ -25,6 +25,14 @@ namespace WebApi.Services
 
             if (_queriesList == null || _queriesList.Count == 0)
             {
+                try
+                {
+                    _sqlConnection.SendQuery($"DROP TABLE {destinationDatasetName}");
+                }
+                catch (Exception)
+                {
+                    // ignored
+                }
                 _sqlConnection.SendQuery("SELECT * " +
                                          $"INTO {destinationDatasetName} " +
                                          $"FROM {startingDatasetName} ");
