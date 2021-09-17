@@ -219,9 +219,4 @@ export class DesignerComponent
         this.auth.authToken = null;
         this.router.navigate(['/']);
     }
-
-  navigatePipeLine() {
-    this.router.navigate(['/posts/5'], {state: {data: {data : 5}}}).then();
-
-  }
 }
