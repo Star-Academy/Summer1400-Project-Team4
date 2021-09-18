@@ -33,25 +33,6 @@ export class PostsComponent implements OnInit , AfterViewInit {
 
   ngOnInit(): void {
 
-    let obj = {
-      "tableRows": [
-        {
-          "data": [
-            "name",
-            "password"
-          ]
-        },
-        {
-          "data": [
-            "ahmad",
-            "4321"
-          ]
-        }
-      ]
-    }
-
-    console.log(obj.tableRows[0].data);
-
     this.datasetId = this.route.snapshot.paramMap.get('datasetId');
     // console.log(this.datasetId);
     this.getPreview(0);
@@ -77,7 +58,8 @@ export class PostsComponent implements OnInit , AfterViewInit {
       () => {
         if(!this.displayedColumns)
           this.displayedColumns = this.dataSets.tableRows.data;
-        this.dataSource.data = this.dataSource.data.concat(ELEM); //star
+        this.dataSets.tableRows.shift();
+        this.dataSource.data = this.dataSource.data.concat(this.dataSets); //star
         this.dataSource.sort = this.sort;
         this.enableScroll = true;
 
