@@ -58,7 +58,7 @@ export class PostsComponent implements OnInit, AfterViewInit {
           if (!this.displayedColumns)
             this.displayedColumns = this.dataSets.tableRows[0].data;
           this.dataSets.tableRows.shift();
-          this.dataSource.data = this.dataSource.data.concat(this.dataSets); //star
+          this.dataSource.data = this.dataSource.data.concat(this.dataSets.tableRows); //star
           this.dataSource.sort = this.sort;
           this.enableScroll = true;
 
