@@ -155,7 +155,7 @@
 <p style="padding-right: 10px"> پیش نمایش </p>
 <cdk-virtual-scroll-viewport (scroll)="onTableScroll($event)" [style.overflow]="enableScroll ? 'auto' : 'hidden'"
                              class="wrapper mat-elevation-z2" tvsItemSize>
-  <table #table *ngIf="dataSource && displayedColumns" [dataSource]="dataSource" class="mat-elevation-z8" mat-table matSort
+  <table #table  [dataSource]="dataSource" class="mat-elevation-z8" mat-table matSort
          style="margin-right: 6rem">
 
     <ng-container *ngFor="let column of displayedColumns; let index = index" matColumnDef="{{column}}" >

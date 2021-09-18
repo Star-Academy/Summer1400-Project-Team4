@@ -33,7 +33,6 @@ export class PostsComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-
     this.datasetId = this.route.snapshot.paramMap.get('datasetId');
     // console.log(this.datasetId);
     this.getPreview(0);
