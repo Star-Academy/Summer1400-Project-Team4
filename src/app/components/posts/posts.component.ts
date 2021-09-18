@@ -5,30 +5,31 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {HttpClient} from "@angular/common/http";
 import {MatSort} from "@angular/material/sort";
 import {ActivatedRoute} from "@angular/router";
-import { Location } from '@angular/common';
+import {Location} from '@angular/common';
 import {DatasetService} from "../../services/dataset.service";
 
 const buffer = 200;
 const message = 'نمونه های بیشتر لود شدند  ...';
-const batchSize = 40 ;
+const batchSize = 40;
+
 @Component({
   selector: 'app-posts',
   templateUrl: './posts.component.html',
   styleUrls: ['./posts.component.scss']
 })
-export class PostsComponent implements OnInit , AfterViewInit {
+export class PostsComponent implements OnInit, AfterViewInit {
 
-  displayedColumns! : string[];
+  displayedColumns!: string[];
   dataSets!: any;
-  columns!:string[];
+  columns!: string[];
   dataSource = new TableVirtualScrollDataSource<any>();
   enableScroll: boolean = true;
   datasetId!: string | null;
 
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(public snackBar: MatSnackBar, public http: HttpClient , private route: ActivatedRoute , private location: Location ,
-              private datasetService : DatasetService) {
+  constructor(public snackBar: MatSnackBar, public http: HttpClient, private route: ActivatedRoute, private location: Location,
+              private datasetService: DatasetService) {
   }
 
   ngOnInit(): void {
@@ -38,37 +39,35 @@ export class PostsComponent implements OnInit , AfterViewInit {
     this.getPreview(0);
   }
 
-  ngAfterViewInit(): void
-  {
-    this.dataSource.sort = this.sort;
+  ngAfterViewInit(): void {
   }
 
-  getPreview(startingIndex : number) {
-    if(this.datasetId)
-    this.datasetService.preview(+this.datasetId , startingIndex , batchSize).subscribe(res => {
-        this.dataSets = res;
-        console.log(this.dataSets);
-      },
-      error => {
-        this.snackBar.open('خطا در دریافت پیش نمایش', '', {
-          duration: 1000, verticalPosition: "bottom",
-          horizontalPosition: "left", panelClass: 'red-snackbar'
-        });
-      },
-      () => {
-        if(!this.displayedColumns)
-          this.displayedColumns = this.dataSets.tableRows.data;
-        this.dataSets.tableRows.shift();
-        this.dataSource.data = this.dataSource.data.concat(this.dataSets); //star
-        this.dataSource.sort = this.sort;
-        this.enableScroll = true;
+  getPreview(startingIndex: number) {
+    if (this.datasetId)
+      this.datasetService.preview(+this.datasetId, startingIndex, batchSize).subscribe(res => {
+          this.dataSets = res;
+          console.log(this.dataSets);
+        },
+        error => {
+          this.snackBar.open('خطا در دریافت پیش نمایش', '', {
+            duration: 1000, verticalPosition: "bottom",
+            horizontalPosition: "left", panelClass: 'red-snackbar'
+          });
+        },
+        () => {
+          if (!this.displayedColumns)
+            this.displayedColumns = this.dataSets.tableRows.data;
+          this.dataSets.tableRows.shift();
+          this.dataSource.data = this.dataSource.data.concat(this.dataSets); //star
+          this.dataSource.sort = this.sort;
+          this.enableScroll = true;
 
-        this.snackBar.open(message, '', {
-          duration: 1000, verticalPosition: "bottom",
-          horizontalPosition: "left", panelClass: 'purple-snackbar'
-        });
-      }
-    )
+          this.snackBar.open(message, '', {
+            duration: 1000, verticalPosition: "bottom",
+            horizontalPosition: "left", panelClass: 'purple-snackbar'
+          });
+        }
+      )
   }
 
 
@@ -92,6 +91,7 @@ export class PostsComponent implements OnInit , AfterViewInit {
   }
 
 }
+
 let ELEM: PeriodicElement[] = [
   {id: 1, name: 'هیدروزن'},
   {id: 2, name: 'هلیم'},
